@@ -113,6 +113,7 @@ import { InstitutionalAdvancementDevelopmentWorkspace } from './components/insti
 import { InstitutionalLegalComplianceRiskGovernanceWorkspace } from './components/institutionalLegalComplianceRiskGovernance/InstitutionalLegalComplianceRiskGovernanceWorkspace';
 import { InstitutionalStrategyPlanningPerformanceWorkspace } from './components/institutionalStrategyPlanningPerformance/InstitutionalStrategyPlanningPerformanceWorkspace';
 import { InstitutionalDigitalTransformationTechnologyOperationsWorkspace } from './components/institutionalDigitalTransformationTechnologyOperations/InstitutionalDigitalTransformationTechnologyOperationsWorkspace';
+import { InstitutionalDataGovernanceRecordsPrivacyDigitalTrustWorkspace } from './components/institutionalDataGovernanceRecordsPrivacyDigitalTrust/InstitutionalDataGovernanceRecordsPrivacyDigitalTrustWorkspace';
 import { DigitalTechnologyGovernanceWorkspace } from './components/digitalTechnologyGovernance/DigitalTechnologyGovernanceWorkspace';
 import { CyberSecurityPrivacyGovernanceWorkspace } from './components/cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceWorkspace';
 import { BusinessContinuityResilienceGovernanceWorkspace } from './components/businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceWorkspace';
@@ -731,6 +732,10 @@ function AppContent() {
 
             {(activeRoute === 'institutional_digital_transformation_technology_operations' || activeTab === 'institutional_digital_transformation_technology_operations' || activeRoute === 'nav_institutional_digital_transformation_technology_operations' || activeTab === 'nav_tech_command_center' || activeRoute === 'nav_tech_command_center') && (
               <InstitutionalDigitalTransformationTechnologyOperationsWorkspace />
+            )}
+
+            {(activeRoute === 'institutional_data_governance_records_privacy_digital_trust' || activeTab === 'institutional_data_governance_records_privacy_digital_trust' || activeRoute === 'nav_institutional_data_governance_records_privacy_digital_trust' || activeTab === 'nav_datagov_command_center' || activeRoute === 'nav_datagov_command_center') && (
+              <InstitutionalDataGovernanceRecordsPrivacyDigitalTrustWorkspace />
             )}
 
           </RouteGuard>
