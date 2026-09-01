@@ -45,6 +45,7 @@ import { StudentSuccessGovernanceModule } from './studentSuccessGovernance/Stude
 import { CommunityEngagementGovernanceModule } from './communityEngagementGovernance/CommunityEngagementGovernanceModule';
 import { InternationalizationGovernanceModule } from './internationalizationGovernance/InternationalizationGovernanceModule';
 import { InternationalizationGlobalMobilityModule } from './internationalizationGlobalMobility/InternationalizationGlobalMobilityModule';
+import { InstitutionalAdvancementDevelopmentModule } from './institutionalAdvancementDevelopment/InstitutionalAdvancementDevelopmentModule';
 import { DigitalTechnologyGovernanceModule } from './digitalTechnologyGovernance/DigitalTechnologyGovernanceModule';
 import { CyberSecurityPrivacyGovernanceModule } from './cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceModule';
 import { BusinessContinuityResilienceGovernanceModule } from './businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceModule';
@@ -418,6 +419,9 @@ export function registerAllModules() {
     ModuleEngine.register(InternationalizationGlobalMobilityModule);
   } catch (err) {}
   try {
+    ModuleEngine.register(InstitutionalAdvancementDevelopmentModule);
+  } catch (err) {}
+  try {
     ModuleEngine.register(DigitalTechnologyGovernanceModule);
   } catch (err) {}
   try {
@@ -451,6 +455,7 @@ export {
   CommunityEngagementGovernanceModule,
   InternationalizationGovernanceModule,
   InternationalizationGlobalMobilityModule,
+  InstitutionalAdvancementDevelopmentModule,
   DigitalTechnologyGovernanceModule,
   CyberSecurityPrivacyGovernanceModule,
   BusinessContinuityResilienceGovernanceModule,
