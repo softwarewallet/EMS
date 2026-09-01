@@ -46,6 +46,7 @@ import { CommunityEngagementGovernanceModule } from './communityEngagementGovern
 import { InternationalizationGovernanceModule } from './internationalizationGovernance/InternationalizationGovernanceModule';
 import { InternationalizationGlobalMobilityModule } from './internationalizationGlobalMobility/InternationalizationGlobalMobilityModule';
 import { InstitutionalAdvancementDevelopmentModule } from './institutionalAdvancementDevelopment/InstitutionalAdvancementDevelopmentModule';
+import { InstitutionalLegalComplianceRiskGovernanceModule } from './institutionalLegalComplianceRiskGovernance/InstitutionalLegalComplianceRiskGovernanceModule';
 import { DigitalTechnologyGovernanceModule } from './digitalTechnologyGovernance/DigitalTechnologyGovernanceModule';
 import { CyberSecurityPrivacyGovernanceModule } from './cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceModule';
 import { BusinessContinuityResilienceGovernanceModule } from './businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceModule';
@@ -422,6 +423,9 @@ export function registerAllModules() {
     ModuleEngine.register(InstitutionalAdvancementDevelopmentModule);
   } catch (err) {}
   try {
+    ModuleEngine.register(InstitutionalLegalComplianceRiskGovernanceModule);
+  } catch (err) {}
+  try {
     ModuleEngine.register(DigitalTechnologyGovernanceModule);
   } catch (err) {}
   try {
@@ -456,6 +460,7 @@ export {
   InternationalizationGovernanceModule,
   InternationalizationGlobalMobilityModule,
   InstitutionalAdvancementDevelopmentModule,
+  InstitutionalLegalComplianceRiskGovernanceModule,
   DigitalTechnologyGovernanceModule,
   CyberSecurityPrivacyGovernanceModule,
   BusinessContinuityResilienceGovernanceModule,

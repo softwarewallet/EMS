@@ -110,6 +110,7 @@ import { CommunityEngagementGovernanceWorkspace } from './components/communityEn
 import { InternationalizationGovernanceWorkspace } from './components/internationalizationGovernance/InternationalizationGovernanceWorkspace';
 import { InternationalizationGlobalMobilityWorkspace } from './components/internationalizationGlobalMobility/InternationalizationGlobalMobilityWorkspace';
 import { InstitutionalAdvancementDevelopmentWorkspace } from './components/institutionalAdvancementDevelopment/InstitutionalAdvancementDevelopmentWorkspace';
+import { InstitutionalLegalComplianceRiskGovernanceWorkspace } from './components/institutionalLegalComplianceRiskGovernance/InstitutionalLegalComplianceRiskGovernanceWorkspace';
 import { DigitalTechnologyGovernanceWorkspace } from './components/digitalTechnologyGovernance/DigitalTechnologyGovernanceWorkspace';
 import { CyberSecurityPrivacyGovernanceWorkspace } from './components/cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceWorkspace';
 import { BusinessContinuityResilienceGovernanceWorkspace } from './components/businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceWorkspace';
@@ -716,6 +717,10 @@ function AppContent() {
 
             {(activeRoute === 'student_services_support' || activeTab === 'student_services_support' || activeRoute === 'nav_student_services_support' || activeTab === 'nav_student_services_support') && (
               <StudentServicesSupportWorkspace />
+            )}
+
+            {(activeRoute === 'institutional_legal_compliance_risk_governance' || activeTab === 'institutional_legal_compliance_risk_governance' || activeRoute === 'institutional_legal_compliance_risk_governance_workspace' || activeRoute === 'institutional_legal_compliance_risk_governance_workspace' || activeRoute === 'nav_institutional_legal_compliance_risk_governance' || activeRoute === 'nav_institutional_legal_compliance_risk_governance') && (
+              <InstitutionalLegalComplianceRiskGovernanceWorkspace />
             )}
 
           </RouteGuard>
