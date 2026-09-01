@@ -108,6 +108,7 @@ import { QualityAssuranceGovernanceWorkspace } from './components/qualityAssuran
 import { StudentSuccessGovernanceWorkspace } from './components/studentSuccessGovernance/StudentSuccessGovernanceWorkspace';
 import { CommunityEngagementGovernanceWorkspace } from './components/communityEngagementGovernance/CommunityEngagementGovernanceWorkspace';
 import { InternationalizationGovernanceWorkspace } from './components/internationalizationGovernance/InternationalizationGovernanceWorkspace';
+import { InternationalizationGlobalMobilityWorkspace } from './components/internationalizationGlobalMobility/InternationalizationGlobalMobilityWorkspace';
 import { DigitalTechnologyGovernanceWorkspace } from './components/digitalTechnologyGovernance/DigitalTechnologyGovernanceWorkspace';
 import { CyberSecurityPrivacyGovernanceWorkspace } from './components/cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceWorkspace';
 import { BusinessContinuityResilienceGovernanceWorkspace } from './components/businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceWorkspace';
@@ -538,6 +539,10 @@ function AppContent() {
 
             {(activeRoute === 'internationalization_governance' || activeTab === 'internationalization_governance' || activeRoute === 'internationalization_governance_workspace' || activeTab === 'internationalization_governance_workspace' || activeRoute === 'nav_internationalization_governance' || activeTab === 'nav_internationalization_governance') && (
               <InternationalizationGovernanceWorkspace />
+            )}
+
+            {(activeRoute === 'internationalization_global_mobility' || activeTab === 'internationalization_global_mobility' || activeRoute === 'internationalization_global_mobility_workspace' || activeRoute === 'internationalization_global_mobility_workspace' || activeRoute === 'nav_internationalization_global_mobility' || activeRoute === 'nav_internationalization_global_mobility') && (
+              <InternationalizationGlobalMobilityWorkspace />
             )}
 
             {(activeRoute === 'digital_technology_governance' || activeTab === 'digital_technology_governance' || activeRoute === 'digital_technology_governance_workspace' || activeTab === 'digital_technology_governance_workspace' || activeRoute === 'nav_digital_technology_governance' || activeTab === 'nav_digital_technology_governance') && (

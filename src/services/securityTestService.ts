@@ -38,6 +38,7 @@ import { libraryKnowledgeInformationServicesService } from './libraryKnowledgeIn
 import { institutionalCommunicationsService } from './institutionalCommunicationsService';
 import { institutionalSecuritySafetyContinuityService } from './institutionalSecuritySafetyContinuityService';
 import { studentServicesSupportService } from './studentServicesSupportService';
+import { internationalizationGlobalMobilityOperationsService } from './internationalizationGlobalMobilityOperationsService';
 import { Student, StudentAttendanceRecord, ProcessLifecycleState } from '../types';
 
 export interface TestResult {
@@ -6598,6 +6599,25 @@ export class SecurityTestService {
     campusId: string = 'campus-north'
   ): Promise<TestResult[]> {
     const suiteResults = studentServicesSupportService.runPhase1112VerificationSuite(tenantId, campusId);
+    return suiteResults.map(r => ({
+      id: r.id,
+      category: r.category as TestResult['category'],
+      title: r.title,
+      description: r.description,
+      status: r.status === 'PASS' ? 'PASSED' : 'FAILED',
+      durationMs: r.durationMs
+    }));
+  }
+
+  /**
+   * PHASE 11.14: Institutional Internationalization, Global Mobility, Partnerships & Transnational Education Verification Suite
+   * Comprehensive 50 Adversarial Tests (ADV-11.14-01 to ADV-11.14-50)
+   */
+  static async runPhase1114VerificationSuite(
+    tenantId: string = 'tenant-main',
+    campusId: string = 'campus-north'
+  ): Promise<TestResult[]> {
+    const suiteResults = internationalizationGlobalMobilityOperationsService.runPhase1114VerificationSuite(tenantId, campusId);
     return suiteResults.map(r => ({
       id: r.id,
       category: r.category as TestResult['category'],
