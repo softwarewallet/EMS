@@ -115,6 +115,7 @@ import { InstitutionalStrategyPlanningPerformanceWorkspace } from './components/
 import { InstitutionalDigitalTransformationTechnologyOperationsWorkspace } from './components/institutionalDigitalTransformationTechnologyOperations/InstitutionalDigitalTransformationTechnologyOperationsWorkspace';
 import { InstitutionalDataGovernanceRecordsPrivacyDigitalTrustWorkspace } from './components/institutionalDataGovernanceRecordsPrivacyDigitalTrust/InstitutionalDataGovernanceRecordsPrivacyDigitalTrustWorkspace';
 import { InstitutionalITServiceManagementWorkspace } from './components/institutionalITServiceManagement/InstitutionalITServiceManagementWorkspace';
+import { InstitutionalCybersecurityIdentitySecurityOperationsWorkspace } from './components/institutionalCybersecurityIdentitySecurityOperations/InstitutionalCybersecurityIdentitySecurityOperationsWorkspace';
 import { DigitalTechnologyGovernanceWorkspace } from './components/digitalTechnologyGovernance/DigitalTechnologyGovernanceWorkspace';
 import { CyberSecurityPrivacyGovernanceWorkspace } from './components/cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceWorkspace';
 import { BusinessContinuityResilienceGovernanceWorkspace } from './components/businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceWorkspace';
@@ -741,6 +742,10 @@ function AppContent() {
 
             {(activeRoute === 'institutional_it_service_management' || activeTab === 'institutional_it_service_management' || activeRoute === 'nav_institutional_it_service_management' || activeTab === 'nav_itsm_command_center' || activeRoute === 'nav_itsm_command_center') && (
               <InstitutionalITServiceManagementWorkspace />
+            )}
+
+            {(activeRoute === 'institutional_cybersecurity_identity_ops' || activeTab === 'institutional_cybersecurity_identity_ops' || activeRoute === 'nav_secops_dashboard' || activeTab === 'nav_secops_dashboard') && (
+              <InstitutionalCybersecurityIdentitySecurityOperationsWorkspace />
             )}
 
           </RouteGuard>

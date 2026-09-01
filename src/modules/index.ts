@@ -51,6 +51,7 @@ import { InstitutionalStrategyPlanningPerformanceModule } from './institutionalS
 import { InstitutionalDigitalTransformationTechnologyOperationsModule } from './institutionalDigitalTransformationTechnologyOperations/InstitutionalDigitalTransformationTechnologyOperationsModule';
 import { InstitutionalDataGovernanceRecordsPrivacyDigitalTrustModule } from './institutionalDataGovernanceRecordsPrivacyDigitalTrust/InstitutionalDataGovernanceRecordsPrivacyDigitalTrustModule';
 import { InstitutionalITServiceManagementModule } from './institutionalITServiceManagement/InstitutionalITServiceManagementModule';
+import { InstitutionalCybersecurityIdentitySecurityOperationsModule } from './institutionalCybersecurityIdentitySecurityOperations/InstitutionalCybersecurityIdentitySecurityOperationsModule';
 import { DigitalTechnologyGovernanceModule } from './digitalTechnologyGovernance/DigitalTechnologyGovernanceModule';
 import { CyberSecurityPrivacyGovernanceModule } from './cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceModule';
 import { BusinessContinuityResilienceGovernanceModule } from './businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceModule';
@@ -442,6 +443,9 @@ export function registerAllModules() {
     ModuleEngine.register(InstitutionalITServiceManagementModule);
   } catch (err) {}
   try {
+    ModuleEngine.register(InstitutionalCybersecurityIdentitySecurityOperationsModule);
+  } catch (err) {}
+  try {
     ModuleEngine.register(DigitalTechnologyGovernanceModule);
   } catch (err) {}
   try {
@@ -481,6 +485,7 @@ export {
   InstitutionalDigitalTransformationTechnologyOperationsModule,
   InstitutionalDataGovernanceRecordsPrivacyDigitalTrustModule,
   InstitutionalITServiceManagementModule,
+  InstitutionalCybersecurityIdentitySecurityOperationsModule,
   DigitalTechnologyGovernanceModule,
   CyberSecurityPrivacyGovernanceModule,
   BusinessContinuityResilienceGovernanceModule,

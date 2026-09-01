@@ -45,6 +45,7 @@ import { InstitutionalStrategyPlanningPerformanceService } from './institutional
 import { InstitutionalDigitalTransformationTechnologyOperationsService } from './institutionalDigitalTransformationTechnologyOperationsService';
 import { InstitutionalDataGovernanceRecordsPrivacyDigitalTrustService } from './institutionalDataGovernanceRecordsPrivacyDigitalTrustService';
 import { InstitutionalITServiceManagementService } from './institutionalITServiceManagementService';
+import { InstitutionalCybersecurityIdentitySecurityOperationsService } from "./institutionalCybersecurityIdentitySecurityOperationsService";
 import { Student, StudentAttendanceRecord, ProcessLifecycleState } from '../types';
 
 export interface TestResult {
@@ -6743,6 +6744,25 @@ export class SecurityTestService {
   ): Promise<TestResult[]> {
     const serviceInstance = InstitutionalITServiceManagementService.getInstance();
     const suiteResults = serviceInstance.runPhase1120VerificationSuite(tenantId, campusId);
+    return suiteResults.map(r => ({
+      id: r.id,
+      category: 'Authorization' as TestResult['category'],
+      title: r.title,
+      description: r.description,
+      status: r.status === 'PASS' ? 'PASSED' : 'FAILED',
+      durationMs: r.durationMs
+    }));
+  }
+  /**
+   * PHASE 11.21: Cybersecurity, Identity, Security Operations Verification Suite
+   * Comprehensive 50 Adversarial Tests (ADV-11.21-01 to ADV-11.21-50)
+   */
+  static async runPhase1121VerificationSuite(
+    tenantId: string = 'tenant-main',
+    campusId: string = 'campus-north'
+  ): Promise<TestResult[]> {
+    const serviceInstance = InstitutionalCybersecurityIdentitySecurityOperationsService.getInstance();
+    const suiteResults = serviceInstance.runPhase1121VerificationSuite(tenantId, campusId);
     return suiteResults.map(r => ({
       id: r.id,
       category: 'Authorization' as TestResult['category'],
