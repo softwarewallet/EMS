@@ -114,6 +114,7 @@ import { InstitutionalLegalComplianceRiskGovernanceWorkspace } from './component
 import { InstitutionalStrategyPlanningPerformanceWorkspace } from './components/institutionalStrategyPlanningPerformance/InstitutionalStrategyPlanningPerformanceWorkspace';
 import { InstitutionalDigitalTransformationTechnologyOperationsWorkspace } from './components/institutionalDigitalTransformationTechnologyOperations/InstitutionalDigitalTransformationTechnologyOperationsWorkspace';
 import { InstitutionalDataGovernanceRecordsPrivacyDigitalTrustWorkspace } from './components/institutionalDataGovernanceRecordsPrivacyDigitalTrust/InstitutionalDataGovernanceRecordsPrivacyDigitalTrustWorkspace';
+import { InstitutionalITServiceManagementWorkspace } from './components/institutionalITServiceManagement/InstitutionalITServiceManagementWorkspace';
 import { DigitalTechnologyGovernanceWorkspace } from './components/digitalTechnologyGovernance/DigitalTechnologyGovernanceWorkspace';
 import { CyberSecurityPrivacyGovernanceWorkspace } from './components/cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceWorkspace';
 import { BusinessContinuityResilienceGovernanceWorkspace } from './components/businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceWorkspace';
@@ -736,6 +737,10 @@ function AppContent() {
 
             {(activeRoute === 'institutional_data_governance_records_privacy_digital_trust' || activeTab === 'institutional_data_governance_records_privacy_digital_trust' || activeRoute === 'nav_institutional_data_governance_records_privacy_digital_trust' || activeTab === 'nav_datagov_command_center' || activeRoute === 'nav_datagov_command_center') && (
               <InstitutionalDataGovernanceRecordsPrivacyDigitalTrustWorkspace />
+            )}
+
+            {(activeRoute === 'institutional_it_service_management' || activeTab === 'institutional_it_service_management' || activeRoute === 'nav_institutional_it_service_management' || activeTab === 'nav_itsm_command_center' || activeRoute === 'nav_itsm_command_center') && (
+              <InstitutionalITServiceManagementWorkspace />
             )}
 
           </RouteGuard>

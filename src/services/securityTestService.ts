@@ -44,6 +44,7 @@ import { InstitutionalLegalComplianceRiskGovernanceService } from './institution
 import { InstitutionalStrategyPlanningPerformanceService } from './institutionalStrategyPlanningPerformanceService';
 import { InstitutionalDigitalTransformationTechnologyOperationsService } from './institutionalDigitalTransformationTechnologyOperationsService';
 import { InstitutionalDataGovernanceRecordsPrivacyDigitalTrustService } from './institutionalDataGovernanceRecordsPrivacyDigitalTrustService';
+import { InstitutionalITServiceManagementService } from './institutionalITServiceManagementService';
 import { Student, StudentAttendanceRecord, ProcessLifecycleState } from '../types';
 
 export interface TestResult {
@@ -6731,6 +6732,24 @@ export class SecurityTestService {
       durationMs: r.durationMs
     }));
   }
+
+  /**
+   * PHASE 11.20: IT Service Management & Ops Verification Suite
+   * Comprehensive 50 Adversarial Tests (ADV-11.20-01 to ADV-11.20-50)
+   */
+  static async runPhase1120VerificationSuite(
+    tenantId: string = 'tenant-main',
+    campusId: string = 'campus-north'
+  ): Promise<TestResult[]> {
+    const serviceInstance = InstitutionalITServiceManagementService.getInstance();
+    const suiteResults = serviceInstance.runPhase1120VerificationSuite(tenantId, campusId);
+    return suiteResults.map(r => ({
+      id: r.id,
+      category: 'Authorization' as TestResult['category'],
+      title: r.title,
+      description: r.description,
+      status: r.status === 'PASS' ? 'PASSED' : 'FAILED',
+      durationMs: r.durationMs
+    }));
+  }
 }
-
-
