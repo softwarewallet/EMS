@@ -42,6 +42,7 @@ import { internationalizationGlobalMobilityOperationsService } from './internati
 import { institutionalAdvancementDevelopmentService } from './institutionalAdvancementDevelopmentService';
 import { InstitutionalLegalComplianceRiskGovernanceService } from './institutionalLegalComplianceRiskGovernanceService';
 import { InstitutionalStrategyPlanningPerformanceService } from './institutionalStrategyPlanningPerformanceService';
+import { InstitutionalDigitalTransformationTechnologyOperationsService } from './institutionalDigitalTransformationTechnologyOperationsService';
 import { Student, StudentAttendanceRecord, ProcessLifecycleState } from '../types';
 
 export interface TestResult {
@@ -6683,6 +6684,26 @@ export class SecurityTestService {
     return suiteResults.map(r => ({
       id: r.id,
       category: 'Authorization' as TestResult['category'], // mapped for test view
+      title: r.title,
+      description: r.description,
+      status: r.status === 'PASS' ? 'PASSED' : 'FAILED',
+      durationMs: r.durationMs
+    }));
+  }
+
+  /**
+   * PHASE 11.18: ITSM & Technology Operations Verification Suite
+   * Comprehensive 50 Adversarial Tests (ADV-11.18-01 to ADV-11.18-50)
+   */
+  static async runPhase1118VerificationSuite(
+    tenantId: string = 'tenant-main',
+    campusId: string = 'campus-north'
+  ): Promise<TestResult[]> {
+    const serviceInstance = InstitutionalDigitalTransformationTechnologyOperationsService.getInstance();
+    const suiteResults = serviceInstance.runPhase1118VerificationSuite(tenantId, campusId);
+    return suiteResults.map(r => ({
+      id: r.id,
+      category: 'Authorization' as TestResult['category'],
       title: r.title,
       description: r.description,
       status: r.status === 'PASS' ? 'PASSED' : 'FAILED',

@@ -112,6 +112,7 @@ import { InternationalizationGlobalMobilityWorkspace } from './components/intern
 import { InstitutionalAdvancementDevelopmentWorkspace } from './components/institutionalAdvancementDevelopment/InstitutionalAdvancementDevelopmentWorkspace';
 import { InstitutionalLegalComplianceRiskGovernanceWorkspace } from './components/institutionalLegalComplianceRiskGovernance/InstitutionalLegalComplianceRiskGovernanceWorkspace';
 import { InstitutionalStrategyPlanningPerformanceWorkspace } from './components/institutionalStrategyPlanningPerformance/InstitutionalStrategyPlanningPerformanceWorkspace';
+import { InstitutionalDigitalTransformationTechnologyOperationsWorkspace } from './components/institutionalDigitalTransformationTechnologyOperations/InstitutionalDigitalTransformationTechnologyOperationsWorkspace';
 import { DigitalTechnologyGovernanceWorkspace } from './components/digitalTechnologyGovernance/DigitalTechnologyGovernanceWorkspace';
 import { CyberSecurityPrivacyGovernanceWorkspace } from './components/cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceWorkspace';
 import { BusinessContinuityResilienceGovernanceWorkspace } from './components/businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceWorkspace';
@@ -726,6 +727,10 @@ function AppContent() {
 
             {(activeRoute === 'institutional_strategy_planning_performance' || activeTab === 'institutional_strategy_planning_performance' || activeRoute === 'nav_institutional_strategy_planning_performance') && (
               <InstitutionalStrategyPlanningPerformanceWorkspace />
+            )}
+
+            {(activeRoute === 'institutional_digital_transformation_technology_operations' || activeTab === 'institutional_digital_transformation_technology_operations' || activeRoute === 'nav_institutional_digital_transformation_technology_operations' || activeTab === 'nav_tech_command_center' || activeRoute === 'nav_tech_command_center') && (
+              <InstitutionalDigitalTransformationTechnologyOperationsWorkspace />
             )}
 
           </RouteGuard>
