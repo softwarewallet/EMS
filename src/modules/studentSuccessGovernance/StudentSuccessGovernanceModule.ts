@@ -1,0 +1,42 @@
+import { UniversalModuleContract } from '../../core/contracts/ModuleContract';
+
+export const StudentSuccessGovernanceModule: UniversalModuleContract = {
+  moduleId: 'mod_student_success_governance',
+  name: 'Institutional Student Success, Retention, Progression, Completion & Learner Outcomes Governance Engine',
+  displayName: 'Student Success, Retention & Learner Outcomes Governance',
+  description: 'Authoritative institutional governance, assurance, and risk control plane for student retention, persistence, progression, completion, graduation readiness, learner outcomes, early alerts, support services, and equity monitoring.',
+  version: '1.0.0',
+  status: 'INSTALLED',
+  category: 'Academics',
+  provider: 'EduTech-SMS',
+  dependencies: [],
+  configurationSchema: [],
+  navigationItems: [],
+  permissions: [
+    { code: 'student_success.governance.view', name: 'View Student Success Governance', description: 'View student success command center, retention indicators, and progression metrics.' },
+    { code: 'student_success.strategy.manage', name: 'Manage Success Strategy', description: 'Govern institutional student success strategies, strategic objectives, and review periods.' },
+    { code: 'student_success.framework.manage', name: 'Manage Success Frameworks', description: 'Configure student success policies, metric frameworks, and indicator hierarchies.' },
+    { code: 'student_success.cohort.manage', name: 'Manage Success Cohorts', description: 'Govern institutional reference cohorts, tracking definitions, and lineage.' },
+    { code: 'student_success.metric.manage', name: 'Manage Success Metrics', description: 'Govern retention, persistence, progression, and completion metric observations.' },
+    { code: 'student_success.retention.manage', name: 'Manage Retention Observations', description: 'Record and govern first-year retention, persistence, and stop-out observations.' },
+    { code: 'student_success.progression.manage', name: 'Manage Progression Observations', description: 'Monitor credit accumulation, gateway course bottlenecks, and degree progress.' },
+    { code: 'student_success.completion.manage', name: 'Manage Completion & Graduation', description: 'Govern multi-year completion rates, time-to-degree, and graduation readiness indexes.' },
+    { code: 'student_success.earlyalert.manage', name: 'Manage Early Alert Governance', description: 'Govern explainable early alert rules, trigger criteria, and false-positive reviews.' },
+    { code: 'student_success.intervention.manage', name: 'Manage Intervention Plans', description: 'Formulate, approve, and track student success interventions and milestones.' },
+    { code: 'student_success.intervention.verify', name: 'Verify Intervention Outcomes', description: 'Perform independent verification of intervention effectiveness under SoD.' },
+    { code: 'student_success.advising.manage', name: 'Manage Advising Governance', description: 'Monitor advising capacity, advisor-to-student ratios, and campaign milestones.' },
+    { code: 'student_success.support.manage', name: 'Manage Support Services', description: 'Govern support service capacity, utilization rates, and strain metrics.' },
+    { code: 'student_success.outcomes.manage', name: 'Manage Learner Outcomes', description: 'Govern student learning outcome direct assessment references and attainment.' },
+    { code: 'student_success.equity.view', name: 'View Equity Disparity Governance', description: 'Monitor governed cohort outcome differences with small-cell privacy protection.' },
+    { code: 'student_success.forecast.manage', name: 'Manage Success Forecasts', description: 'Govern predictive retention/completion forecasts and confidence intervals.' },
+    { code: 'student_success.risk.manage', name: 'Manage Success Risks', description: 'Perform deterministic student success risk scoring and control reviews.' },
+    { code: 'student_success.resilience.assess', name: 'Assess Success Resilience', description: 'Evaluate institutional student support resilience and redundancy.' },
+    { code: 'student_success.exception.create', name: 'Create Success Exception', description: 'Request bounded student success standard variances and policy waivers.' },
+    { code: 'student_success.exception.approve', name: 'Approve Success Exception', description: 'Authorize success policy exceptions under Four-Eyes Separation of Duties.' },
+    { code: 'student_success.decision.propose', name: 'Propose Success Decisions', description: 'Propose executive student success decisions and strategy revisions.' },
+    { code: 'student_success.decision.approve', name: 'Approve Success Decisions', description: 'Approve executive student success decisions under Four-Eyes SoD.' },
+    { code: 'student_success.simulation.run', name: 'Run What-If Simulations', description: 'Execute isolated in-memory what-if retention and capacity shock simulations.' },
+    { code: 'student_success.audit.view', name: 'View Success Audit Trail', description: 'Inspect append-only immutable audit logs for student success governance.' },
+    { code: 'student_success.diagnostics.run', name: 'Run Success Diagnostics', description: 'Execute automated diagnostic scanner for data gaps, SoD violations, and expired waivers.' }
+  ]
+};

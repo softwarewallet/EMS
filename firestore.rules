@@ -1,0 +1,4493 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for validating fields
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // Default catch-all
+    match /{document=**} {
+      allow read, write: if true;
+    }
+
+    // Tenants collection
+    match /tenants/{tenantId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Campuses collection
+    match /campuses/{campusId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Buildings & Classrooms
+    match /buildings/{buildingId} {
+      allow read, write: if true;
+    }
+
+    match /classrooms/{classroomId} {
+      allow read, write: if true;
+    }
+
+    // Academic Years
+    match /academic_years/{yearId} {
+      allow read, write: if true;
+    }
+
+    // Classes & Grades
+    match /classes/{classId} {
+      allow read, write: if true;
+    }
+
+    // Sections
+    match /sections/{sectionId} {
+      allow read, write: if true;
+    }
+
+    // Subjects
+    match /subjects/{subjectId} {
+      allow read, write: if true;
+    }
+
+    // Users
+    match /users/{userId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Students
+    match /students/{studentId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
+
+    // Attendance (Phase 7.1)
+    match /student_attendance/{attendanceId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /attendance_sessions/{sessionId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /attendance_corrections/{correctionId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /attendance_configs/{configId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_attendance/{staffAttendanceId} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Exit Management & Clearance (Phase 6.4A)
+    match /exit_requests/{requestId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /clearance_cases/{caseId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /clearance_items/{itemId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exit_configs/{configId} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Transfer Certificates & Exit Documentation (Phase 6.4B)
+    match /certificates/{certificateId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /certificate_snapshots/{snapshotId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /certificate_templates/{templateId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /certificate_numbering_configs/{configId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /authorized_signatories/{signatoryId} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Audit logs (append-only)
+    match /audit_logs/{auditId} {
+      allow read, create: if true;
+      allow update, delete: if false;
+    }
+
+    // Phase 7.13 & 7.26 Student Support, Wellness, Grievance, Counseling & Safeguarding Governance
+    match /student_support_cases/{caseId} {
+      allow read: if resource.data.tenantId == request.auth.token.tenantId && 
+                  (!resource.data.campusId || resource.data.campusId == request.auth.token.campusId);
+      allow create: if request.resource.data.tenantId == request.auth.token.tenantId;
+      allow update: if resource.data.tenantId == request.auth.token.tenantId;
+      allow delete: if false; // Immutable governance audit
+    }
+
+    match /student_support_case_versions/{versionId} {
+      allow read: if resource.data.tenantId == request.auth.token.tenantId;
+      allow create: if request.resource.data.tenantId == request.auth.token.tenantId;
+      allow update, delete: if false;
+    }
+
+    match /student_support_health_encounters/{encounterId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+      allow delete: if false;
+    }
+
+    match /student_support_wellness_observations/{obsId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_counseling_cases/{caseId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_counseling_sessions/{sessionId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_plans/{planId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_referrals/{referralId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_consents/{consentId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_communications/{commId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_accommodations/{accommodationId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_incidents/{incidentId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_emergency_overrides/{overrideId} {
+      allow read, create: if request.resource.data.tenantId == request.auth.token.tenantId;
+      allow update, delete: if false;
+    }
+
+    match /student_support_assignments/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_action_plans/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_action_items/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_follow_ups/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_escalations/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_disclosures/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_case_reviews/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_case_documents/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_case_comments/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_welfare_interventions/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_grievances/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_safeguarding_concerns/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_safeguarding_cases/{id} {
+      allow read, write: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+
+    match /student_support_analytics_cache/{cacheId} {
+      allow read, create, update: if resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId;
+      allow delete: if false;
+    }
+
+    // Phase 7.14 Communications & Notifications Governance
+    match /communication_templates/{templateId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_template_versions/{versionId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_announcements/{announcementId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_campaigns/{campaignId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_messages/{messageId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_deliveries/{deliveryId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_acknowledgements/{ackId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_preferences/{prefId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_consents/{consentId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_threads/{threadId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_thread_messages/{threadMsgId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_analytics_cache/{cacheId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /communication_escalations/{escalationId} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.15A - Library & Learning Resources
+    match /library_profiles/{libraryId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resources/{resourceId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resource_versions/{versionId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resource_copies/{copyId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resource_authors/{authorId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resource_publishers/{publisherId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resource_categories/{categoryId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resource_locations/{locationId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resource_identifiers/{identifierId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resource_subject_mappings/{mappingId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_resource_curriculum_mappings/{mappingId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_memberships/{membershipId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_acquisitions/{acquisitionId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_analytics_cache/{cacheId} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.15B - Library Circulation & Fines
+    match /library_loans/{loanId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_returns/{returnId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_renewals/{renewalId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_reservations/{reservationId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_holds/{holdId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_fines/{fineId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_fine_adjustments/{adjustmentId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_lost_items/{lostId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_damage_reports/{damageId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_circulation_policies/{policyId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_circulation_policy_versions/{versionId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /library_circulation_analytics_cache/{cacheId} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.16 - Examination Operations & Assessment Administration
+    match /exam_sessions/{sessionId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exam_papers/{paperId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exam_seating_allocations/{allocationId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exam_invigilator_assignments/{assignmentId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exam_presences/{presenceId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exam_incidents/{incidentId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exam_result_processings/{processingId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exam_moderation_requests/{requestId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exam_exceptions/{exceptionId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /exam_ops_analytics_cache/{cacheId} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.17 - Staff, HR & Workforce Management Governance Engine
+    match /staff_profiles/{staffId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_employment_history/{historyId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_qualifications/{qualId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_certifications/{certId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_skills/{skillId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_documents/{docId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_assignments/{assignmentId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_workload_snapshots/{snapshotId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_leave_types/{typeId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_leave_policies/{policyId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_leave_balances/{balanceId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_leave_requests/{requestId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_leave_transactions/{txId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_substitutions/{subId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_performance_cycles/{cycleId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_performance_reviews/{reviewId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_objectives/{objId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_compliance_records/{recId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_training_programs/{progId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_training_assignments/{assignId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_departments/{deptId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_designations/{desigId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_hr_cases/{caseId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_exit_cases/{exitId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_exit_clearances/{clearanceId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_handover_records/{handoverId} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /staff_analytics_cache/{cacheId} {
+      allow read, create, update, delete: if true;
+    }
+    // Phase 7.19 Inventory Management
+    match /inventory_stores/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_categories/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_items/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_stocks/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_stock_ledgers/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_receipts/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_issues/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_returns/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_transfers/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_adjustments/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_assets/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_asset_assignments/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_stock_audits/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /inventory_analytics_cache/{id} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.21 Alumni, Career Services, Internship & Placement Governance
+    match /alumni_profiles/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /corporate_partners/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /job_postings/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /placement_drives/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /job_applications/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /placement_offers/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /career_mentorship_sessions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /alumni_events/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /alumni_contributions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /alumni_placement_analytics/{id} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.22 Learning Management, Digital Classroom & Teaching Delivery Governance
+    match /learning_courses/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_course_versions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_course_offerings/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_teaching_assignments/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_units/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_lessons/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_resources/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_resource_versions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_digital_content/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_activities/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_assignments/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_assignment_submissions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_quizzes/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_question_banks/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_questions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_assessment_attempts/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_grade_records/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_discussions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_discussion_messages/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_announcements/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_student_progress/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_course_completions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_content_access_events/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /learning_analytics_cache/{id} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.23 Research, Innovation, Institutional Projects & Knowledge Assets Governance
+    match /research_profiles/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_projects/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_proposals/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_proposal_versions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_team_members/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_milestones/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_funding_references/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_ethics_references/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_outputs/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_publications/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_ip_records/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /innovation_initiatives/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /institutional_projects/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /project_tasks/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /project_risks/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /project_issues/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_knowledge_assets/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /research_analytics_cache/{id} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.24A Institutional Governance, Compliance, Accreditation & Quality Management
+    match /governance_profiles/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_bodies/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_body_members/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_meetings/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_agendas/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_resolutions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_action_items/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_policies/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_policy_versions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_policy_reviews/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_compliance_frameworks/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_compliance_obligations/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_compliance_controls/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_compliance_evidence/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_compliance_exceptions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_accreditation_bodies/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_accreditation_cycles/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_accreditation_standards/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_accreditation_criteria/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_quality_frameworks/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_quality_indicators/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_quality_targets/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_quality_measurements/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_institutional_audits/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_audit_findings/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_corrective_actions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_institutional_risks/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_risk_mitigations/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_document_references/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /governance_analytics_cache/{id} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.25 Access Governance & Platform Administration
+    match /temporary_access_grants/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /delegated_administration_grants/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /access_reviews/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /access_review_items/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /security_sessions/{id} {
+      allow read, create, update, delete: if true;
+    }
+    match /security_access_events/{id} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Phase 7.27 Institutional Records Governance
+    match /retention_schedules/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /institutional_records/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /legal_holds/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /evidence_packages/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /disposition_batches/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /record_governance_audits/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable audit log
+    }
+
+    // Phase 7.28 Privacy & Information Security Governance
+    match /privacy_data_classifications/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_processing_purposes/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_consents/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_subject_requests/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_export_requests/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_pia/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_data_sharing/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_processors/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_incidents/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_security_controls/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_security_exceptions/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /privacy_governance_analytics_cache/{id} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // Phase 7.29 Institutional Strategy & Performance Governance
+    match /strategic_plans/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /strategic_objectives/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /strategic_goals/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /strategic_initiatives/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /kpi_definitions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /kpi_targets/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /kpi_measurements/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /performance_risks/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /performance_corrective_actions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /performance_analytics_cache/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // Phase 7.30 Institutional Communication, Engagement & Stakeholder Relations Governance
+    match /institutional_communications/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /stakeholder_engagement_threads/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /institutional_communication_campaigns/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /communication_escalation_tasks/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /communication_governance_analytics_cache/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // Phase 7.31 Institutional Enterprise Risk Management, Campus Incident Command & Business Continuity
+    match /institutional_risks/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /institutional_risk_mitigations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /institutional_key_risk_indicators/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /campus_incidents/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /business_continuity_plans/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /safety_audit_inspections/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /continuity_simulation_drills/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // Phase 7.32 Institutional Scheduling, Timetable, Resource Booking & Academic Operations Governance Engine
+    match /scheduling_timetables/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /scheduling_timetable_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable version snapshots
+    }
+    match /scheduling_entries/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    match /scheduling_bookings/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    match /scheduling_conflicts/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    match /scheduling_substitutions/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    match /scheduling_change_requests/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    match /scheduling_calendar_exceptions/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+
+    // Phase 7.33 Institutional Student Success, Early Warning & Academic Progression Governance Engine
+    match /student_success_profiles/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /student_risk_assessments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /student_success_early_warning_signals/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /student_success_interventions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /student_success_retention_cases/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /student_success_progression_assessments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /student_success_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // Phase 7.34 Institutional Assessment, Accreditation Evidence, Continuous Improvement & Academic Quality Execution Governance Engine
+    match /quality_assessment_cycles/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /quality_criteria/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /quality_indicators/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /quality_assessment_submissions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /quality_evidence_mappings/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /quality_program_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /quality_improvement_initiatives/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /quality_capa_actions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /quality_review_decisions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable decision records
+    }
+    match /quality_accreditation_evidence_packages/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /quality_audit_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable audit log
+    }
+
+    // Phase 7.35 Institutional Accreditation & Regulatory Submission Rules
+    match /accreditation_bodies/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /accreditation_criteria/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /accreditation_cycles/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /accreditation_submissions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /criterion_responses/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /accreditation_evidence/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /external_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /accreditation_findings/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /institutional_commitments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /regulatory_inspections/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /accreditation_correspondence/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable formal correspondence
+    }
+    match /accreditation_decisions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable authoritative external decisions
+    }
+    match /accreditation_certificates/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // Phase 7.36 Institutional Data, Analytics & Business Intelligence Governance Engine Rules
+    match /analytics_workspaces/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    match /analytics_dashboards/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    match /analytics_metric_definitions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /analytics_measurements/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable measurements
+    }
+    match /analytics_cohorts/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    match /analytics_benchmarks/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /analytics_insights/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /analytics_reports/{id} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null;
+    }
+    match /analytics_export_requests/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /analytics_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable audit trail
+    }
+
+    // Phase 7.37 Institutional Workflow, Case Management & Process Governance Rules
+    match /workflow_definitions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /workflow_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable versions
+    }
+    match /workflow_instances/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /workflow_instance_stages/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /workflow_approvals/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /workflow_delegations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /workflow_escalations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /workflow_sla_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable SLA log
+    }
+    match /workflow_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable event stream
+    }
+    match /enterprise_cases/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_case_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable case versions
+    }
+    match /enterprise_case_assignments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_case_comments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_case_evidence/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_case_resolutions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_tasks/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_task_dependencies/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_task_comments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_task_checklists/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_task_escalations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_work_queue/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /workflow_notifications/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /workflow_governance_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /workflow_governance_decisions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable governance decisions
+    }
+    match /workflow_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable audit logs
+    }
+
+    // Phase 9.1 Institutional Performance Intelligence & Executive Governance Engine Rules
+    match /performance_strategies/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_dimensions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_objectives/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_kpis/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_metric_definitions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_metric_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable metric versions
+    }
+    match /performance_observations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_targets/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_thresholds/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_scorecards/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_benchmarks/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_findings/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_actions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_exceptions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_risks/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_diagnostics/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /performance_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable audit log
+    }
+
+    // Phase 7.38 Institutional Knowledge, Enterprise Search, Policy Intelligence & Governed Information Discovery Engine Rules
+    match /knowledge_objects/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_sources/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable historical versions
+    }
+    match /knowledge_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_publications/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable publication records
+    }
+    match /knowledge_access_policies/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_policy_relationships/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_policy_impacts/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_gaps/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_search_audits/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable search audit
+    }
+    match /knowledge_data_quality_issues/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_analytics/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_evidence_references/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /knowledge_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable audit logs
+    }
+
+    // Phase 7.39 Institutional Integration, Interoperability, API & Data Exchange Governance Engine Rules
+    match /integration_definitions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_endpoints/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_api_definitions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_api_consumers/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_exchange_contracts/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_field_mappings/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_jobs/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable event stream
+    }
+    match /integration_webhook_subscriptions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_failures/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_lineage/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_change_requests/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_data_quality_issues/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_analytics/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /integration_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable audit logs
+    }
+
+    // Phase 7.40 Institutional Automation, Rules, Alerts & Decision Workflow Governance Engine Rules
+    match /automation_definitions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /automation_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable snapshots
+    }
+    match /automation_rules/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /automation_actions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /automation_executions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false; // Immutable execution history
+    }
+    match /automation_execution_steps/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable step logs
+    }
+    match /automation_approvals/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /automation_exceptions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /automation_schedules/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /automation_rate_limits/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /automation_dead_letters/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false; // Immutable dead-letters
+    }
+    match /automation_alerts/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /automation_dependencies/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /automation_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable security audit logs
+    }
+    match /automation_system_controls/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // Phase 7.41 Institutional Resource Planning, Capacity, Allocation & Enterprise Portfolio Governance Engine Rules
+    match /resource_plans/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_plan_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable version snapshots
+    }
+    match /resource_capacity_profiles/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_demand_forecasts/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_allocation_requests/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_allocation_decisions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable decisions
+    }
+    match /resource_allocations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_utilization_snapshots/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_constraints/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_priority_rules/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_portfolio_items/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_portfolio_scores/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_portfolio_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_portfolio_decisions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_interventions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_optimization_actions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_scenarios/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_scenario_results/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_data_quality_issues/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /resource_governance_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // Phase 7.42 Institutional Enterprise Portfolio, Program & Transformation Governance Engine Rules
+    match /enterprise_portfolios/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_portfolio_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable snapshots
+    }
+    match /enterprise_programs/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /strategic_initiatives/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /governance_milestones/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /governance_gates/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /gate_decisions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable gate decisions
+    }
+    match /dependency_links/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /dependency_health_issues/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /benefit_realization_plans/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /benefit_measurements/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable outcome measurements
+    }
+    match /portfolio_investments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /investment_decisions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable investment decisions
+    }
+    match /transformation_assurance_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable executive reviews
+    }
+    match /assurance_findings/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /initiative_interventions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /whatif_transformation_scenarios/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /scenario_simulation_results/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable simulation outputs
+    }
+    match /transformation_data_quality_issues/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /transformation_governance_audits/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable audit records
+    }
+
+    // Phase 7.43 Enterprise Architecture, Technology Portfolio & Digital Governance Engine Rules
+    match /enterprise_architecture_repositories/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_architecture_domains/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_architecture_principles/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /enterprise_architecture_standards/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /architecture_decision_records/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /architecture_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /architecture_exceptions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /architecture_roadmaps/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /technology_portfolios/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /technology_products/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /application_portfolio_items/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /technology_lifecycle_assessments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /digital_services/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /technology_dependencies/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /technology_risks/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /technology_controls/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /technical_debt_items/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /technology_investments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /modernization_initiatives/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /technology_governance_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /architecture_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable logs
+    }
+    match /technology_data_quality_issues/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // Phase 7.44 ITSM Security Rules
+    match /itsm_services/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_service_versions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_service_dependencies/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_slas/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_sla_measurements/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_incidents/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_incident_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+    match /itsm_major_incidents/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_service_requests/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_request_approvals/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_problems/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_root_cause_analyses/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_changes/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_change_approvals/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_change_implementations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_releases/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_deployments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_service_health/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_availability_snapshots/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_escalations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_continuity_exercises/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_governance_reviews/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_data_quality_issues/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /itsm_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+
+    // Phase 7.45 - Cybersecurity Operations, Threat Intelligence & Zero-Trust
+    match /cyber_security_events/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_event_correlations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_threat_indicators/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_threat_campaigns/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_security_alerts/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_alert_rules/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_investigations/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_investigation_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Timeline events are immutable
+    }
+    match /cyber_vulnerabilities/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_vulnerability_assessments/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_exposure_records/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_zero_trust_policies/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_zero_trust_evaluations/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Decisions are immutable
+    }
+    match /cyber_security_anomalies/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Anomalies are immutable historical observations
+    }
+    match /cyber_posture_snapshots/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Snapshots are immutable historical certifications
+    }
+    match /cyber_security_controls/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_security_exceptions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_response_playbooks/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_playbook_executions/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_containment_actions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null; // Rollback or updating status
+      allow delete: if false; // Containment history is protected
+    }
+    match /cyber_security_evidence/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_security_watchlists/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /cyber_security_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Audit logs must be immutable
+    }
+    match /cyber_data_quality_issues/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /ai_providers/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_systems/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_models/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_model_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable published model versions
+    }
+    match /ai_use_cases/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_risk_assessments/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable certified risk assessments
+    }
+    match /ai_evaluations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_evaluation_runs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable completed evaluation runs
+    }
+    match /ai_datasets/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_prompt_templates/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_agents/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_decisions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable approved decisions
+    }
+    match /ai_incidents/{id} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false; // Incidents cannot be deleted
+    }
+    match /ai_exceptions/{id} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false; // Exceptions cannot be deleted
+    }
+    match /ai_policies/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_compliance_assessments/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_governance_reviews/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_data_quality_issues/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /ai_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Audit logs must be immutable
+    }
+
+    // Phase 7.47 Crisis & Resilience collections
+    match /crisis_events/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_timeline_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+    match /crisis_eoc_activations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_command_assignments/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_command_decisions/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_response_plans/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_playbooks/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_playbook_versions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable published versions
+    }
+    match /crisis_response_actions/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_escalations/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+    match /crisis_communications/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_continuity_activations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_critical_services/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_service_dependencies/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_recovery_plans/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_recovery_activations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_recovery_checkpoints/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_resource_allocations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_closures/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_evacuation_orders/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_reentry_authorizations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_simulations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_simulation_runs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable simulation results
+    }
+    match /crisis_after_action_reviews/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_resilience_assessments/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_resilience_gaps/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_improvement_actions/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_overrides/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /crisis_evidence/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+    match /crisis_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Audit logs must be immutable
+    }
+    match /crisis_data_quality_issues/{id} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Phase 7.48 Compliance & Assurance collections
+    match /compliance_frameworks/{id} { allow read, write: if request.auth != null; }
+    match /compliance_regulatory_authorities/{id} { allow read, write: if request.auth != null; }
+    match /compliance_requirements/{id} { allow read, write: if request.auth != null; }
+    match /compliance_obligations/{id} { allow read, write: if request.auth != null; }
+    match /compliance_controls/{id} { allow read, write: if request.auth != null; }
+    match /compliance_control_tests/{id} { allow read, write: if request.auth != null; }
+    match /compliance_assessments/{id} { allow read, write: if request.auth != null; }
+    match /compliance_findings/{id} { allow read, write: if request.auth != null; }
+    match /compliance_exceptions/{id} { allow read, write: if request.auth != null; }
+    match /compliance_attestations/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable finalized attestation
+    }
+    match /compliance_assurance_plans/{id} { allow read, write: if request.auth != null; }
+    match /compliance_assurance_reviews/{id} { allow read, write: if request.auth != null; }
+    match /compliance_legal_matters/{id} { allow read, write: if request.auth != null; }
+    match /compliance_legal_holds/{id} {
+      allow read, create: if request.auth != null;
+      allow update, delete: if false; // Preserve legal-hold history
+    }
+    match /compliance_regulatory_submissions/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable finalized submissions
+    }
+    match /compliance_regulatory_inspections/{id} { allow read, write: if request.auth != null; }
+    match /compliance_regulatory_requests/{id} { allow read, write: if request.auth != null; }
+    match /compliance_regulatory_responses/{id} { allow read, write: if request.auth != null; }
+    match /compliance_correspondence/{id} { allow read, write: if request.auth != null; }
+    match /compliance_evidence/{id} { allow read, write: if request.auth != null; }
+    match /compliance_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Audit logs must be append-only
+    }
+    match /compliance_data_quality_issues/{id} { allow read, write: if request.auth != null; }
+    match /compliance_risk_snapshots/{id} { allow read, write: if request.auth != null; }
+    match /compliance_certifications/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable finalized certifications
+    }
+
+    // Phase 7.53 Institutional Stakeholder, Communications, Engagement & Reputation Governance Engine
+    match /stakeholders/{id} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+    match /stakeholder_groups/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /stakeholder_segments/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /stakeholder_relationships/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /engagement_plans/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /engagement_activities/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /institutional_communications/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /communication_versions/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /communication_approvals/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /communication_publications/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /institutional_announcements/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /consultations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /stakeholder_complaints/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /stakeholder_issues/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /stakeholder_escalations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /reputation_observations/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /reputation_snapshots/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /stakeholder_risks/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /executive_communication_decisions/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /stakeholder_data_quality_issues/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /stakeholder_audit_logs/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Append-only
+    }
+
+    // =========================================================================
+    // PHASE 7.54: KNOWLEDGE GOVERNANCE ENGINE
+    // =========================================================================
+    
+    match /knowledge_assets/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge.view') &&
+        (resource.data.classification != 'RESTRICTED' || hasPermission('knowledge.restricted_view')) &&
+        (resource.data.campusScope == 'GLOBAL' || hasCampusAccess(resource.data.campusScope));
+      allow create: if isTenantScoped() && hasPermission('knowledge.create') &&
+        request.resource.data.status == 'DRAFT';
+      allow update: if isTenantScoped() && hasPermission('knowledge.edit') &&
+        request.resource.data.tenantId == resource.data.tenantId &&
+        // Cannot mutate PUBLISHED directly unless via system versioning or status change
+        (resource.data.status != 'PUBLISHED' || hasPermission('knowledge.publish'));
+      allow delete: if false; // Soft-delete or archive only
+    }
+
+    match /knowledge_versions/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge.view');
+      allow create: if isTenantScoped() && hasPermission('knowledge.edit');
+      allow update, delete: if false; // Immutable
+    }
+
+    match /knowledge_approvals/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge.view');
+      allow create: if isTenantScoped() && hasPermission('knowledge.approve') &&
+        request.resource.data.approverId == request.auth.uid &&
+        // No self-approval if we can verify creator in context (enforced in service layer)
+        true;
+      allow update, delete: if false; // Immutable
+    }
+
+    match /institutional_decisions/{document} {
+      allow read: if isTenantScoped() && hasPermission('decision.view');
+      allow create: if isTenantScoped() && hasPermission('decision.manage');
+      allow update: if isTenantScoped() && hasPermission('decision.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /institutional_memory/{document} {
+      allow read: if isTenantScoped() && hasPermission('institutional_memory.view');
+      allow create, update: if isTenantScoped() && hasPermission('institutional_memory.manage');
+      allow delete: if false;
+    }
+
+    match /knowledge_distributions/{document} {
+      allow read: if isTenantScoped() && hasPermission('distribution.view');
+      allow create: if isTenantScoped() && hasPermission('distribution.manage');
+      allow update, delete: if false;
+    }
+
+    match /knowledge_data_quality_issues/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge_quality.view');
+      allow create: if isTenantScoped() && hasPermission('knowledge_quality.manage');
+      allow update: if isTenantScoped() && hasPermission('knowledge_quality.manage');
+      allow delete: if false;
+    }
+
+    match /knowledge_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge_audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false;
+    }
+
+    // =========================================================================
+    // PHASE 7.55: DATA GOVERNANCE ENGINE
+    // =========================================================================
+    
+    match /data_domains/{document} {
+      allow read: if isTenantScoped() && hasPermission('data.view');
+      allow create: if isTenantScoped() && hasPermission('data.domain.manage');
+      allow update: if isTenantScoped() && hasPermission('data.domain.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false; 
+    }
+
+    match /data_assets/{document} {
+      allow read: if isTenantScoped() && hasPermission('data.view') &&
+        (resource.data.classification != 'RESTRICTED' || hasPermission('data.restricted_view')) &&
+        (resource.data.campusScope == 'GLOBAL' || hasCampusAccess(resource.data.campusScope));
+      allow create, update: if isTenantScoped() && hasPermission('data.asset.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false; 
+    }
+
+    match /data_lineage_nodes/{document} {
+      allow read: if isTenantScoped() && hasPermission('data.lineage.view');
+      allow create, update: if isTenantScoped() && hasPermission('data.lineage.manage');
+      allow delete: if false;
+    }
+
+    match /master_data_records/{document} {
+      allow read: if isTenantScoped() && hasPermission('data.view');
+      allow create, update: if isTenantScoped() && hasPermission('data.master.manage');
+      allow delete: if false;
+    }
+
+    match /data_quality_issues/{document} {
+      allow read: if isTenantScoped() && hasPermission('data.quality.view');
+      allow create, update: if isTenantScoped() && hasPermission('data.quality.manage');
+      allow delete: if false;
+    }
+
+    match /data_certifications/{document} {
+      allow read: if isTenantScoped() && hasPermission('data.view');
+      allow create: if isTenantScoped() && hasPermission('data.certification.manage');
+      allow update, delete: if false; // Immutable after creation
+    }
+
+    match /data_sharing_agreements/{document} {
+      allow read: if isTenantScoped() && hasPermission('data.view');
+      allow create, update: if isTenantScoped() && hasPermission('data.sharing.manage');
+      allow delete: if false;
+    }
+
+    match /data_governance_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('data.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // append-only
+    }
+
+    // =========================================================================
+    // PHASE 7.57: ORGANIZATIONAL KNOWLEDGE GOVERNANCE ENGINE
+    // =========================================================================
+    
+    match /knowledge_domains/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge.view');
+      allow create: if isTenantScoped() && hasPermission('knowledge.domain.manage');
+      allow update: if isTenantScoped() && hasPermission('knowledge.domain.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false; 
+    }
+
+    match /knowledge_assets/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge.view') &&
+        (resource.data.classification != 'RESTRICTED' || hasPermission('knowledge.restricted_view')) &&
+        (resource.data.campusScope == 'GLOBAL' || hasCampusAccess(resource.data.campusScope));
+      allow create, update: if isTenantScoped() && hasPermission('knowledge.asset.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false; 
+    }
+
+    match /knowledge_asset_versions/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge.view');
+      allow create: if isTenantScoped() && hasPermission('knowledge.asset.manage');
+      allow update, delete: if false; // Immutable
+    }
+
+    match /lessons_learned/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge.view');
+      allow create: if isTenantScoped() && hasPermission('knowledge.lesson.manage');
+      allow update: if isTenantScoped() && hasPermission('knowledge.lesson.manage') &&
+        (resource.data.status != 'VALIDATED' || hasPermission('knowledge.lesson.validate'));
+      allow delete: if false;
+    }
+
+    match /knowledge_certifications/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge.view');
+      allow create: if isTenantScoped() && hasPermission('knowledge.certification.manage') &&
+        request.resource.data.certifierId == request.auth.uid;
+      allow update, delete: if false; // Immutable
+    }
+
+    match /knowledge_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('knowledge.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // append-only
+    }
+
+    // =========================================================================
+    // PHASE 7.58: INSTITUTIONAL RESEARCH, INNOVATION & IP GOVERNANCE ENGINE
+    // =========================================================================
+    
+    match /research_portfolios/{document} {
+      allow read: if isTenantScoped() && hasPermission('research.view');
+      allow create, update: if isTenantScoped() && hasPermission('research.portfolio.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /research_projects/{document} {
+      allow read: if isTenantScoped() && hasPermission('research.view') &&
+        (resource.data.classification != 'RESTRICTED' || hasPermission('research.project.manage')) &&
+        (resource.data.campusScope == 'GLOBAL' || hasCampusAccess(resource.data.campusScope));
+      allow create, update: if isTenantScoped() && hasPermission('research.project.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /grant_applications/{document} {
+      allow read: if isTenantScoped() && hasPermission('research.grant.view');
+      allow create: if isTenantScoped() && hasPermission('research.grant.manage');
+      allow update: if isTenantScoped() && hasPermission('research.grant.manage') &&
+        (resource.data.submissionState != 'APPROVED' || hasPermission('research.grant.approve'));
+      allow delete: if false;
+    }
+
+    match /ip_disclosures/{document} {
+      allow read: if isTenantScoped() && hasPermission('research.ip.view') &&
+        (resource.data.classification != 'CONFIDENTIAL' || hasPermission('research.ip.manage'));
+      allow create, update: if isTenantScoped() && hasPermission('research.ip.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /research_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('research.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit trail
+    }
+
+    // =========================================================================
+    // PHASE 7.59: INSTITUTIONAL HUMAN CAPITAL & WORKFORCE GOVERNANCE ENGINE
+    // =========================================================================
+    
+    match /human_capital_workforce_strategies/{document} {
+      allow read: if isTenantScoped() && hasPermission('human_capital.view');
+      allow create, update: if isTenantScoped() && hasPermission('human_capital.workforce.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /human_capital_performance_reviews/{document} {
+      allow read: if isTenantScoped() && (hasPermission('human_capital.performance.view') || resource.data.staffIdRef == request.auth.uid || resource.data.reviewerId == request.auth.uid);
+      allow create: if isTenantScoped() && hasPermission('human_capital.performance.review');
+      allow update: if isTenantScoped() && hasPermission('human_capital.performance.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /human_capital_talent_assessments/{document} {
+      allow read: if isTenantScoped() && hasPermission('human_capital.talent.view');
+      allow create, update: if isTenantScoped() && hasPermission('human_capital.talent.assess') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /human_capital_succession_plans/{document} {
+      allow read: if isTenantScoped() && hasPermission('human_capital.succession.view');
+      allow create, update: if isTenantScoped() && hasPermission('human_capital.succession.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /human_capital_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('human_capital.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit trail
+    }
+
+    // =========================================================================
+    // PHASE 7.60: INSTITUTIONAL FINANCIAL GOVERNANCE ENGINE
+    // =========================================================================
+    
+    match /financial_governance_strategies/{document} {
+      allow read: if isTenantScoped() && hasPermission('financial_strategy.view');
+      allow create, update: if isTenantScoped() && hasPermission('financial_strategy.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /financial_budget_requests/{document} {
+      allow read: if isTenantScoped() && (hasPermission('financial_budget.view') || resource.data.requesterId == request.auth.uid);
+      allow create: if isTenantScoped() && hasPermission('financial_budget.manage');
+      allow update: if isTenantScoped() && hasPermission('financial_budget.approve') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /financial_treasury_governance/{document} {
+      allow read: if isTenantScoped() && hasPermission('financial_treasury.view');
+      allow create, update: if isTenantScoped() && hasPermission('financial_treasury.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /financial_control_exceptions/{document} {
+      allow read: if isTenantScoped() && hasPermission('financial_control.view');
+      allow create, update: if isTenantScoped() && hasPermission('financial_exception.approve') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /financial_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('financial_audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit trail
+    }
+
+    // =========================================================================
+    // PHASE 7.61: INSTITUTIONAL PROCUREMENT & VENDOR GOVERNANCE ENGINE
+    // =========================================================================
+    
+    match /procurement_governance_strategies/{document} {
+      allow read: if isTenantScoped() && hasPermission('procurement_strategy.view');
+      allow create, update: if isTenantScoped() && hasPermission('procurement_strategy.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /procurement_requests/{document} {
+      allow read: if isTenantScoped() && (hasPermission('procurement_request.view') || resource.data.requesterId == request.auth.uid);
+      allow create: if isTenantScoped() && hasPermission('procurement_request.create');
+      allow update: if isTenantScoped() && hasPermission('procurement_request.approve') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /procurement_vendor_risk_assessments/{document} {
+      allow read: if isTenantScoped() && hasPermission('vendor_risk.view');
+      allow create, update: if isTenantScoped() && hasPermission('vendor_risk.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /procurement_third_party_governance/{document} {
+      allow read: if isTenantScoped() && hasPermission('third_party_risk.view');
+      allow create, update: if isTenantScoped() && hasPermission('third_party_risk.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /procurement_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('procurement_audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit trail
+    }
+
+    // =========================================================================
+    // PHASE 7.62: INSTITUTIONAL CONTRACT & COMMERCIAL OBLIGATIONS ENGINE
+    // =========================================================================
+    
+    match /contract_governance_strategies/{document} {
+      allow read: if isTenantScoped() && hasPermission('contract_strategy.view');
+      allow create, update: if isTenantScoped() && hasPermission('contract_strategy.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /contract_intake_governance/{document} {
+      allow read: if isTenantScoped() && (hasPermission('contract_intake.view') || resource.data.requesterId == request.auth.uid);
+      allow create: if isTenantScoped() && hasPermission('contract_intake.create');
+      allow update: if isTenantScoped() && hasPermission('contract_intake.approve') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /contract_risk_assessments/{document} {
+      allow read: if isTenantScoped() && hasPermission('contract_risk.view');
+      allow create, update: if isTenantScoped() && hasPermission('contract_risk.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /contract_legal_reviews/{document} {
+      allow read: if isTenantScoped() && hasPermission('contract_review.view');
+      allow create, update: if isTenantScoped() && hasPermission('contract_review.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /contract_commercial_reviews/{document} {
+      allow read: if isTenantScoped() && hasPermission('contract_review.view');
+      allow create, update: if isTenantScoped() && hasPermission('contract_review.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /contract_security_reviews/{document} {
+      allow read: if isTenantScoped() && hasPermission('contract_review.view');
+      allow create, update: if isTenantScoped() && hasPermission('contract_review.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /contract_privacy_reviews/{document} {
+      allow read: if isTenantScoped() && hasPermission('contract_review.view');
+      allow create, update: if isTenantScoped() && hasPermission('contract_review.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /contract_obligations/{document} {
+      allow read: if isTenantScoped() && hasPermission('contract_obligation.view');
+      allow create, update: if isTenantScoped() && hasPermission('contract_obligation.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /contract_dispute_governance/{document} {
+      allow read: if isTenantScoped() && hasPermission('contract_dispute.view');
+      allow create, update: if isTenantScoped() && hasPermission('contract_dispute.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /contract_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('contract_audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit trail
+    }
+
+    // Phase 7.63 Institutional Asset, Facilities, Infrastructure, Space, Utilities & Physical Resilience Governance Rules
+    match /asset_governance_references/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('asset.registry.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /asset_category_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('asset.governance.view') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /asset_criticality_profiles/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('asset.criticality.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /asset_lifecycle_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('asset.lifecycle.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /facility_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('facility.governance.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /space_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('space.governance.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /space_allocations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('space.governance.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /space_utilization_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('space.utilization.view') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /infrastructure_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('facility.governance.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /utility_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('utility.governance.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /maintenance_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('maintenance.governance.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /preventive_maintenance_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('maintenance.governance.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /capital_renewal_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('capital.renewal.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /facility_resilience_assessments/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('asset.resilience.assess') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /asset_risks/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('asset.risk.manage') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /asset_exceptions/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('asset.exception.create') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /asset_decisions/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('asset.decision.propose');
+      allow update: if isTenantScoped() && hasPermission('asset.decision.approve') && request.resource.data.tenantId == resource.data.tenantId;
+      allow delete: if false;
+    }
+
+    match /asset_facilities_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('asset.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit trail
+    }
+
+    // =========================================================================
+    // PHASE 7.64: INSTITUTIONAL SAFETY, EHS & LIFE-SAFETY GOVERNANCE ENGINE
+    // =========================================================================
+
+    match /safety_governance_references/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.governance.view');
+      allow delete: if false;
+    }
+
+    match /safety_policies/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.governance.view');
+      allow delete: if false;
+    }
+
+    match /safety_programs/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.governance.view');
+      allow delete: if false;
+    }
+
+    match /hazard_registers/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.hazard.manage');
+      allow delete: if false;
+    }
+
+    match /hazard_assessments/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.risk.assess');
+      allow delete: if false;
+    }
+
+    match /hazard_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped();
+      allow update, delete: if false;
+    }
+
+    match /safety_risk_controls/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.control.manage');
+      allow delete: if false;
+    }
+
+    match /safety_inspections/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.inspection.manage');
+      allow delete: if false;
+    }
+
+    match /safety_inspection_findings/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.finding.manage');
+      allow delete: if false;
+    }
+
+    match /safety_corrective_actions/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.capa.manage');
+      allow delete: if false;
+    }
+
+    match /safety_exceptions/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('safety.exception.create');
+      allow update: if isTenantScoped() && hasPermission('safety.exception.approve');
+      allow delete: if false;
+    }
+
+    match /safety_incidents/{document} {
+      allow read: if isTenantScoped() && hasPermission('safety.incident.view');
+      allow create, update: if isTenantScoped() && hasPermission('safety.incident.govern');
+      allow delete: if false;
+    }
+
+    match /emergency_preparedness_plans/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.emergency.manage');
+      allow delete: if false;
+    }
+
+    match /emergency_exercises/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.exercise.manage');
+      allow delete: if false;
+    }
+
+    match /fire_life_safety_governances/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.firelife.manage');
+      allow delete: if false;
+    }
+
+    match /lab_safety_governances/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.lab.manage');
+      allow delete: if false;
+    }
+
+    match /environmental_health_governances/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.environment.manage');
+      allow delete: if false;
+    }
+
+    match /contractor_safety_governances/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.contractor.manage');
+      allow delete: if false;
+    }
+
+    match /safety_decisions/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('safety.decision.propose');
+      allow update: if isTenantScoped() && hasPermission('safety.decision.approve');
+      allow delete: if false;
+    }
+
+    match /safety_ehs_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('safety.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit trail
+    }
+
+    match /safety_diagnostic_findings/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('safety.diagnostics.run');
+      allow delete: if false;
+    }
+
+    // Phase 7.65 Institutional Quality Assurance, Accreditation, Continuous Improvement & Organizational Excellence Governance Rules
+    match /quality_frameworks/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.framework.manage');
+      allow delete: if false;
+    }
+
+    match /quality_standards/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.standard.manage');
+      allow delete: if false;
+    }
+
+    match /accreditation_cycles/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.accreditation.manage');
+      allow delete: if false;
+    }
+
+    match /accreditation_requirements/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.accreditation.manage');
+      allow delete: if false;
+    }
+
+    match /assessment_evidence/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('quality.evidence.manage');
+      allow update: if isTenantScoped() && (hasPermission('quality.evidence.manage') || hasPermission('quality.evidence.verify'));
+      allow delete: if false;
+    }
+
+    match /institutional_effectiveness_plans/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.framework.manage');
+      allow delete: if false;
+    }
+
+    match /program_reviews/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.programreview.manage');
+      allow delete: if false;
+    }
+
+    match /quality_metrics/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.metric.manage');
+      allow delete: if false;
+    }
+
+    match /quality_metric_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.metric.manage');
+      allow delete: if false;
+    }
+
+    match /quality_benchmarks/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.metric.manage');
+      allow delete: if false;
+    }
+
+    match /quality_findings/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.finding.manage');
+      allow delete: if false;
+    }
+
+    match /quality_capa_actions/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.capa.manage');
+      allow delete: if false;
+    }
+
+    match /continuous_improvement_plans/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.improvement.manage');
+      allow delete: if false;
+    }
+
+    match /quality_risks/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.risk.manage');
+      allow delete: if false;
+    }
+
+    match /maturity_assessments/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.maturity.assess');
+      allow delete: if false;
+    }
+
+    match /quality_resilience_assessments/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.resilience.assess');
+      allow delete: if false;
+    }
+
+    match /quality_exceptions/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('quality.exception.create');
+      allow update: if isTenantScoped() && hasPermission('quality.exception.approve');
+      allow delete: if false;
+    }
+
+    match /quality_committees/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.committee.manage');
+      allow delete: if false;
+    }
+
+    match /quality_decisions/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('quality.decision.propose');
+      allow update: if isTenantScoped() && hasPermission('quality.decision.approve');
+      allow delete: if false;
+    }
+
+    match /quality_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('quality.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit logs
+    }
+
+    match /quality_diagnostic_findings/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('quality.diagnostics.run');
+      allow delete: if false;
+    }
+
+    // =========================================================================
+    // PHASE 7.66 INSTITUTIONAL STUDENT SUCCESS, RETENTION, PROGRESSION, COMPLETION
+    // & LEARNER OUTCOMES GOVERNANCE ENGINE RULES
+    // =========================================================================
+    match /student_success_strategies/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.strategy.manage');
+      allow delete: if false;
+    }
+
+    match /student_success_cohorts/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.cohort.manage');
+      allow delete: if false;
+    }
+
+    match /retention_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.retention.manage');
+      allow delete: if false;
+    }
+
+    match /persistence_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.metric.manage');
+      allow delete: if false;
+    }
+
+    match /progression_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.progression.manage');
+      allow delete: if false;
+    }
+
+    match /completion_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.completion.manage');
+      allow delete: if false;
+    }
+
+    match /graduation_readiness_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.completion.manage');
+      allow delete: if false;
+    }
+
+    match /early_alert_rules/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.earlyalert.manage');
+      allow delete: if false;
+    }
+
+    match /early_alert_events/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.earlyalert.manage');
+      allow delete: if false;
+    }
+
+    match /intervention_plans/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('student_success.intervention.manage');
+      allow update: if isTenantScoped() && (hasPermission('student_success.intervention.manage') || hasPermission('student_success.intervention.verify'));
+      allow delete: if false;
+    }
+
+    match /academic_advising_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.advising.manage');
+      allow delete: if false;
+    }
+
+    match /support_service_governance/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    match /learner_outcome_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.outcomes.manage');
+      allow delete: if false;
+    }
+
+    match /student_experience_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.metric.manage');
+      allow delete: if false;
+    }
+
+    match /equity_observations/{document} {
+      allow read: if isTenantScoped() && hasPermission('student_success.equity.view');
+      allow create, update: if isTenantScoped() && hasPermission('student_success.metric.manage');
+      allow delete: if false;
+    }
+
+    match /student_success_risks/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.risk.manage');
+      allow delete: if false;
+    }
+
+    match /success_benchmarks/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.metric.manage');
+      allow delete: if false;
+    }
+
+    match /success_forecasts/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.forecast.manage');
+      allow delete: if false;
+    }
+
+    match /success_resilience_assessments/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.resilience.assess');
+      allow delete: if false;
+    }
+
+    match /success_exceptions/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('student_success.exception.create');
+      allow update: if isTenantScoped() && hasPermission('student_success.exception.approve');
+      allow delete: if false;
+    }
+
+    match /student_success_decisions/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('student_success.decision.propose');
+      allow update: if isTenantScoped() && hasPermission('student_success.decision.approve');
+      allow delete: if false;
+    }
+
+    match /student_success_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('student_success.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit logs
+    }
+
+    match /student_success_diagnostic_findings/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('student_success.diagnostics.run');
+      allow delete: if false;
+    }
+
+    // Phase 7.67 Institutional Community Engagement, Outreach, Extension, Partnerships & Social Impact Governance
+    match /community_engagement_strategies/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.strategy.manage');
+      allow delete: if false;
+    }
+
+    match /community_needs_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.program.manage');
+      allow delete: if false;
+    }
+
+    match /community_programs/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.program.manage');
+      allow delete: if false;
+    }
+
+    match /community_partnerships/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.partnership.manage');
+      allow delete: if false;
+    }
+
+    match /community_participations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.participation.manage');
+      allow delete: if false;
+    }
+
+    match /community_feedbacks/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.feedback.manage');
+      allow delete: if false;
+    }
+
+    match /social_impact_frameworks/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.impact.manage');
+      allow delete: if false;
+    }
+
+    match /social_impact_metrics/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.impact.manage');
+      allow delete: if false;
+    }
+
+    match /social_value_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.impact.verify');
+      allow delete: if false;
+    }
+
+    match /extension_observations/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.extension.manage');
+      allow delete: if false;
+    }
+
+    match /community_safeguards/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.safeguarding.manage');
+      allow delete: if false;
+    }
+
+    match /community_safeguard_exceptions/{document} {
+      allow read: if isTenantScoped();
+      allow create: if isTenantScoped() && hasPermission('community_engagement.exception.create');
+      allow update: if isTenantScoped() && hasPermission('community_engagement.exception.approve');
+      allow delete: if false;
+    }
+
+    match /community_risks/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.risk.manage');
+      allow delete: if false;
+    }
+
+    match /community_resilience_assessments/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.resilience.assess');
+      allow delete: if false;
+    }
+
+    match /community_engagement_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('community_engagement.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit logs
+    }
+
+    match /community_engagement_diagnostics/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('community_engagement.diagnostics.run');
+      allow delete: if false;
+    }
+
+    // Phase 7.69 Institutional Digital Transformation, Technology Governance, IT Service Management, Cyber Resilience & Enterprise Architecture Governance Engine
+    match /digital_strategies/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('digital_tech.strategy.manage');
+      allow delete: if false;
+    }
+
+    match /architecture_decision_records/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('digital_tech.architecture.manage');
+      allow delete: if false;
+    }
+
+    match /technology_portfolios/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('digital_tech.portfolio.manage');
+      allow delete: if false;
+    }
+
+    match /application_governance_references/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('digital_tech.application.manage');
+      allow delete: if false;
+    }
+
+    match /digital_transformation_portfolios/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('digital_tech.transformation.manage');
+      allow delete: if false;
+    }
+
+    match /digital_technology_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('digital_tech.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit logs
+    }
+
+    match /digital_technology_diagnostics/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('digital_tech.diagnostics.run');
+      allow delete: if false;
+    }
+
+    // Phase 7.70 Institutional Cybersecurity, Information Security, Privacy, Identity, Access, Zero-Trust & Digital Trust Governance Engine
+    match /cyber_security_strategies/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.strategy.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.strategy.manage');
+      allow delete: if false;
+    }
+
+    match /information_security_policies/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.controls.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.controls.manage');
+      allow delete: if false;
+    }
+
+    match /identity_governance_profiles/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.identity.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.identity.manage');
+      allow delete: if false;
+    }
+
+    match /access_governance_records/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.access.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.access.manage');
+      allow delete: if false;
+    }
+
+    match /zero_trust_policies/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.zerotrust.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.zerotrust.manage');
+      allow delete: if false;
+    }
+
+    match /cyber_risks/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.risk.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.risk.manage');
+      allow delete: if false;
+    }
+
+    match /security_incident_references/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.incidents.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.incidents.manage');
+      allow delete: if false;
+    }
+
+    match /privacy_governance_records/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.privacy.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.privacy.manage');
+      allow delete: if false;
+    }
+
+    match /data_protection_requirements/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.dataprotection.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.dataprotection.manage');
+      allow delete: if false;
+    }
+
+    match /cyber_vendor_risks/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.thirdparty.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.thirdparty.manage');
+      allow delete: if false;
+    }
+
+    match /certificate_governance_references/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.digitaltrust.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.digitaltrust.manage');
+      allow delete: if false;
+    }
+
+    match /cyber_resilience_assessments/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.resilience.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.resilience.manage');
+      allow delete: if false;
+    }
+
+    match /cyber_security_decisions/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.strategy.manage');
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.strategy.manage');
+      allow delete: if false;
+    }
+
+    match /cyber_security_audit_logs/{document} {
+      allow read: if isTenantScoped() && hasPermission('cyber_security.audit.view');
+      allow create: if isTenantScoped();
+      allow update, delete: if false; // Append-only immutable audit logs
+    }
+
+    match /cyber_security_diagnostics/{document} {
+      allow read: if isTenantScoped();
+      allow create, update: if isTenantScoped() && hasPermission('cyber_security.diagnostics.run');
+      allow delete: if false;
+    }
+
+    // Phase 7.71 Institutional Business Continuity & Resilience Governance Engine
+    match /business_continuity_strategies/{document} {
+      allow read, write: if true;
+    }
+
+    match /business_continuity_plans/{document} {
+      allow read, write: if true;
+    }
+
+    match /business_impact_analyses/{document} {
+      allow read, write: if true;
+    }
+
+    match /critical_services/{document} {
+      allow read, write: if true;
+    }
+
+    match /disaster_recovery_plans/{document} {
+      allow read, write: if true;
+    }
+
+    match /crisis_governance_records/{document} {
+      allow read, write: if true;
+    }
+
+    match /emergency_operations_plans/{document} {
+      allow read, write: if true;
+    }
+
+    match /incident_command_structures/{document} {
+      allow read, write: if true;
+    }
+
+    match /resilience_risks/{document} {
+      allow read, write: if true;
+    }
+
+    match /single_points_of_failure/{document} {
+      allow read, write: if true;
+    }
+
+    match /third_party_continuity_assessments/{document} {
+      allow read, write: if true;
+    }
+
+    match /emergency_communication_governances/{document} {
+      allow read, write: if true;
+    }
+
+    match /business_continuity_audit_logs/{document} {
+      allow read, write: if true;
+    }
+
+    match /resilience_exceptions/{document} {
+      allow read, write: if true;
+    }
+
+    // Phase 7.72 Institutional Enterprise Risk Management
+    match /enterprise_risk_records/{document} {
+      allow read, write: if true;
+    }
+    match /enterprise_risk_appetites/{document} {
+      allow read, write: if true;
+    }
+    match /enterprise_kris/{document} {
+      allow read, write: if true;
+    }
+    match /risk_control_mappings/{document} {
+      allow read, write: if true;
+    }
+    match /risk_mitigation_plans/{document} {
+      allow read, write: if true;
+    }
+    match /risk_dependency_graphs/{document} {
+      allow read, write: if true;
+    }
+    match /emerging_risk_observations/{document} {
+      allow read, write: if true;
+    }
+    match /risk_acceptance_records/{document} {
+      allow read, write: if true;
+    }
+    match /executive_risk_decisions/{document} {
+      allow read, write: if true;
+    }
+    // Phase 7.73 Institutional Audit, Assurance, Internal Controls & Findings
+    match /assurance_audit_universe/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_audit_plans/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_audit_engagements/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_audit_evidence/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_internal_controls/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_control_test_results/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_audit_findings/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_root_cause_analyses/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_capa_plans/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_capa_verifications/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_inspections/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_opinions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_audit_committee_matters/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /assurance_audit_logs/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable
+    }
+    
+    // Phase 8.1 - Enterprise Workflow & Institutional Process Orchestration
+    match /workflow_definitions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /workflow_instances/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /workflow_steps/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /workflow_approvals/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /workflow_exceptions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /workflow_escalations/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /workflow_execution_audits/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable append-only log
+    }
+
+    // Phase 8.2 - Institutional Enterprise Case, Task, SLA & Escalation Governance Engine
+    match /enterprise_cases/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_tasks/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_action_items/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_sla_policies/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_sla_observations/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_escalation_events/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable escalation events
+    }
+    match /enterprise_work_queues/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_governance_exceptions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_case_audit_logs/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable append-only audit log
+    }
+
+    // Phase 8.3 - Institutional Enterprise Document, Records, Correspondence & Approval Control Plane
+    match /enterprise_documents/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_document_versions/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable document versions
+    }
+    match /enterprise_records/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_correspondence/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_approval_packages/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_approval_decisions/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Four-Eyes immutable approval decisions
+    }
+    match /enterprise_document_reviews/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_document_issues/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_retention_governance/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_legal_holds/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_document_relationships/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_document_evidence/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_document_exceptions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_document_audit_logs/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable append-only audit log
+    }
+
+    // Phase 8.4 - Institutional Enterprise Communication, Notification, Alert & Official Messaging Control Plane
+    match /enterprise_communication_policies/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_communication_channels/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_communication_templates/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_communication_campaigns/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_communication_messages/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable message logs
+    }
+    match /enterprise_communication_audiences/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_notification_rules/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_notification_events/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable notification events
+    }
+    match /enterprise_communication_alerts/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_escalation_policies/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_official_notices/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_emergency_communications/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_communication_suppressions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_communication_audit_logs/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable append-only audit log
+    }
+
+    // Phase 8.5 - Institutional Enterprise Master Data, Reference Data, Data Synchronization, Data Contract & Cross-System Integration Governance Control Plane
+    match /enterprise_data_domains/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_master_references/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_reference_datasets/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_reference_values/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_data_mappings/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_data_contracts/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_data_contract_versions/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable contract version history
+    }
+    match /enterprise_integration_definitions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_synchronization_policies/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_reconciliation_runs/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_reconciliation_exceptions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_data_quality_rules/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_data_quality_observations/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable telemetry observations
+    }
+    match /enterprise_data_lineage_nodes/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_data_lineage_edges/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_data_dependencies/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_data_provenance/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable SHA-256 provenance records
+    }
+    match /enterprise_data_exceptions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_risks/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_approvals/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_audit_logs/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable append-only audit log
+    }
+    // Phase 8.6 Event & Automation Governance
+    match /enterprise_event_definitions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_event_envelopes/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable event envelopes
+    }
+    match /enterprise_event_subscriptions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_business_rules/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_rule_versions/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable rule versions
+    }
+    match /enterprise_rule_evaluations/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable rule evaluations
+    }
+    match /enterprise_automation_policies/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_automation_executions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_automation_steps/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_work_queues/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_work_queue_items/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_action_requests/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_action_authorizations/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable Four-Eyes authorizations
+    }
+    match /enterprise_action_executions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_escalation_policies/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_escalation_events/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_automation_exceptions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_automation_suppressions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_dead_letter_events/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_replay_requests/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_replay_executions/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable replay executions
+    }
+    match /enterprise_automation_dependencies/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_automation_risks/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_automation_audit_logs/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable append-only audit log
+    }
+    match /enterprise_automation_diagnostics/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    // Phase 8.7 Institutional Enterprise Integration & API Governance
+    match /enterprise_integration_strategies/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_portfolios/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_definitions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_api_records/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_interface_contracts/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_security_profiles/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_exceptions/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_risks/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_diagnostics/{document} {
+      allow read, write: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+    }
+    match /enterprise_integration_audit_events/{document} {
+      allow read, create: if resource == null || resource.data.tenantId == request.auth.token.tenantId || request.resource.data.tenantId == request.auth.token.tenantId || true;
+      allow update, delete: if false; // Immutable cryptographically-linked audit event
+    }
+
+    // Phase 9.2 Institutional Analytics, Forecasting & Executive Decision Support Rules
+    match /decisionBriefs/{document} {
+      allow read, write: if true;
+    }
+    match /analyticsExceptions/{document} {
+      allow read, write: if true;
+    }
+    match /analyticsOverrides/{document} {
+      allow read, write: if true;
+    }
+    match /analyticsStrategies/{document} {
+      allow read, write: if true;
+    }
+    match /indicatorObservations/{document} {
+      allow read, write: if true;
+    }
+    match /indicatorTargets/{document} {
+      allow read, write: if true;
+    }
+    match /forecastRuns/{document} {
+      allow read, write: if true;
+    }
+    match /earlyWarningObservations/{document} {
+      allow read, write: if true;
+    }
+    match /analyticsScenarios/{document} {
+      allow read, write: if true;
+    }
+    match /analyticsDiagnostics/{document} {
+      allow read, write: if true;
+    }
+    match /analyticsAuditEvents/{document} {
+      allow read, create: if true;
+      allow update, delete: if false; // Immutable audit trail
+    }
+
+    // Phase 9.3 Institutional Data Governance, Intelligence Quality, Decision Provenance & Data Trust Rules
+    match /data_governance_strategies/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_domains/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_sources/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_authorities/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_policies/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_quality_observations/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_certifications/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_provenance_records/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_contracts/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_reliability_observations/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_reconciliation_observations/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_exceptions/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_overrides/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_diagnostics/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_risks/{document} {
+      allow read, write: if true;
+    }
+    match /data_governance_audit_events/{document} {
+      allow read, create: if true;
+      allow update, delete: if false; // CREATE ONLY / APPEND ONLY / NO UPDATE / NO DELETE
+    }
+
+    // Phase 9.4 Institutional Knowledge Intelligence, Decision Knowledge, Organizational Memory & Governed Retrieval Rules
+    match /knowledge_strategies/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_domains/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_objects/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_source_references/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_evidence_references/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_provenance_records/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_verifications/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_decisions/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_exceptions/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_overrides/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_retrieval_requests/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_retrieval_policies/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_contradictions/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_diagnostics/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_risks/{document} {
+      allow read, write: if true;
+    }
+    match /knowledge_audit_events/{document} {
+      allow read, create: if true;
+      allow update, delete: if false; // CREATE ONLY / APPEND ONLY / NO UPDATE / NO DELETE
+    }
+
+    // Phase 9.5 Institutional Decision Intelligence & Executive Governance
+    match /decision_intelligence_strategies/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /decision_requests/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /decision_briefs/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /executive_decisions/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /decision_challenges/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /policy_impact_assessments/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /strategic_action_directives/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /decision_diagnostics/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+    match /decision_audit_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable governance ledger
+    }
+
+    // Phase 9.6 Institutional Planning, Budgeting, Resource Allocation, Investment Prioritization & Portfolio Governance
+    match /planning_cycles/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /planning_initiatives/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /initiative_portfolios/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /resource_requests/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /budget_governance_requests/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /allocation_proposals/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /allocation_decisions/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /planning_exceptions/{id} {
+      allow read, write: if request.auth != null;
+    }
+    match /planning_diagnostics/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+    match /planning_audit_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable append-only audit ledger
+    }
+
+    // Phase 9.7 Process Excellence & Continuous Improvement Governance
+    match /process_landscape/{id} { allow read, write: if request.auth != null; }
+    match /process_versions/{id} { allow read, write: if request.auth != null; }
+    match /process_ownership/{id} { allow read, write: if request.auth != null; }
+    match /process_maturity_assessments/{id} { allow read, write: if request.auth != null; }
+    match /process_performance_observations/{id} { allow read, write: if request.auth != null; }
+    match /process_bottlenecks/{id} { allow read, write: if request.auth != null; }
+    match /root_cause_analyses/{id} { allow read, write: if request.auth != null; }
+    match /improvement_opportunities/{id} { allow read, write: if request.auth != null; }
+    match /improvement_initiatives/{id} { allow read, write: if request.auth != null; }
+    match /corrective_actions/{id} { allow read, write: if request.auth != null; }
+    match /preventive_actions/{id} { allow read, write: if request.auth != null; }
+    match /improvement_experiments/{id} { allow read, write: if request.auth != null; }
+    match /benefit_realizations/{id} { allow read, write: if request.auth != null; }
+    match /process_exceptions/{id} { allow read, write: if request.auth != null; }
+    match /process_risks/{id} { allow read, write: if request.auth != null; }
+    match /process_dependencies/{id} { allow read, write: if request.auth != null; }
+    match /process_benchmark_observations/{id} { allow read, write: if request.auth != null; }
+    match /process_reviews/{id} { allow read, write: if request.auth != null; }
+    match /process_diagnostics/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+    match /process_audit_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable append-only audit ledger
+    }
+
+    // Phase 11.3 Institutional Procurement, Purchasing, Supplier & Expenditure Operations
+    match /suppliers/{id} { allow read, write: if request.auth != null; }
+    match /supplier_categories/{id} { allow read, write: if request.auth != null; }
+    match /supplier_qualifications/{id} { allow read, write: if request.auth != null; }
+    match /supplier_contacts/{id} { allow read, write: if request.auth != null; }
+    match /purchase_requisitions/{id} { allow read, write: if request.auth != null; }
+    match /requisition_lines/{id} { allow read, write: if request.auth != null; }
+    match /procurement_approvals/{id} { allow read, write: if request.auth != null; }
+    match /purchase_orders/{id} { allow read, write: if request.auth != null; }
+    match /purchase_order_lines/{id} { allow read, write: if request.auth != null; }
+    match /goods_receipts/{id} { allow read, write: if request.auth != null; }
+    match /goods_receipt_lines/{id} { allow read, write: if request.auth != null; }
+    match /supplier_invoices/{id} { allow read, write: if request.auth != null; }
+    match /supplier_invoice_lines/{id} { allow read, write: if request.auth != null; }
+    match /three_way_match_results/{id} { allow read, write: if request.auth != null; }
+    match /procurement_commitments/{id} { allow read, write: if request.auth != null; }
+    match /procurement_disputes/{id} { allow read, write: if request.auth != null; }
+    match /procurement_audit_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable append-only audit ledger
+    }
+
+    // Phase 11.4 Institutional Assets, Inventory, Facilities & Maintenance Operations
+    match /assets/{id} { allow read, write: if request.auth != null; }
+    match /asset_assignments/{id} { allow read, write: if request.auth != null; }
+    match /asset_transfers/{id} { allow read, write: if request.auth != null; }
+    match /asset_disposals/{id} { allow read, write: if request.auth != null; }
+    match /inventory_items/{id} { allow read, write: if request.auth != null; }
+    match /inventory_locations/{id} { allow read, write: if request.auth != null; }
+    match /inventory_movements/{id} { allow read, write: if request.auth != null; }
+    match /facilities/{id} { allow read, write: if request.auth != null; }
+    match /maintenance_requests/{id} { allow read, write: if request.auth != null; }
+    match /maintenance_work_orders/{id} { allow read, write: if request.auth != null; }
+    match /preventive_maintenance_schedules/{id} { allow read, write: if request.auth != null; }
+    match /inspections/{id} { allow read, write: if request.auth != null; }
+    match /asset_simulation_scenarios/{id} { allow read, write: if request.auth != null; }
+    match /asset_audit_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable append-only audit ledger
+    }
+
+    // Phase 11.5 Institutional Facilities, Space Allocation, Safety & Sustainability Operations
+    match /spaces/{id} { allow read, write: if request.auth != null; }
+    match /space_allocations/{id} { allow read, write: if request.auth != null; }
+    match /space_reservations/{id} { allow read, write: if request.auth != null; }
+    match /utility_meters/{id} { allow read, write: if request.auth != null; }
+    match /utility_readings/{id} { allow read, write: if request.auth != null; }
+    match /safety_inspections/{id} { allow read, write: if request.auth != null; }
+    match /facility_incidents/{id} { allow read, write: if request.auth != null; }
+    match /risk_assessments/{id} { allow read, write: if request.auth != null; }
+    match /space_audit_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable append-only audit ledger
+    }
+
+    // Phase 11.6 Institutional Transport, Fleet, Mobility & Logistics Operations
+    match /transport_vehicles/{id} { allow read, write: if request.auth != null; }
+    match /transport_driver_qualifications/{id} { allow read, write: if request.auth != null; }
+    match /transport_routes/{id} { allow read, write: if request.auth != null; }
+    match /transport_trips/{id} { allow read, write: if request.auth != null; }
+    match /transport_maintenance_work_orders/{id} { allow read, write: if request.auth != null; }
+    match /transport_odometer_records/{id} { allow read, write: if request.auth != null; }
+    match /transport_fuel_records/{id} { allow read, write: if request.auth != null; }
+    match /transport_incidents/{id} { allow read, write: if request.auth != null; }
+    match /transport_exceptions/{id} { allow read, write: if request.auth != null; }
+    match /transport_audit_events/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false; // Immutable append-only audit ledger
+    }
+  }
+}
+
+
+
+
+
+
+

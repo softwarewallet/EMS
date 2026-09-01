@@ -1,0 +1,12 @@
+{
+  "projectId": "edutech-sms",
+  "appId": "1:756106798276:web:5a6dd3e963afd0e5f11591",
+  "apiKey": "AIzaSyCTX6qLyh332ggI5xaAYc96-_Tzpp_fF9E",
+  "authDomain": "edutech-sms.firebaseapp.com",
+  "firestoreDatabaseId": "ai-studio-edutechsms-3f5a2a43-0fb3-466a-9ab4-7820c8d1cb2b",
+  "storageBucket": "edutech-sms.firebasestorage.app",
+  "messagingSenderId": "756106798276",
+  "measurementId": "",
+  "oAuthClientId": "756106798276-g4fug3aea6kbq6hpfubbqukp8c8kqp2q.apps.googleusercontent.com",
+  "recaptchaSiteKey": ""
+}

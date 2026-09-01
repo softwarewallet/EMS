@@ -1,0 +1,6 @@
+{
+  "name": "EMS",
+  "description": "EMS (Education Management System) is a multi-tenant, modular education management platform designed to digitally manage educational institutions, students, teachers, academics, administration, operations, learning, analytics and future government education monitoring from a centralized platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

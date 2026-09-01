@@ -1,0 +1,4731 @@
+{
+  "entities": {
+    "Tenant": {
+      "title": "Tenant",
+      "description": "Institutional tenant within the multi-tenant EduTech-SMS platform",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "type": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "registrationNumber": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "website": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "suspended",
+            "onboarding",
+            "archived"
+          ]
+        },
+        "totalStudents": {
+          "type": "number"
+        },
+        "totalStaff": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "code",
+        "type",
+        "status"
+      ]
+    },
+    "Campus": {
+      "title": "Campus",
+      "description": "Physical or satellite campus branch for a tenant institution",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "isMainCampus": {
+          "type": "boolean"
+        },
+        "contactEmail": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "contactPhone": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "name",
+        "code"
+      ]
+    },
+    "Classroom": {
+      "title": "Classroom",
+      "description": "Classroom or facility in campus",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "capacity": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "name",
+        "code"
+      ]
+    },
+    "User": {
+      "title": "User",
+      "description": "System user with multi-tenant role assignments",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive",
+            "suspended"
+          ]
+        },
+        "isPlatformSuperAdmin": {
+          "type": "boolean"
+        },
+        "defaultTenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "displayName",
+        "status"
+      ]
+    },
+    "AcademicYear": {
+      "title": "AcademicYear",
+      "description": "Academic calendar year for an institution",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "startDate": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "endDate": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "isCurrent": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "name",
+        "startDate",
+        "endDate"
+      ]
+    },
+    "ClassGrade": {
+      "title": "ClassGrade",
+      "description": "Class or grade level in an educational institution",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "order": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "name",
+        "code",
+        "order"
+      ]
+    },
+    "Section": {
+      "title": "Section",
+      "description": "Class division or section",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "classId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "classId",
+        "name",
+        "code"
+      ]
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "Curriculum course or subject",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "core",
+            "elective",
+            "lab",
+            "vocational"
+          ]
+        },
+        "creditHours": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "name",
+        "code",
+        "type"
+      ]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student record with institutional affiliation",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "studentIdNumber": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "firstName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "lastName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "gender": {
+          "type": "string",
+          "enum": [
+            "male",
+            "female",
+            "other"
+          ]
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "currentAcademicYearId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "currentClassId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "currentSectionId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "rollNumber": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "enrolled",
+            "transferred",
+            "graduated",
+            "suspended",
+            "withdrawn"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "studentIdNumber",
+        "firstName",
+        "lastName",
+        "status"
+      ]
+    },
+    "AttendanceRecord": {
+      "title": "AttendanceRecord",
+      "description": "Daily attendance status record for a student",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "academicYearId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "classId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "sectionId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "studentId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "studentName": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "late",
+            "half_day",
+            "excused"
+          ]
+        },
+        "recordedBy": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "recordedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "date",
+        "studentId",
+        "status"
+      ]
+    },
+    "StaffAttendanceRecord": {
+      "title": "StaffAttendanceRecord",
+      "description": "Staff clock-in and daily attendance record",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "staffId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "staffName": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "present",
+            "absent",
+            "leave",
+            "half_day"
+          ]
+        },
+        "checkIn": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "checkOut": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "staffId",
+        "date",
+        "status"
+      ]
+    },
+    "AuditRecord": {
+      "title": "AuditRecord",
+      "description": "Immutable audit log entry for compliance and tracking",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantName": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "userEmail": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "userDisplayName": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "action": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "resource": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "resourceId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "timestamp": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "SUCCESS",
+            "FAILURE",
+            "DENIED"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "userId",
+        "action",
+        "resource",
+        "timestamp",
+        "result"
+      ]
+    },
+    "EnterpriseArchitectureRepository": {
+      "title": "EnterpriseArchitectureRepository",
+      "description": "Governed enterprise architecture items",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "domain": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "classification": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "authoritativeSource": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "effectiveDate": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "reviewDate": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "createdBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "name",
+        "domain",
+        "status",
+        "classification"
+      ]
+    },
+    "ArchitectureDecisionRecord": {
+      "title": "ArchitectureDecisionRecord",
+      "description": "Governed architecture decision records with multi-stage lifecycle",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "version": {
+          "type": "number"
+        },
+        "creatorId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "approverId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "decisionRationale": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "createdBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "title",
+        "status",
+        "version",
+        "creatorId"
+      ]
+    },
+    "ApplicationPortfolioItem": {
+      "title": "ApplicationPortfolioItem",
+      "description": "Institutional application portfolio items",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "businessOwner": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "technicalOwner": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "rationalizationCategory": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "rationalizationScore": {
+          "type": "number"
+        },
+        "createdBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "name",
+        "status",
+        "businessOwner",
+        "technicalOwner"
+      ]
+    },
+    "TechnologyRiskItem": {
+      "title": "TechnologyRiskItem",
+      "description": "Governed technology risks",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "probability": {
+          "type": "number"
+        },
+        "impact": {
+          "type": "number"
+        },
+        "exposure": {
+          "type": "number"
+        },
+        "severity": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "creatorId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "title",
+        "probability",
+        "impact",
+        "severity",
+        "status"
+      ]
+    },
+    "TechnicalDebtItem": {
+      "title": "TechnicalDebtItem",
+      "description": "Governed technical debt items",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "affectedTechnology": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "creatorId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "title",
+        "affectedTechnology",
+        "status",
+        "creatorId"
+      ]
+    },
+    "CrisisEvent": {
+      "title": "CrisisEvent",
+      "description": "Institutional crisis and safety event tracking",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "severity": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "createdBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "updatedBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "title",
+        "category",
+        "severity",
+        "status",
+        "isActive"
+      ]
+    },
+    "EOCActivation": {
+      "title": "EOCActivation",
+      "description": "Emergency Operations Center activation log",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "crisisId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "eocId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "activatedBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "activatedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "justification": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "crisisId",
+        "eocId",
+        "activatedBy",
+        "activatedAt",
+        "status"
+      ]
+    },
+    "CommandAssignment": {
+      "title": "CommandAssignment",
+      "description": "EOC command role time-bound assignments",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "crisisId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "userName": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "assignedBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "assignedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "startTime": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "crisisId",
+        "role",
+        "userId",
+        "assignedBy",
+        "status"
+      ]
+    },
+    "DisasterRecoveryPlan": {
+      "title": "DisasterRecoveryPlan",
+      "description": "Disaster recovery orchestration plans",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "systemName": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "rtoMinutes": {
+          "type": "number"
+        },
+        "rpoMinutes": {
+          "type": "number"
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "title",
+        "systemName",
+        "ownerId"
+      ]
+    },
+    "AfterActionReview": {
+      "title": "AfterActionReview",
+      "description": "Post-crisis assessment and improvement planning",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "crisisId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "facilitatorId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "facilitatorName": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "reviewedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "whatHappened": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "whatWorked": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "whatFailed": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "crisisId",
+        "facilitatorId",
+        "status"
+      ]
+    },
+    "ComplianceFramework": {
+      "title": "ComplianceFramework",
+      "description": "Governed regulatory compliance frameworks",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "authorityId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "name",
+        "code",
+        "authorityId",
+        "status"
+      ]
+    },
+    "ComplianceObligation": {
+      "title": "ComplianceObligation",
+      "description": "Regulatory obligations mapping to requirements",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "campusId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "title",
+        "code",
+        "status"
+      ]
+    },
+    "ComplianceControl": {
+      "title": "ComplianceControl",
+      "description": "Compliance control measures and effectiveness",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "obligationId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "effectiveness": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "obligationId",
+        "code",
+        "title",
+        "effectiveness"
+      ]
+    },
+    "ComplianceAssessment": {
+      "title": "ComplianceAssessment",
+      "description": "Compliance program periodic reviews and assessments",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "title",
+        "status"
+      ]
+    },
+    "ComplianceFinding": {
+      "title": "ComplianceFinding",
+      "description": "Issues and findings derived from compliance assessments",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "assessmentId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "severity": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "assessmentId",
+        "severity",
+        "status"
+      ]
+    },
+    "LegalMatter": {
+      "title": "LegalMatter",
+      "description": "Governed institutional legal matters",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "matterNumber": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "classification": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "matterNumber",
+        "title",
+        "classification",
+        "status"
+      ]
+    },
+    "LegalHold": {
+      "title": "LegalHold",
+      "description": "Active litigation records holds on users and documents",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tenantId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "holdIdentifier": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "id",
+        "tenantId",
+        "holdIdentifier",
+        "status"
+      ]
+    },
+    "stakeholders": {
+      "type": "object",
+      "properties": {}
+    },
+    "stakeholder_groups": {
+      "type": "object",
+      "properties": {}
+    },
+    "stakeholder_segments": {
+      "type": "object",
+      "properties": {}
+    },
+    "stakeholder_relationships": {
+      "type": "object",
+      "properties": {}
+    },
+    "engagement_plans": {
+      "type": "object",
+      "properties": {}
+    },
+    "engagement_activities": {
+      "type": "object",
+      "properties": {}
+    },
+    "institutional_communications": {
+      "type": "object",
+      "properties": {}
+    },
+    "communication_versions": {
+      "type": "object",
+      "properties": {}
+    },
+    "communication_approvals": {
+      "type": "object",
+      "properties": {}
+    },
+    "communication_publications": {
+      "type": "object",
+      "properties": {}
+    },
+    "institutional_announcements": {
+      "type": "object",
+      "properties": {}
+    },
+    "consultations": {
+      "type": "object",
+      "properties": {}
+    },
+    "stakeholder_complaints": {
+      "type": "object",
+      "properties": {}
+    },
+    "stakeholder_issues": {
+      "type": "object",
+      "properties": {}
+    },
+    "stakeholder_escalations": {
+      "type": "object",
+      "properties": {}
+    },
+    "reputation_observations": {
+      "type": "object",
+      "properties": {}
+    },
+    "reputation_snapshots": {
+      "type": "object",
+      "properties": {}
+    },
+    "stakeholder_risks": {
+      "type": "object",
+      "properties": {}
+    },
+    "executive_communication_decisions": {
+      "type": "object",
+      "properties": {}
+    },
+    "stakeholder_data_quality_issues": {
+      "type": "object",
+      "properties": {}
+    },
+    "stakeholder_audit_logs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "firestore": {
+    "/tenants/{tenantId}": {
+      "schema": "Tenant",
+      "description": "Registered education institution tenants"
+    },
+    "/campuses/{campusId}": {
+      "schema": "Campus",
+      "description": "Campuses associated with tenants"
+    },
+    "/classrooms/{classroomId}": {
+      "schema": "Classroom",
+      "description": "Campus classrooms and halls"
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "System users and their multi-tenant assignments"
+    },
+    "/academic_years/{academicYearId}": {
+      "schema": "AcademicYear",
+      "description": "Tenant academic calendars"
+    },
+    "/classes/{classId}": {
+      "schema": "ClassGrade",
+      "description": "Class levels within tenants"
+    },
+    "/sections/{sectionId}": {
+      "schema": "Section",
+      "description": "Sections within classes"
+    },
+    "/subjects/{subjectId}": {
+      "schema": "Subject",
+      "description": "Courses and subjects"
+    },
+    "/students/{studentId}": {
+      "schema": "Student",
+      "description": "Enrolled student profiles"
+    },
+    "/student_attendance/{attendanceId}": {
+      "schema": "AttendanceRecord",
+      "description": "Student attendance entries"
+    },
+    "/staff_attendance/{staffAttendanceId}": {
+      "schema": "StaffAttendanceRecord",
+      "description": "Staff attendance and check-in records"
+    },
+    "/library_profiles/{libraryId}": {
+      "description": "Library profiles and opening parameters"
+    },
+    "/library_resources/{resourceId}": {
+      "description": "Master library resources catalog records"
+    },
+    "/library_resource_versions/{versionId}": {
+      "description": "Immutable version history snapshots for library resources"
+    },
+    "/library_resource_copies/{copyId}": {
+      "description": "Physical copy inventory records with accession/barcodes"
+    },
+    "/library_resource_authors/{authorId}": {
+      "description": "Resource authors directory"
+    },
+    "/library_resource_publishers/{publisherId}": {
+      "description": "Resource publishers directory"
+    },
+    "/library_resource_categories/{categoryId}": {
+      "description": "Hierarchical catalog category tree records"
+    },
+    "/library_resource_locations/{locationId}": {
+      "description": "Physical library shelving and storage locations"
+    },
+    "/library_resource_identifiers/{identifierId}": {
+      "description": "Normalized resource and copy barcode/ISBN identifiers"
+    },
+    "/library_resource_subject_mappings/{mappingId}": {
+      "description": "Mappings from resources to authoritative subjects"
+    },
+    "/library_resource_curriculum_mappings/{mappingId}": {
+      "description": "Mappings from resources to authoritative curriculum nodes"
+    },
+    "/library_memberships/{membershipId}": {
+      "description": "User library membership and eligibility status"
+    },
+    "/library_acquisitions/{acquisitionId}": {
+      "description": "Library resource procurement and purchasing orders"
+    },
+    "/library_analytics_cache/{cacheId}": {
+      "description": "Aggregated cache for library metrics and analytics"
+    },
+    "/library_loans/{loanId}": {
+      "description": "Authoritative active and historical library loans"
+    },
+    "/library_returns/{returnId}": {
+      "description": "Historical library loan return transactions"
+    },
+    "/library_renewals/{renewalId}": {
+      "description": "Historical loan extension renewal records"
+    },
+    "/library_reservations/{reservationId}": {
+      "description": "Resource reserve queue entries"
+    },
+    "/library_holds/{holdId}": {
+      "description": "Physical copy hold assignments for fulfilled reservations"
+    },
+    "/library_fines/{fineId}": {
+      "description": "Circulation overdue and replacement fee obligations"
+    },
+    "/library_fine_adjustments/{adjustmentId}": {
+      "description": "Audit records for fine reductions and waivers"
+    },
+    "/library_lost_items/{lostId}": {
+      "description": "Lost library copy tracking and replacement workflow records"
+    },
+    "/library_damage_reports/{damageId}": {
+      "description": "Damage assessment and penalty management records"
+    },
+    "/library_circulation_policies/{policyId}": {
+      "description": "Configurable library circulation policy rules"
+    },
+    "/library_circulation_policy_versions/{versionId}": {
+      "description": "Immutable historical versions of circulation policies"
+    },
+    "/library_circulation_analytics_cache/{cacheId}": {
+      "description": "Aggregated circulation performance and copy utilization projections"
+    },
+    "/support_cases/{caseId}": {
+      "description": "Master support case records for students"
+    },
+    "/health_encounters/{encounterId}": {
+      "description": "Student health clinic and routine encounter logs"
+    },
+    "/wellness_observations/{observationId}": {
+      "description": "Behavioural and wellness observations by staff"
+    },
+    "/counselling_cases/{caseId}": {
+      "description": "Restricted counselling case folders"
+    },
+    "/counselling_sessions/{sessionId}": {
+      "description": "Individual counselling session notes"
+    },
+    "/support_plans/{planId}": {
+      "description": "Individualized support and learning accommodation plans"
+    },
+    "/support_referrals/{referralId}": {
+      "description": "Internal and external specialist referrals"
+    },
+    "/support_consents/{consentId}": {
+      "description": "Legal consents for medical and support interventions"
+    },
+    "/support_communications/{commId}": {
+      "description": "Communication logs with guardians regarding support"
+    },
+    "/support_accommodations/{accomId}": {
+      "description": "Formal academic or physical accommodations"
+    },
+    "/support_incidents/{incidentId}": {
+      "description": "Acute support or behavioural incidents"
+    },
+    "/emergency_support_overrides/{overrideId}": {
+      "description": "Emergency security overrides for confidential access"
+    },
+    "/student_support_case_versions/{versionId}": {
+      "description": "Immutable version history for support cases"
+    },
+    "/student_support_assignments/{assignmentId}": {
+      "description": "Case officer and specialist assignments"
+    },
+    "/student_support_action_plans/{planId}": {
+      "description": "Governance-level support action plans"
+    },
+    "/student_support_action_items/{itemId}": {
+      "description": "Specific tasks within a support action plan"
+    },
+    "/student_support_follow_ups/{followUpId}": {
+      "description": "Scheduled follow-up checkpoints for cases"
+    },
+    "/student_support_escalations/{escalationId}": {
+      "description": "Case escalation logs to higher authorities"
+    },
+    "/student_support_disclosures/{disclosureId}": {
+      "description": "Formal student disclosures and self-reports"
+    },
+    "/student_support_case_reviews/{reviewId}": {
+      "description": "Periodic case reviews and effectiveness audits"
+    },
+    "/student_support_case_documents/{docId}": {
+      "description": "References to external evidence and support documents"
+    },
+    "/student_support_case_comments/{commentId}": {
+      "description": "Staff collaboration comments on support cases"
+    },
+    "/student_support_welfare_interventions/{interventionId}": {
+      "description": "Welfare and social support interventions"
+    },
+    "/student_support_grievances/{grievanceId}": {
+      "description": "Formal grievances and investigation lifecycle"
+    },
+    "/student_support_safeguarding_concerns/{concernId}": {
+      "description": "Primary safeguarding concern logs"
+    },
+    "/student_support_safeguarding_cases/{caseId}": {
+      "description": "Restricted safeguarding case folders"
+    },
+    "/support_analytics_cache/{cacheId}": {
+      "description": "Aggregated analytics for support operations"
+    },
+    "/exam_sessions/{sessionId}": {
+      "description": "Authoritative examination operational sessions"
+    },
+    "/exam_papers/{paperId}": {
+      "description": "Examination papers and assessment document metadata"
+    },
+    "/exam_seating_allocations/{allocationId}": {
+      "description": "Room seating arrangements and student seat positions"
+    },
+    "/exam_invigilator_assignments/{assignmentId}": {
+      "description": "Invigilator and exam supervisor assignments"
+    },
+    "/exam_presences/{presenceId}": {
+      "description": "Examination session presence and attendance tracking"
+    },
+    "/exam_incidents/{incidentId}": {
+      "description": "Examination malpractice and operational incident logs"
+    },
+    "/exam_result_processings/{processingId}": {
+      "description": "Result processing workflows and verification states"
+    },
+    "/exam_moderation_requests/{requestId}": {
+      "description": "Result moderation requests and mark adjustment reviews"
+    },
+    "/exam_exceptions/{exceptionId}": {
+      "description": "Examination exception register for operational anomalies"
+    },
+    "/exam_ops_analytics_cache/{cacheId}": {
+      "description": "Rebuildable analytics projections for examination operations"
+    },
+    "/staff_profiles/{staffId}": {
+      "description": "Authoritative employee and staff profile master records"
+    },
+    "/staff_employment_history/{historyId}": {
+      "description": "Immutable staff lifecycle transition logs"
+    },
+    "/staff_qualifications/{qualId}": {
+      "description": "Staff academic degrees and higher qualifications"
+    },
+    "/staff_certifications/{certId}": {
+      "description": "Staff professional and teaching certifications"
+    },
+    "/staff_skills/{skillId}": {
+      "description": "Staff skills and competency tags"
+    },
+    "/staff_documents/{docId}": {
+      "description": "HR contracts, identity proofs, and credentials"
+    },
+    "/staff_assignments/{assignmentId}": {
+      "description": "Teaching, administrative, and committee duties"
+    },
+    "/staff_workload_snapshots/{snapshotId}": {
+      "description": "Calculated weekly staff workload snapshots"
+    },
+    "/staff_leave_types/{typeId}": {
+      "description": "Tenant leave type definitions and entitlement rules"
+    },
+    "/staff_leave_policies/{policyId}": {
+      "description": "Configured staff leave policies and quota limits"
+    },
+    "/staff_leave_balances/{balanceId}": {
+      "description": "Annual staff leave quota balances and carryovers"
+    },
+    "/staff_leave_requests/{requestId}": {
+      "description": "Staff leave applications and review decisions"
+    },
+    "/staff_leave_transactions/{txId}": {
+      "description": "Immutable leave debit/credit ledger transactions"
+    },
+    "/staff_substitutions/{subId}": {
+      "description": "Daily teacher cover and class substitution allocations"
+    },
+    "/staff_performance_cycles/{cycleId}": {
+      "description": "Institutional appraisal periods and review cycles"
+    },
+    "/staff_performance_reviews/{reviewId}": {
+      "description": "Multi-stage employee appraisal reviews and ratings"
+    },
+    "/staff_objectives/{objId}": {
+      "description": "Staff goal setting and key performance indicators"
+    },
+    "/staff_compliance_records/{recId}": {
+      "description": "Non-punitive compliance and credential expiry monitoring"
+    },
+    "/staff_training_programs/{progId}": {
+      "description": "Professional development courses and workshops"
+    },
+    "/staff_training_assignments/{assignId}": {
+      "description": "Staff training enrollments and completion records"
+    },
+    "/staff_departments/{deptId}": {
+      "description": "Academic and administrative department masters"
+    },
+    "/staff_designations/{desigId}": {
+      "description": "Job titles and organizational rank designations"
+    },
+    "/staff_hr_cases/{caseId}": {
+      "description": "Confidential grievances, investigations, and incident cases"
+    },
+    "/staff_exit_cases/{exitId}": {
+      "description": "Offboarding cases, resignations, and retirement records"
+    },
+    "/staff_exit_clearances/{clearanceId}": {
+      "description": "Multi-department asset clearance checkpoints"
+    },
+    "/staff_handover_records/{handoverId}": {
+      "description": "Offboarding task and asset handover items"
+    },
+    "/staff_analytics_cache/{cacheId}": {
+      "description": "Pre-computed workforce KPIs and demographic analytics cache"
+    },
+    "/alumni_profiles/{alumniId}": {
+      "description": "Graduated student alumni directory and career trajectory profiles"
+    },
+    "/corporate_partners/{partnerId}": {
+      "description": "Corporate recruiters, campus placement partners, and MoU governance"
+    },
+    "/job_postings/{postingId}": {
+      "description": "Campus recruitment job and internship opportunities"
+    },
+    "/placement_drives/{driveId}": {
+      "description": "Scheduled campus placement drives and participating companies"
+    },
+    "/job_applications/{applicationId}": {
+      "description": "Student job/internship applications and selection status"
+    },
+    "/placement_offers/{offerId}": {
+      "description": "Verified campus placement offers and package details"
+    },
+    "/career_mentorship_sessions/{sessionId}": {
+      "description": "Alumni career counseling and student mentorship sessions"
+    },
+    "/alumni_events/{eventId}": {
+      "description": "Alumni reunions, summits, and networking events"
+    },
+    "/alumni_contributions/{contributionId}": {
+      "description": "Alumni donations, sponsorships, and institutional grants"
+    },
+    "/alumni_placement_analytics/{cacheId}": {
+      "description": "Derived placement rates, average package, and career analytics cache"
+    },
+    "/learning_courses/{courseId}": {
+      "description": "Authoritative course master structures and metadata"
+    },
+    "/learning_course_versions/{versionId}": {
+      "description": "Immutable published course versions and syllabus overviews"
+    },
+    "/learning_course_offerings/{offeringId}": {
+      "description": "Bound academic year, class, section, and subject course offerings"
+    },
+    "/learning_teaching_assignments/{assignmentId}": {
+      "description": "Faculty, co-teacher, and TA teaching assignments"
+    },
+    "/learning_units/{unitId}": {
+      "description": "Curriculum units and syllabus modules"
+    },
+    "/learning_lessons/{lessonId}": {
+      "description": "Digital classroom lesson content and instructional bodies"
+    },
+    "/learning_resources/{resourceId}": {
+      "description": "Institutional learning resources"
+    },
+    "/learning_assignments/{assignmentId}": {
+      "description": "Coursework assignments, max marks, and due dates"
+    },
+    "/learning_assignment_submissions/{submissionId}": {
+      "description": "Student coursework submissions and grading feedback"
+    },
+    "/learning_question_banks/{bankId}": {
+      "description": "Subject question banks and item repositories"
+    },
+    "/learning_questions/{questionId}": {
+      "description": "Question bank items, options, and difficulty levels"
+    },
+    "/learning_quizzes/{quizId}": {
+      "description": "Formative online quizzes and time-limited tests"
+    },
+    "/learning_assessment_attempts/{attemptId}": {
+      "description": "Student quiz attempts, answers, and evaluation scores"
+    },
+    "/learning_grade_records/{gradeId}": {
+      "description": "Formative coursework and quiz grade ledgers"
+    },
+    "/learning_discussions/{discussionId}": {
+      "description": "Course collaboration and discussion threads"
+    },
+    "/learning_discussion_messages/{messageId}": {
+      "description": "Discussion messages, student replies, and teacher answers"
+    },
+    "/learning_announcements/{announcementId}": {
+      "description": "Course announcements integrated with communications"
+    },
+    "/learning_student_progress/{progressId}": {
+      "description": "Derived student course progress and completion percentages"
+    },
+    "/learning_course_completions/{completionId}": {
+      "description": "Governed course completion certificates and records"
+    },
+    "/learning_analytics_cache/{cacheId}": {
+      "description": "Derived learning analytics and engagement KPIs cache"
+    },
+    "/governance_profiles/{profileId}": {
+      "description": "Institutional governance framework profiles and settings"
+    },
+    "/governance_bodies/{bodyId}": {
+      "description": "Authoritative governing bodies, boards, and committees"
+    },
+    "/governance_body_members/{memberId}": {
+      "description": "Appointed governance body members and role designations"
+    },
+    "/governance_meetings/{meetingId}": {
+      "description": "Scheduled governing body meetings and status"
+    },
+    "/governance_agendas/{agendaId}": {
+      "description": "Meeting agenda items and presenter assignments"
+    },
+    "/governance_resolutions/{resolutionId}": {
+      "description": "Approved committee resolutions and voting records"
+    },
+    "/governance_action_items/{actionItemId}": {
+      "description": "Committee action item assignments and tracking"
+    },
+    "/governance_policies/{policyId}": {
+      "description": "Institutional policy registry and approval status"
+    },
+    "/governance_policy_versions/{versionId}": {
+      "description": "Immutable published policy versions and text"
+    },
+    "/governance_policy_reviews/{reviewId}": {
+      "description": "Periodic policy reviews and recommendations"
+    },
+    "/governance_compliance_frameworks/{frameworkId}": {
+      "description": "Regulatory and ministry compliance frameworks"
+    },
+    "/governance_compliance_obligations/{obligationId}": {
+      "description": "Compliance requirements, owners, and due dates"
+    },
+    "/governance_compliance_controls/{controlId}": {
+      "description": "Internal compliance controls and effectiveness ratings"
+    },
+    "/governance_compliance_evidence/{evidenceId}": {
+      "description": "Compliance evidence references linked to document registry"
+    },
+    "/governance_compliance_exceptions/{exceptionId}": {
+      "description": "Authorized compliance exceptions and expiry tracking"
+    },
+    "/governance_accreditation_bodies/{bodyId}": {
+      "description": "Accreditation agencies and authorities"
+    },
+    "/governance_accreditation_cycles/{cycleId}": {
+      "description": "Accreditation review cycles and readiness scores"
+    },
+    "/governance_accreditation_standards/{standardId}": {
+      "description": "Accreditation standards and criteria weights"
+    },
+    "/governance_accreditation_criteria/{criterionId}": {
+      "description": "Accreditation criteria and compliance status"
+    },
+    "/governance_quality_frameworks/{frameworkId}": {
+      "description": "Institutional quality management frameworks"
+    },
+    "/governance_quality_indicators/{indicatorId}": {
+      "description": "Quality indicators, definitions, and targets"
+    },
+    "/governance_quality_targets/{targetId}": {
+      "description": "Quality performance targets per academic year"
+    },
+    "/governance_quality_measurements/{measurementId}": {
+      "description": "Recorded quality performance measurements"
+    },
+    "/governance_institutional_audits/{auditId}": {
+      "description": "Internal and external institutional audits"
+    },
+    "/governance_audit_findings/{findingId}": {
+      "description": "Audit findings, severity levels, and observations"
+    },
+    "/governance_corrective_actions/{actionId}": {
+      "description": "Corrective action plans and closure verification"
+    },
+    "/governance_institutional_risks/{riskId}": {
+      "description": "Institutional risk register and severity scores"
+    },
+    "/governance_risk_mitigations/{mitigationId}": {
+      "description": "Risk mitigation plans and residual severity tracking"
+    },
+    "/governance_document_references/{refId}": {
+      "description": "Governance document references to authoritative document registry"
+    },
+    "/governance_analytics_cache/{cacheId}": {
+      "description": "Derived governance, compliance, and quality analytics cache"
+    },
+    "/audit_logs/{auditId}": {
+      "schema": "AuditRecord",
+      "description": "Immutable platform and tenant audit log"
+    },
+    "/retention_schedules/{scheduleId}": {
+      "description": "Institutional record retention schedules and legal authorities"
+    },
+    "/institutional_records/{recordId}": {
+      "description": "Governed institutional records referencing authoritative artifacts"
+    },
+    "/legal_holds/{holdId}": {
+      "description": "Legal hold mandates and affected record linkages"
+    },
+    "/evidence_packages/{packageId}": {
+      "description": "Immutable sequences of records for audits or accreditation"
+    },
+    "/disposition_batches/{batchId}": {
+      "description": "Batches of records pending or completed disposition"
+    },
+    "/record_governance_audits/{auditId}": {
+      "description": "Detailed lifecycle audit logs for governed records"
+    },
+    "/privacy_data_classifications/{classId}": {
+      "description": "Institutional data classification policies and handling requirements"
+    },
+    "/privacy_processing_purposes/{purposeId}": {
+      "description": "Immutable register of authorized data processing purposes"
+    },
+    "/privacy_consents/{consentId}": {
+      "description": "Data subject consent records and immutable history"
+    },
+    "/privacy_subject_requests/{requestId}": {
+      "description": "Governed data subject rights requests and fulfillment tracking"
+    },
+    "/privacy_export_requests/{exportId}": {
+      "description": "Controlled data export authorizations and audit trails"
+    },
+    "/privacy_pia/{piaId}": {
+      "description": "Privacy Impact Assessments for institutional projects and systems"
+    },
+    "/privacy_data_sharing/{sharingId}": {
+      "description": "Register of data sharing agreements and recipient organizations"
+    },
+    "/privacy_processors/{processorId}": {
+      "description": "Governance oversight of third-party data processors"
+    },
+    "/privacy_incidents/{incidentId}": {
+      "description": "Privacy and security incident reporting, triage, and remediation"
+    },
+    "/privacy_security_controls/{controlId}": {
+      "description": "Information security control register and effectiveness reviews"
+    },
+    "/privacy_security_exceptions/{exceptionId}": {
+      "description": "Governed information security policy exceptions and risk approvals"
+    },
+    "/privacy_governance_analytics_cache/{cacheId}": {
+      "description": "Rebuildable analytics for privacy and security compliance"
+    },
+    "/strategic_plans/{planId}": {
+      "description": "Multi-year institutional strategic plans and vision/mission bodies"
+    },
+    "/strategic_objectives/{objectiveId}": {
+      "description": "Governed strategic objectives and priority weights"
+    },
+    "/strategic_goals/{goalId}": {
+      "description": "Specific measurable goals linked to objectives"
+    },
+    "/strategic_initiatives/{initiativeId}": {
+      "description": "Strategic initiatives linked to strategic objectives, risks, and financial codes"
+    },
+    "/kpi_definitions/{kpiId}": {
+      "description": "Authoritative institutional KPI definitions and calculation methods"
+    },
+    "/kpi_targets/{targetId}": {
+      "description": "Institutional KPI performance targets and thresholds per period"
+    },
+    "/kpi_measurements/{measurementId}": {
+      "description": "Verified institutional KPI measurements and evidence links"
+    },
+    "/performance_risks/{riskId}": {
+      "description": "Institutional performance risk register and severity tracking"
+    },
+    "/performance_corrective_actions/{actionId}": {
+      "description": "Corrective actions for strategy underperformance and risks"
+    },
+    "/performance_analytics_cache/{cacheId}": {
+      "description": "Aggregated cache for institutional strategy and performance metrics"
+    },
+    "/institutional_communications/{commId}": {
+      "description": "Governed institutional circulars, notices, and official communications"
+    },
+    "/stakeholder_engagement_threads/{threadId}": {
+      "description": "Parent, student, and community inquiry and grievance engagement threads"
+    },
+    "/institutional_communication_campaigns/{campaignId}": {
+      "description": "Multi-stage communication campaigns, sequencing, and cadence metrics"
+    },
+    "/communication_acknowledgements/{ackId}": {
+      "description": "Digital acknowledgement tracking, signatures, and administrative waivers"
+    },
+    "/communication_escalation_tasks/{taskId}": {
+      "description": "Automated and manual escalation tasks for SLA breaches in communications"
+    },
+    "/communication_governance_analytics_cache/{cacheId}": {
+      "description": "Precomputed delivery rates, SLA metrics, and compliance analytics"
+    },
+    "/institutional_risks/{riskId}": {
+      "description": "Enterprise risk register items with inherent and residual risk matrices"
+    },
+    "/institutional_risk_mitigations/{mitId}": {
+      "description": "Risk mitigation controls, action items, budgets, and verification audits"
+    },
+    "/institutional_key_risk_indicators/{kriId}": {
+      "description": "Key risk indicator metrics, threshold limits, and status evaluations"
+    },
+    "/campus_incidents/{incidentId}": {
+      "description": "Campus safety and operational incident logs, ICS activations, and timeline events"
+    },
+    "/business_continuity_plans/{bcpId}": {
+      "description": "Departmental business continuity and disaster recovery procedures with RTO/RPO"
+    },
+    "/safety_audit_inspections/{inspId}": {
+      "description": "Campus safety and hazard inspection audits with CAPA tracking"
+    },
+    "/continuity_simulation_drills/{drillId}": {
+      "description": "Emergency evacuation and continuity simulation drills with readiness ratings"
+    },
+    "/scheduling_timetables/{timetableId}": {
+      "description": "Governed academic timetables with status lifecycle, versions, and publication locks"
+    },
+    "/scheduling_timetable_versions/{versionId}": {
+      "description": "Immutable version snapshots of published timetables and schedule entries"
+    },
+    "/scheduling_entries/{entryId}": {
+      "description": "Individual schedule period slots mapping class, section, subject, teacher, and room"
+    },
+    "/scheduling_bookings/{bookingId}": {
+      "description": "Resource and facility reservation requests, approvals, and usage states"
+    },
+    "/scheduling_conflicts/{conflictId}": {
+      "description": "System-detected double-booking, room, section, and laboratory schedule conflicts"
+    },
+    "/scheduling_substitutions/{subId}": {
+      "description": "Faculty cover and temporary teacher substitution requests and approvals"
+    },
+    "/scheduling_change_requests/{reqId}": {
+      "description": "Formal requests for adjustments to active published timetables with audit diff"
+    },
+    "/scheduling_calendar_exceptions/{exceptionId}": {
+      "description": "Institutional calendar exceptions, holidays, special academic days, and emergency closures"
+    },
+    "/student_success_profiles/{profileId}": {
+      "description": "Student academic progression and derived risk master profiles"
+    },
+    "/student_risk_assessments/{assessmentId}": {
+      "description": "Deterministic weighted risk assessments for attendance, academic, financial, behavioral, and engagement factors"
+    },
+    "/student_success_early_warning_signals/{signalId}": {
+      "description": "Automated and manual early-warning indicator signals for student retention"
+    },
+    "/student_success_interventions/{interventionId}": {
+      "description": "Governed student intervention plans with multi-stage verification workflows and SoD enforcement"
+    },
+    "/student_success_retention_cases/{caseId}": {
+      "description": "Student retention and attrition monitoring cases with authoritative approval governance"
+    },
+    "/student_success_progression_assessments/{assessmentId}": {
+      "description": "Academic progression eligibility assessments with SoD-enforced approval checks"
+    },
+    "/student_success_reviews/{reviewId}": {
+      "description": "Formal student success committee reviews, findings, and decision records"
+    },
+    "/quality_assessment_cycles/{cycleId}": {
+      "description": "Governed assessment cycles, types, and academic year timelines"
+    },
+    "/quality_criteria/{criterionId}": {
+      "description": "Quality framework criteria definitions for NAAC, NBA, ABET, AACSB, ISO 21001"
+    },
+    "/quality_indicators/{indicatorId}": {
+      "description": "Measurable quality indicators linked to criteria and strategy KPIs"
+    },
+    "/quality_assessment_submissions/{submissionId}": {
+      "description": "Assessment value submissions, narratives, and evidence links"
+    },
+    "/quality_evidence_mappings/{mappingId}": {
+      "description": "Document registry evidence mappings and verification status"
+    },
+    "/quality_program_reviews/{reviewId}": {
+      "description": "Periodic program and department quality reviews, findings, and recommendations"
+    },
+    "/quality_improvement_initiatives/{initiativeId}": {
+      "description": "PDCA continuous improvement initiatives, targets, baseline values, and outcomes"
+    },
+    "/quality_capa_actions/{capaId}": {
+      "description": "Corrective and preventive action plans, RCA methodology, and verification"
+    },
+    "/quality_review_decisions/{decisionId}": {
+      "description": "Immutable committee review approval and rejection decision logs"
+    },
+    "/quality_accreditation_evidence_packages/{packageId}": {
+      "description": "Accreditation readiness evidence packages, completeness scores, and approvals"
+    },
+    "/quality_audit_events/{eventId}": {
+      "description": "Quality execution lifecycle audit events and SoD checks"
+    },
+    "/accreditation_bodies/{bodyId}": {
+      "description": "Governance registry for regulatory and accreditation frameworks (NAAC, NBA, UGC, AICTE, NIRF, ISO 21001, AACSB, ABET)"
+    },
+    "/accreditation_criteria/{criterionId}": {
+      "description": "Accreditation criteria definitions, weights, response requirements, and scoring models"
+    },
+    "/accreditation_cycles/{cycleId}": {
+      "description": "Governed accreditation cycle lifecycles, lead coordinators, and self-study status"
+    },
+    "/accreditation_submissions/{submissionId}": {
+      "description": "Self-study submission workspace, current version, versions array, and lock states"
+    },
+    "/criterion_responses/{responseId}": {
+      "description": "Criterion responses, narratives, scores, and version tracking"
+    },
+    "/accreditation_evidence/{evidenceId}": {
+      "description": "Phase 7.27 Document Registry evidence mappings, verification status, and defect flags"
+    },
+    "/external_reviews/{reviewId}": {
+      "description": "External peer review visits, reviewer details, agendas, meetings, and reports"
+    },
+    "/accreditation_findings/{findingId}": {
+      "description": "Review and inspection findings, severity, priority score, and remediation evidence (SoD enforced)"
+    },
+    "/institutional_commitments/{commitmentId}": {
+      "description": "Institutional commitments, statutory directions, due dates, progress, and verification"
+    },
+    "/regulatory_inspections/{inspectionId}": {
+      "description": "Regulatory body inspections, findings, responses, and approval status"
+    },
+    "/accreditation_correspondence/{correspondenceId}": {
+      "description": "Formal institutional communications linked to Document Registry references"
+    },
+    "/accreditation_decisions/{decisionId}": {
+      "description": "Authoritative external accreditation outcomes, grades, and immutable decision logs"
+    },
+    "/accreditation_certificates/{certificateId}": {
+      "description": "Official accreditation certificates, issue/expiry dates, scope, and validity horizons"
+    },
+    "/analytics_workspaces/{workspaceId}": {
+      "description": "Institutional analytics workspaces, owner, and dashboard collections"
+    },
+    "/analytics_dashboards/{dashboardId}": {
+      "description": "Executive and department analytics dashboard definitions and widgets"
+    },
+    "/analytics_metric_definitions/{metricId}": {
+      "description": "Governed KPI metric definitions with data lineage and SoD approval status"
+    },
+    "/analytics_cohorts/{cohortId}": {
+      "description": "Student and academic cohorts with minimum cohort size privacy protection"
+    },
+    "/analytics_benchmarks/{benchmarkId}": {
+      "description": "Institutional and external verified benchmarks with source references"
+    },
+    "/analytics_insights/{insightId}": {
+      "description": "Decision intelligence insights, recommendations, and certification status"
+    },
+    "/analytics_reports/{reportId}": {
+      "description": "Governed analytics and executive report definitions"
+    },
+    "/analytics_export_requests/{exportId}": {
+      "description": "Controlled analytics data export requests, classification levels, and SoD approvals"
+    },
+    "/analytics_audit_logs/{auditId}": {
+      "description": "Immutable analytics action audit trail"
+    },
+    "/workflow_definitions/{definitionId}": {
+      "description": "Governed institutional workflow definitions, code, category, and lifecycle status"
+    },
+    "/workflow_versions/{versionId}": {
+      "description": "Immutable workflow versions, stages, transitions, conditions, and approval policies"
+    },
+    "/workflow_instances/{instanceId}": {
+      "description": "Live workflow instances, current stage, source entity reference, and status"
+    },
+    "/workflow_instance_stages/{stageId}": {
+      "description": "Workflow instance stage execution history and completion tracking"
+    },
+    "/workflow_approvals/{approvalId}": {
+      "description": "Workflow approval chain requests, steps, Decisions, and four-eyes governance"
+    },
+    "/workflow_delegations/{delegationId}": {
+      "description": "Delegated authority records, effective dates, permissions, and tenant/campus scope"
+    },
+    "/workflow_escalations/{escalationId}": {
+      "description": "Idempotent workflow and case escalations, levels, and resolutions"
+    },
+    "/workflow_sla_events/{eventId}": {
+      "description": "SLA warning, breach, pause, and resolution event log"
+    },
+    "/workflow_events/{eventId}": {
+      "description": "Workflow execution lifecycle event stream"
+    },
+    "/enterprise_cases/{caseId}": {
+      "description": "Enterprise cases across categories (Academic, Finance, Support, HR, Privacy, etc.)"
+    },
+    "/enterprise_case_versions/{versionId}": {
+      "description": "Immutable version history of case state transitions and classification changes"
+    },
+    "/enterprise_case_assignments/{assignmentId}": {
+      "description": "Case ownership and department assignment records"
+    },
+    "/enterprise_case_comments/{commentId}": {
+      "description": "Case collaboration and internal notes"
+    },
+    "/enterprise_case_evidence/{evidenceId}": {
+      "description": "Case evidence items linked to Phase 7.27 Document Registry"
+    },
+    "/enterprise_case_resolutions/{resolutionId}": {
+      "description": "Immutable case resolution summary and corrective actions"
+    },
+    "/enterprise_tasks/{taskId}": {
+      "description": "Enterprise tasks, assignees, due dates, and blocking dependencies"
+    },
+    "/enterprise_task_dependencies/{dependencyId}": {
+      "description": "Task dependency mappings (BLOCKS, BLOCKED_BY, RELATED_TO)"
+    },
+    "/enterprise_task_comments/{commentId}": {
+      "description": "Task comments and discussion threads"
+    },
+    "/enterprise_task_checklists/{checklistId}": {
+      "description": "Task checklist sub-items and completion tracking"
+    },
+    "/enterprise_task_escalations/{escalationId}": {
+      "description": "Task-level SLA breach and priority escalations"
+    },
+    "/enterprise_work_queue/{queueId}": {
+      "description": "Derived work queue items for users (My Tasks, Approvals, Cases, Overdue, Escalated)"
+    },
+    "/workflow_notifications/{notificationId}": {
+      "description": "Workflow and case assignment, SLA, and approval notifications with idempotency keys"
+    },
+    "/workflow_governance_reviews/{reviewId}": {
+      "description": "Workflow definition governance reviews and SoD verification"
+    },
+    "/workflow_governance_decisions/{decisionId}": {
+      "description": "Immutable workflow governance decisions and override justifications"
+    },
+    "/workflow_audit_logs/{auditId}": {
+      "description": "Immutable workflow, case, task, and delegation action audit logs"
+    },
+    "/knowledge_objects/{objectId}": {
+      "description": "Governed institutional knowledge objects, title, summary, content, category, and classification"
+    },
+    "/knowledge_sources/{sourceId}": {
+      "description": "Authoritative master source registry, module/collection mappings, and verification status"
+    },
+    "/knowledge_versions/{versionId}": {
+      "description": "Immutable version histories for knowledge assets"
+    },
+    "/knowledge_reviews/{reviewId}": {
+      "description": "Knowledge review records"
+    },
+    "/knowledge_publications/{publicationId}": {
+      "description": "Formal publication records, publisher role, and effective dates"
+    },
+    "/knowledge_access_policies/{policyId}": {
+      "description": "Knowledge access policies, allowed roles, departments, and field masking"
+    },
+    "/knowledge_policy_relationships/{relationshipId}": {
+      "description": "Relationships linking knowledge/policy objects to workflows, records, risks, and controls"
+    },
+    "/knowledge_policy_impacts/{impactId}": {
+      "description": "Policy impact assessments evaluating affected workflows, records, and privacy controls"
+    },
+    "/knowledge_gaps/{gapId}": {
+      "description": "Identified knowledge gaps"
+    },
+    "/knowledge_search_audits/{auditId}": {
+      "description": "Immutable audit log of enterprise search queries and access denials"
+    },
+    "/knowledge_data_quality_issues/{issueId}": {
+      "description": "Data quality issues detected in the knowledge registry"
+    },
+    "/knowledge_analytics/{analyticsId}": {
+      "description": "Derived knowledge analytics indicators and coverage scores"
+    },
+    "/knowledge_evidence_references/{referenceId}": {
+      "description": "References linking knowledge objects to Phase 7.27 Document Registry evidence"
+    },
+    "/knowledge_audit_logs/{auditId}": {
+      "description": "Immutable audit trail for organizational knowledge governance"
+    },
+    "/integration_definitions/{integrationId}": {
+      "description": "Governance definitions for institutional integrations, endpoints, and security classifications"
+    },
+    "/integration_endpoints/{endpointId}": {
+      "description": "Integration endpoint configurations, authentication methods, protocols, and rate limits"
+    },
+    "/integration_api_definitions/{apiId}": {
+      "description": "Governed API catalog entries, lifecycle status, consumer policy, and authorization scopes"
+    },
+    "/integration_api_consumers/{consumerId}": {
+      "description": "API consumer registrations, authorized applications, and scope allocations"
+    },
+    "/integration_exchange_contracts/{contractId}": {
+      "description": "Data exchange contracts governing source and destination module data transfers"
+    },
+    "/integration_field_mappings/{mappingId}": {
+      "description": "Source-to-target data field transformations, validation rules, and classifications"
+    },
+    "/integration_jobs/{jobId}": {
+      "description": "Execution jobs tracking batch, scheduled, and event-triggered data exchanges"
+    },
+    "/integration_events/{eventId}": {
+      "description": "Integration event logs tracking inbound and outbound event streams with idempotency"
+    },
+    "/integration_webhook_subscriptions/{webhookId}": {
+      "description": "Webhook subscriptions, event triggers, secret reference identifiers, and policies"
+    },
+    "/integration_failures/{failureId}": {
+      "description": "Integration failure logs, retry queues, and dead-letter queue records"
+    },
+    "/integration_lineage/{lineageId}": {
+      "description": "Data lineage records mapping authoritative source entities to destinations"
+    },
+    "/integration_change_requests/{requestId}": {
+      "description": "Integration change requests, risk assessments, and four-eyes approval workflows"
+    },
+    "/integration_data_quality_issues/{issueId}": {
+      "description": "Data quality issue records flagged across integration definitions, contracts, and mappings"
+    },
+    "/integration_analytics/{analyticsId}": {
+      "description": "Derived integration health indicators, success rates, and SLA metrics"
+    },
+    "/integration_audit_logs/{auditId}": {
+      "description": "Immutable audit log for all integration governance operations and actions"
+    },
+    "/automation_definitions/{automationId}": {
+      "description": "Automation definitions containing conditions, actions, and governance configurations"
+    },
+    "/automation_versions/{versionId}": {
+      "description": "Snapshots of automation definitions for safe state tracking and rollback"
+    },
+    "/automation_rules/{ruleId}": {
+      "description": "Evaluator rules linked to automations"
+    },
+    "/automation_actions/{actionId}": {
+      "description": "Controlled workflow, notification, governance, and integration actions"
+    },
+    "/automation_executions/{executionId}": {
+      "description": "Transactional execution logs for automations with status, retry, and event details"
+    },
+    "/automation_execution_steps/{stepId}": {
+      "description": "Individual step logs within an execution job tracking payload and outputs"
+    },
+    "/automation_approvals/{approvalId}": {
+      "description": "Four-eyes SoD approval requests, justifications, and decision records"
+    },
+    "/automation_exceptions/{exceptionId}": {
+      "description": "Temporary or specific execution bypass requests and approvals"
+    },
+    "/automation_schedules/{scheduleId}": {
+      "description": "One-time, recurring, or academic-relative trigger schedules"
+    },
+    "/automation_rate_limits/{limitId}": {
+      "description": "Configured execution quotas, depths, and limits per automation"
+    },
+    "/automation_dead_letters/{letterId}": {
+      "description": "Immutable failure dumps for manual retry and audit replay"
+    },
+    "/automation_alerts/{alertId}": {
+      "description": "Active system alarms and escalation records"
+    },
+    "/automation_dependencies/{dependencyId}": {
+      "description": "Automation trigger and action target flow relationships"
+    },
+    "/automation_audit_logs/{auditId}": {
+      "description": "Immutable security, lifecycle, and override audit records"
+    },
+    "/automation_system_controls/{controlId}": {
+      "description": "System-wide controls, including the global Emergency Stop kill switch"
+    },
+    "/performance_strategies/{strategyId}": {
+      "description": "Institutional performance strategy records"
+    },
+    "/performance_dimensions/{dimensionId}": {
+      "description": "Governed institutional performance dimension definitions"
+    },
+    "/performance_objectives/{objectiveId}": {
+      "description": "Strategic performance objectives aligned with performance dimensions"
+    },
+    "/performance_kpis/{kpiId}": {
+      "description": "Governed institutional Key Performance Indicators"
+    },
+    "/performance_metric_definitions/{metricId}": {
+      "description": "Immutable metric definitions and formulas"
+    },
+    "/performance_metric_versions/{versionId}": {
+      "description": "Version histories for metric definitions"
+    },
+    "/performance_observations/{observationId}": {
+      "description": "Observed and calculated performance metric values"
+    },
+    "/performance_targets/{targetId}": {
+      "description": "Approved performance targets"
+    },
+    "/performance_thresholds/{thresholdId}": {
+      "description": "Warning and critical performance threshold bands"
+    },
+    "/performance_scorecards/{scorecardId}": {
+      "description": "Institutional master and domain scorecards"
+    },
+    "/performance_benchmarks/{benchmarkId}": {
+      "description": "External and sector benchmark references"
+    },
+    "/performance_findings/{findingId}": {
+      "description": "Identified performance defects and gaps"
+    },
+    "/performance_actions/{actionId}": {
+      "description": "Performance remediation actions"
+    },
+    "/performance_exceptions/{exceptionId}": {
+      "description": "Temporary target and threshold exception approvals"
+    },
+    "/performance_risks/{riskId}": {
+      "description": "Calculated performance risk scores"
+    },
+    "/performance_diagnostics/{diagnosticId}": {
+      "description": "Systemic performance diagnostics"
+    },
+    "/performance_audit_logs/{auditId}": {
+      "description": "Immutable cryptographic audit trail for performance governance"
+    },
+    "/resource_plans/{planId}": {
+      "description": "Institutional resource plans governing capacity, allocations, and budgets"
+    },
+    "/resource_plan_versions/{versionId}": {
+      "description": "Immutable version snapshots of institutional resource plans for safe lifecycle tracking"
+    },
+    "/resource_capacity_profiles/{profileId}": {
+      "description": "Resource capacity profiles tracking total, used, and remaining capacity for rooms, staff, labs"
+    },
+    "/resource_demand_forecasts/{forecastId}": {
+      "description": "Deterministic demand forecast records preserving historical observations and calculated forecasts"
+    },
+    "/resource_allocation_requests/{requestId}": {
+      "description": "Resource allocation requests containing requester, priority, quantities, and justifications"
+    },
+    "/resource_allocation_decisions/{decisionId}": {
+      "description": "Four-eyes decision logs for resource allocation requests with approver and rationale details"
+    },
+    "/resource_allocations/{allocationId}": {
+      "description": "Active, expired, or released resource assignments linking requests to physical/human items"
+    },
+    "/resource_utilization_snapshots/{snapshotId}": {
+      "description": "Derived utilization analytics snapshots for rooms, staff, labs, and equipment"
+    },
+    "/resource_constraints/{constraintId}": {
+      "description": "Detected timeline, budget, staff, or campus resource constraints and timeline blockages"
+    },
+    "/resource_priority_rules/{ruleId}": {
+      "description": "Prioritization scoring weights and algorithms for human and facility allocations"
+    },
+    "/resource_portfolio_items/{itemId}": {
+      "description": "Enterprise portfolio items and projects linked to Phase 7.29 objectives, 7.31 risks, and financial codes"
+    },
+    "/resource_portfolio_scores/{scoreId}": {
+      "description": "Weighted score details tracking strategic alignment, urgency, impact, and operational criticality"
+    },
+    "/resource_portfolio_reviews/{reviewId}": {
+      "description": "Structured peer review comments and recommendations for portfolio prioritization"
+    },
+    "/resource_portfolio_decisions/{decisionId}": {
+      "description": "Immutable governance decisions, approvals, holds, or deferrals of portfolio items"
+    },
+    "/resource_interventions/{interventionId}": {
+      "description": "Controlled capacity reallocations, emergency budgets, or workload shedding actions"
+    },
+    "/resource_optimization_actions/{actionId}": {
+      "description": "Identified cost savings or under-utilization reclamation recommended options"
+    },
+    "/resource_scenarios/{scenarioId}": {
+      "description": "Governed what-if scenario assumptions such as staffing cuts or enrollment increases"
+    },
+    "/resource_scenario_results/{resultId}": {
+      "description": "Simulation output metrics and certified results for what-if scenarios"
+    },
+    "/resource_data_quality_issues/{issueId}": {
+      "description": "Detected data quality issues with automatic remediation workflows"
+    },
+    "/resource_governance_reviews/{reviewId}": {
+      "description": "Compliance rating, certification signature, and audits of resource governance decisions"
+    },
+    "/enterprise_portfolios/{portfolioId}": {
+      "description": "Multi-tenant, campus-isolated strategic portfolios with detailed health scores"
+    },
+    "/enterprise_portfolio_versions/{versionId}": {
+      "description": "Immutable historical snapshots of enterprise portfolios"
+    },
+    "/enterprise_programs/{programId}": {
+      "description": "Strategic programs grouping multi-department initiatives"
+    },
+    "/governance_milestones/{milestoneId}": {
+      "description": "Milestones tracking portfolio deliverables and verification status"
+    },
+    "/governance_gates/{gateId}": {
+      "description": "Stage-gate lifecycle check-points (GATE_0 to GATE_6)"
+    },
+    "/gate_decisions/{decisionId}": {
+      "description": "Four-eyes decision records for stage-gate transitions"
+    },
+    "/dependency_links/{linkId}": {
+      "description": "Inter-initiative dependency definitions with critical path markers"
+    },
+    "/dependency_health_issues/{issueId}": {
+      "description": "Detected dependency violations, circular links, or delays"
+    },
+    "/benefit_realization_plans/{planId}": {
+      "description": "Benefit realization plans tracking institutional target benefits"
+    },
+    "/benefit_measurements/{measurementId}": {
+      "description": "Verified actual outcome measurements tracking benefit realizations"
+    },
+    "/portfolio_investments/{investmentId}": {
+      "description": "Capital allocations and funding sources bound to portfolios"
+    },
+    "/investment_decisions/{decisionId}": {
+      "description": "Four-eyes review and approval logs for capital releases or freezes"
+    },
+    "/transformation_assurance_reviews/{reviewId}": {
+      "description": "Scheduled executive reviews checking compliance, fit, and risk"
+    },
+    "/assurance_findings/{findingId}": {
+      "description": "Assurance audit findings, compliance gaps, and CAPA logs"
+    },
+    "/initiative_interventions/{interventionId}": {
+      "description": "Corrective interventions executing project resets, freezes, or trims"
+    },
+    "/whatif_transformation_scenarios/{scenarioId}": {
+      "description": "Transformation simulation scenarios representing cuts and shifts"
+    },
+    "/scenario_simulation_results/{resultId}": {
+      "description": "Simulated composition and calculated health scores for scenarios"
+    },
+    "/transformation_data_quality_issues/{issueId}": {
+      "description": "Automatic data quality issue flags tracking governance mismatch"
+    },
+    "/transformation_governance_audits/{auditId}": {
+      "description": "Immutable transformation governance action and transition audits"
+    },
+    "/enterprise_architecture_repositories/{repositoryId}": {
+      "schema": "EnterpriseArchitectureRepository",
+      "description": "Enterprise architecture repositories tracking items across domains"
+    },
+    "/enterprise_architecture_domains/{domainId}": {
+      "description": "Enterprise architecture domain groupings"
+    },
+    "/enterprise_architecture_principles/{principleId}": {
+      "description": "Core architecture principles guiding institutional technology"
+    },
+    "/enterprise_architecture_standards/{standardId}": {
+      "description": "Technology standards defining supported platforms and versions"
+    },
+    "/architecture_decision_records/{adrId}": {
+      "schema": "ArchitectureDecisionRecord",
+      "description": "Governed Architecture Decision Records with version lineages"
+    },
+    "/architecture_reviews/{reviewId}": {
+      "description": "Architecture reviews conducted by the Architecture Review Board"
+    },
+    "/architecture_exceptions/{exceptionId}": {
+      "description": "Time-bound, risk-assessed architecture exceptions"
+    },
+    "/architecture_roadmaps/{roadmapId}": {
+      "description": "Technology roadmaps outlining modernizations and retirements"
+    },
+    "/technology_portfolios/{portfolioId}": {
+      "description": "Technology portfolios representing active systems"
+    },
+    "/technology_products/{productId}": {
+      "description": "Technology products utilized across the organization"
+    },
+    "/application_portfolio_items/{itemId}": {
+      "schema": "ApplicationPortfolioItem",
+      "description": "Application portfolio items with rationalization scores"
+    },
+    "/technology_lifecycle_assessments/{assessmentId}": {
+      "description": "Lifecycle assessments tracking end-of-life/support for platforms"
+    },
+    "/digital_services/{serviceId}": {
+      "description": "Institutional digital services tracking availability and risk"
+    },
+    "/technology_dependencies/{dependencyId}": {
+      "description": "Graph mappings of application and technology dependencies"
+    },
+    "/technology_risks/{riskId}": {
+      "schema": "TechnologyRiskItem",
+      "description": "Technology risks tracked inside the 5x5 matrix"
+    },
+    "/technology_controls/{controlId}": {
+      "description": "Controls minimizing technology risk exposures"
+    },
+    "/technical_debt_items/{itemId}": {
+      "schema": "TechnicalDebtItem",
+      "description": "Technical debt items with remediation plans and verification"
+    },
+    "/technology_investments/{investmentId}": {
+      "description": "Technology investment requests linked to Phase 7.42 initiatives"
+    },
+    "/modernization_initiatives/{initiativeId}": {
+      "description": "Modernization initiatives targeting legacy systems"
+    },
+    "/technology_governance_reviews/{reviewId}": {
+      "description": "Governance reviews of digital service portfolios"
+    },
+    "/architecture_audit_logs/{auditId}": {
+      "description": "Immutable audit events tracking technology governance transitions"
+    },
+    "/technology_data_quality_issues/{issueId}": {
+      "description": "Detected architecture repository data quality issues"
+    },
+    "/itsm_services/{serviceId}": {
+      "description": "ITSM services catalog, defining availability, ownership and criticality"
+    },
+    "/itsm_service_versions/{versionId}": {
+      "description": "Service versions snapshot catalog"
+    },
+    "/itsm_service_dependencies/{depId}": {
+      "description": "IT service dependency mappings"
+    },
+    "/itsm_slas/{slaId}": {
+      "description": "SLA configurations defining commitment times"
+    },
+    "/itsm_sla_measurements/{measurementId}": {
+      "description": "Monthly SLA measurement and compliance scores"
+    },
+    "/itsm_incidents/{incidentId}": {
+      "description": "IT service operational incidents"
+    },
+    "/itsm_incident_events/{eventId}": {
+      "description": "Incident historical timeline events"
+    },
+    "/itsm_major_incidents/{majId}": {
+      "description": "Declared Major Incident details and Command information"
+    },
+    "/itsm_service_requests/{requestId}": {
+      "description": "Catalog item service request transactions"
+    },
+    "/itsm_request_approvals/{approvalId}": {
+      "description": "Privileged request or catalog approvals"
+    },
+    "/itsm_problems/{problemId}": {
+      "description": "Problem management records resolving root causes"
+    },
+    "/itsm_root_cause_analyses/{rcaId}": {
+      "description": "Problem root cause analysis records (5 Whys/Fishbone)"
+    },
+    "/itsm_changes/{changeId}": {
+      "description": "Governed change requests with assessment and scheduling"
+    },
+    "/itsm_change_approvals/{approvalId}": {
+      "description": "Change advisory board and owner approvals"
+    },
+    "/itsm_change_implementations/{implId}": {
+      "description": "Change implementation records and logs"
+    },
+    "/itsm_releases/{releaseId}": {
+      "description": "Release tracking containing notes and approvals"
+    },
+    "/itsm_deployments/{deploymentId}": {
+      "description": "Deployment environment checks and validations"
+    },
+    "/itsm_service_health/{healthId}": {
+      "description": "Live health metrics and status snapshots"
+    },
+    "/itsm_availability_snapshots/{availId}": {
+      "description": "Service availability logs of unplanned downtime"
+    },
+    "/itsm_escalations/{escalationId}": {
+      "description": "ITSM escalation alerts and actions taken"
+    },
+    "/itsm_continuity_exercises/{exerciseId}": {
+      "description": "Technology continuity plan test drills and exercises"
+    },
+    "/itsm_governance_reviews/{reviewId}": {
+      "description": "Periodic digital service delivery reviews"
+    },
+    "/itsm_data_quality_issues/{issueId}": {
+      "description": "Actionable ITSM registry data quality scanner issues"
+    },
+    "/itsm_audit_logs/{auditId}": {
+      "description": "Immutable audit events tracking service delivery operations"
+    },
+    "/cyber_security_events/{eventId}": {
+      "description": "Security events and telemetry logs"
+    },
+    "/cyber_event_correlations/{correlationId}": {
+      "description": "Correlated groups of security events"
+    },
+    "/cyber_threat_indicators/{indicatorId}": {
+      "description": "Verified or unverified threat indicators"
+    },
+    "/cyber_threat_campaigns/{campaignId}": {
+      "description": "Tracked malicious campaigns"
+    },
+    "/cyber_security_alerts/{alertId}": {
+      "description": "Triaged alerts and incident signals"
+    },
+    "/cyber_alert_rules/{ruleId}": {
+      "description": "Automated security alert rules"
+    },
+    "/cyber_investigations/{investigationId}": {
+      "description": "Security investigation dossiers"
+    },
+    "/cyber_investigation_events/{eventId}": {
+      "description": "Timeline log for active security investigations"
+    },
+    "/cyber_vulnerabilities/{vulnerabilityId}": {
+      "description": "Vulnerability findings and asset exposures"
+    },
+    "/cyber_vulnerability_assessments/{assessmentId}": {
+      "description": "Vulnerability scanners runs and summaries"
+    },
+    "/cyber_exposure_records/{exposureId}": {
+      "description": "Identified exposed network or credentials assets"
+    },
+    "/cyber_zero_trust_policies/{policyId}": {
+      "description": "Access policy filters for zero-trust authorization"
+    },
+    "/cyber_zero_trust_evaluations/{evaluationId}": {
+      "description": "Logged Zero Trust evaluation decisions"
+    },
+    "/cyber_security_anomalies/{anomalyId}": {
+      "description": "Detected security anomalies and suspicious behavioral spikes"
+    },
+    "/cyber_posture_snapshots/{snapshotId}": {
+      "description": "Enterprise posture scores and telemetry coverage metrics"
+    },
+    "/cyber_security_controls/{controlId}": {
+      "description": "Information security control effectiveness and assessments"
+    },
+    "/cyber_security_exceptions/{exceptionId}": {
+      "description": "Governed active and requested security exceptions"
+    },
+    "/cyber_response_playbooks/{playbookId}": {
+      "description": "Governed response action sequences"
+    },
+    "/cyber_playbook_executions/{executionId}": {
+      "description": "Historical response playbook runs and logs"
+    },
+    "/cyber_containment_actions/{actionId}": {
+      "description": "Logged containment events and overrides"
+    },
+    "/cyber_security_evidence/{evidenceId}": {
+      "description": "Governed evidence packages linked to records & evidence"
+    },
+    "/cyber_security_watchlists/{watchlistId}": {
+      "description": "Monitored entities watchlist"
+    },
+    "/cyber_security_audit_logs/{auditId}": {
+      "description": "Immutable security operations audit entries"
+    },
+    "/cyber_data_quality_issues/{issueId}": {
+      "description": "Cybersecurity data quality scanner issues"
+    },
+    "/ai_providers/{providerId}": {
+      "description": "Registered AI service providers and platforms"
+    },
+    "/ai_systems/{systemId}": {
+      "description": "Institutional AI capabilities and systems"
+    },
+    "/ai_models/{modelId}": {
+      "description": "Registered AI and machine learning models"
+    },
+    "/ai_model_versions/{versionId}": {
+      "description": "Immutable AI model versions"
+    },
+    "/ai_use_cases/{caseId}": {
+      "description": "AI implementation use cases and target populations"
+    },
+    "/ai_risk_assessments/{assessmentId}": {
+      "description": "Multidimensional AI risk assessments"
+    },
+    "/ai_evaluations/{evaluationId}": {
+      "description": "Defined evaluation metrics and benchmark parameters"
+    },
+    "/ai_evaluation_runs/{runId}": {
+      "description": "Executed AI evaluation suite runs and results"
+    },
+    "/ai_datasets/{datasetId}": {
+      "description": "AI dataset lineage and privacy authorization profiles"
+    },
+    "/ai_prompt_templates/{templateId}": {
+      "description": "Governed prompt assets and templates"
+    },
+    "/ai_agents/{agentId}": {
+      "description": "Autonomous and semi-autonomous AI agents"
+    },
+    "/ai_decisions/{decisionId}": {
+      "description": "Governed decisions and recommendation override records"
+    },
+    "/ai_incidents/{incidentId}": {
+      "description": "AI-related policy violations, hallucinations or failures"
+    },
+    "/ai_exceptions/{exceptionId}": {
+      "description": "Governed requested and active temporary AI exceptions"
+    },
+    "/ai_policies/{policyId}": {
+      "description": "Defined institutional AI governance policies"
+    },
+    "/ai_compliance_assessments/{assessmentId}": {
+      "description": "AI systems compliance audits"
+    },
+    "/ai_governance_reviews/{reviewId}": {
+      "description": "Periodic models performance and audit reviews"
+    },
+    "/ai_data_quality_issues/{issueId}": {
+      "description": "AI Governance registry data quality issues"
+    },
+    "/ai_audit_logs/{auditId}": {
+      "description": "Immutable AI operations audit logs"
+    },
+    "/crisis_events/{crisisId}": {
+      "schema": "CrisisEvent",
+      "description": "Governed institutional crisis safety events"
+    },
+    "/crisis_timeline_events/{eventId}": {
+      "description": "Timeline log events for active crises"
+    },
+    "/crisis_eoc_activations/{activationId}": {
+      "schema": "EOCActivation",
+      "description": "Emergency Operations Center activations log"
+    },
+    "/crisis_command_assignments/{assignmentId}": {
+      "schema": "CommandAssignment",
+      "description": "EOC command structure active roles assignments"
+    },
+    "/crisis_command_decisions/{decisionId}": {
+      "description": "Command authority official decisions"
+    },
+    "/crisis_response_plans/{planId}": {
+      "description": "Pre-configured responsive plans per category and severity"
+    },
+    "/crisis_playbooks/{playbookId}": {
+      "description": "Governed playbook blueprints"
+    },
+    "/crisis_playbook_versions/{versionId}": {
+      "description": "Immutable playbook snapshots and actions"
+    },
+    "/crisis_response_actions/{actionId}": {
+      "description": "Specific playbook action executions logged"
+    },
+    "/crisis_escalations/{escalationId}": {
+      "description": "Severity and time-based escalation events"
+    },
+    "/crisis_communications/{commId}": {
+      "description": "Governed communication dispatch logs"
+    },
+    "/crisis_continuity_activations/{activationId}": {
+      "description": "Business continuity plans active status triggers"
+    },
+    "/crisis_critical_services/{serviceId}": {
+      "description": "Critical services registered with RTO/RPO limits"
+    },
+    "/crisis_service_dependencies/{depId}": {
+      "description": "Dependency graphs between core service components"
+    },
+    "/crisis_recovery_plans/{planId}": {
+      "description": "Disaster recovery orchestration workflows"
+    },
+    "/crisis_recovery_activations/{activationId}": {
+      "description": "DR system restore executions logged"
+    },
+    "/crisis_recovery_checkpoints/{checkpointId}": {
+      "description": "Milestones and checkpoints of restoring assets"
+    },
+    "/crisis_resource_allocations/{allocationId}": {
+      "description": "Emergency resource mobilization details"
+    },
+    "/crisis_closures/{closureId}": {
+      "description": "Campus closure records"
+    },
+    "/crisis_evacuation_orders/{orderId}": {
+      "description": "Campus evacuation order tracks"
+    },
+    "/crisis_reentry_authorizations/{reentryId}": {
+      "description": "Reentry certifications and assessments"
+    },
+    "/crisis_simulations/{simulationId}": {
+      "description": "Offline-safe resilience drill definitions"
+    },
+    "/crisis_simulation_runs/{runId}": {
+      "description": "Resilience dry-run outputs and analysis metrics"
+    },
+    "/crisis_after_action_reviews/{aarId}": {
+      "schema": "AfterActionReview",
+      "description": "Post-incident reviews and learnings"
+    },
+    "/crisis_resilience_assessments/{assessmentId}": {
+      "description": "Campus general resilience scores audits"
+    },
+    "/crisis_resilience_gaps/{gapId}": {
+      "description": "Open risk vulnerabilities and gaps logged"
+    },
+    "/crisis_improvement_actions/{actionId}": {
+      "description": "Corrective improvement tracks derived from crisis reviews"
+    },
+    "/crisis_overrides/{overrideId}": {
+      "description": "Emergency transient authorization bypass logs"
+    },
+    "/crisis_evidence/{evidenceId}": {
+      "description": "Crisis validation artifacts and attachments"
+    },
+    "/crisis_audit_logs/{auditId}": {
+      "description": "Immutable security operations resilience audit logs"
+    },
+    "/crisis_data_quality_issues/{issueId}": {
+      "description": "Governance data quality scan findings"
+    },
+    "/compliance_frameworks/{id}": {
+      "schema": "ComplianceFramework",
+      "description": "Governed regulatory compliance frameworks"
+    },
+    "/compliance_regulatory_authorities/{id}": {
+      "description": "Regulatory authority bodies and jurisdictions"
+    },
+    "/compliance_requirements/{id}": {
+      "description": "Specific framework articles and compliance requirements"
+    },
+    "/compliance_obligations/{id}": {
+      "schema": "ComplianceObligation",
+      "description": "Governed active institutional compliance obligations"
+    },
+    "/compliance_controls/{id}": {
+      "schema": "ComplianceControl",
+      "description": "Control structures mitigating specific obligations"
+    },
+    "/compliance_control_tests/{id}": {
+      "description": "Testing actions and effectiveness results for controls"
+    },
+    "/compliance_assessments/{id}": {
+      "schema": "ComplianceAssessment",
+      "description": "Governed institutional compliance reviews"
+    },
+    "/compliance_findings/{id}": {
+      "schema": "ComplianceFinding",
+      "description": "Corrective findings and active remediation logs"
+    },
+    "/compliance_exceptions/{id}": {
+      "description": "Time-bound approved exceptions to compliance obligations"
+    },
+    "/compliance_attestations/{id}": {
+      "description": "Executive certifications and formal compliance attestations"
+    },
+    "/compliance_assurance_plans/{id}": {
+      "description": "Enterprise assurance program planning cycles"
+    },
+    "/compliance_assurance_reviews/{id}": {
+      "description": "Assurance reviews and assessments tracking frameworks"
+    },
+    "/compliance_legal_matters/{id}": {
+      "schema": "LegalMatter",
+      "description": "Governed enterprise legal matters and lawsuits"
+    },
+    "/compliance_legal_holds/{id}": {
+      "schema": "LegalHold",
+      "description": "Active litigation records holds and user logs"
+    },
+    "/compliance_regulatory_submissions/{id}": {
+      "description": "Immutable finalized regulatory reporting submissions"
+    },
+    "/compliance_regulatory_inspections/{id}": {
+      "description": "Regulatory inspection audits and correspondence"
+    },
+    "/compliance_regulatory_requests/{id}": {
+      "description": "Incoming inquiries from external authorities"
+    },
+    "/compliance_regulatory_responses/{id}": {
+      "description": "Approved outbound responses to external authority inquiries"
+    },
+    "/compliance_correspondence/{id}": {
+      "description": "Official legal and regulatory correspondence register"
+    },
+    "/compliance_evidence/{id}": {
+      "description": "Evidence registry linkage files supporting compliance"
+    },
+    "/compliance_audit_logs/{id}": {
+      "description": "Immutable append-only compliance audit events trail"
+    },
+    "/compliance_data_quality_issues/{id}": {
+      "description": "Data quality scanner active governance warnings"
+    },
+    "/compliance_risk_snapshots/{id}": {
+      "description": "Calculated deterministic compliance risk index metrics"
+    },
+    "/compliance_certifications/{id}": {
+      "description": "Immutable governance signatures certifying assurance"
+    },
+    "/knowledge_assets/{assetId}": {
+      "description": "Governed knowledge assets"
+    },
+    "/knowledge_approvals/{approvalId}": {
+      "description": "Knowledge approvals"
+    },
+    "/institutional_decisions/{decisionId}": {
+      "description": "Institutional decision records"
+    },
+    "/institutional_memory/{memoryId}": {
+      "description": "Historical institutional memory and context"
+    },
+    "/knowledge_distributions/{distributionId}": {
+      "description": "Controlled knowledge dissemination records"
+    },
+    "/data_domains/{domainId}": {
+      "description": "Governed institutional data domains"
+    },
+    "/data_assets/{assetId}": {
+      "description": "Enterprise governed data assets"
+    },
+    "/data_dictionary/{entryId}": {
+      "description": "Governed enterprise data dictionary entries"
+    },
+    "/business_glossary/{termId}": {
+      "description": "Governed business vocabulary and terms"
+    },
+    "/data_lineage_nodes/{nodeId}": {
+      "description": "Nodes representing assets in data lineage"
+    },
+    "/data_lineage_edges/{edgeId}": {
+      "description": "Edges connecting assets in data lineage"
+    },
+    "/master_data_records/{recordId}": {
+      "description": "Governed master data entity records"
+    },
+    "/reference_data_sets/{setId}": {
+      "description": "Governed reference data collections"
+    },
+    "/data_quality_rules/{ruleId}": {
+      "description": "Deterministic data quality rules"
+    },
+    "/data_quality_issues/{issueId}": {
+      "description": "Data quality issues discovered"
+    },
+    "/data_certifications/{certId}": {
+      "description": "Data governance certifications"
+    },
+    "/data_contracts/{contractId}": {
+      "description": "Agreements between data providers and consumers"
+    },
+    "/data_sharing_agreements/{agreementId}": {
+      "description": "Governed data sharing access rules"
+    },
+    "/data_governance_decisions/{decisionId}": {
+      "description": "Immutable data governance decisions"
+    },
+    "/data_governance_audit_logs/{auditId}": {
+      "description": "Immutable append-only audit trail for data governance"
+    },
+    "/knowledge_domains/{domainId}": {
+      "description": "Governed knowledge domains"
+    },
+    "/knowledge_asset_versions/{versionId}": {
+      "description": "Immutable knowledge asset versions"
+    },
+    "/knowledge_articles/{articleId}": {
+      "description": "Governed institutional articles"
+    },
+    "/knowledge_resources/{resourceId}": {
+      "description": "Governed knowledge resources"
+    },
+    "/knowledge_collections/{collectionId}": {
+      "description": "Knowledge collections"
+    },
+    "/knowledge_taxonomies/{taxonomyId}": {
+      "description": "Governed taxonomies"
+    },
+    "/knowledge_taxonomy_terms/{termId}": {
+      "description": "Governed taxonomy terms"
+    },
+    "/knowledge_tags/{tagId}": {
+      "description": "Knowledge tags"
+    },
+    "/knowledge_relationships/{relId}": {
+      "description": "Governed relationships between knowledge items"
+    },
+    "/knowledge_references/{refId}": {
+      "description": "Governed knowledge references"
+    },
+    "/knowledge_evidence/{evidenceId}": {
+      "description": "Evidence records for knowledge"
+    },
+    "/institutional_practices/{practiceId}": {
+      "description": "Governed institutional practices"
+    },
+    "/lessons_learned/{lessonId}": {
+      "description": "Governed lessons learned"
+    },
+    "/organizational_memory/{memoryId}": {
+      "description": "Organizational memory records"
+    },
+    "/expertise_profiles/{profileId}": {
+      "description": "Staff/faculty expertise profiles"
+    },
+    "/expertise_domains/{domainId}": {
+      "description": "Expertise domain definitions"
+    },
+    "/expertise_references/{refId}": {
+      "description": "References to specific expertise"
+    },
+    "/research_knowledge/{knowledgeId}": {
+      "description": "Research knowledge records"
+    },
+    "/research_output_references/{refId}": {
+      "description": "References to research outputs"
+    },
+    "/research_evidence/{evidenceId}": {
+      "description": "Evidence derived from research"
+    },
+    "/knowledge_questions/{questionId}": {
+      "description": "Governed knowledge questions"
+    },
+    "/knowledge_answers/{answerId}": {
+      "description": "Governed knowledge answers"
+    },
+    "/knowledge_certifications/{certId}": {
+      "description": "Knowledge certifications"
+    },
+    "/knowledge_risks/{riskId}": {
+      "description": "Knowledge risks"
+    },
+    "/knowledge_exceptions/{exceptionId}": {
+      "description": "Knowledge exceptions"
+    },
+    "/knowledge_lineage_nodes/{nodeId}": {
+      "description": "Nodes for knowledge lineage graph"
+    },
+    "/knowledge_lineage_edges/{edgeId}": {
+      "description": "Edges for knowledge lineage graph"
+    },
+    "/research_portfolios/{portfolioId}": {
+      "description": "Governed research portfolios"
+    },
+    "/research_programs/{programId}": {
+      "description": "Governed research programs"
+    },
+    "/research_projects/{projectId}": {
+      "description": "Governed research projects"
+    },
+    "/research_opportunities/{opportunityId}": {
+      "description": "Research & funding opportunities"
+    },
+    "/grant_applications/{applicationId}": {
+      "description": "Grant applications"
+    },
+    "/grant_awards/{awardId}": {
+      "description": "Grant awards"
+    },
+    "/research_proposals/{proposalId}": {
+      "description": "Research proposals"
+    },
+    "/research_reviews/{reviewId}": {
+      "description": "Research & IP reviews"
+    },
+    "/research_approvals/{approvalId}": {
+      "description": "Research approval decisions"
+    },
+    "/research_investigators/{investigatorId}": {
+      "description": "Research investigator profiles"
+    },
+    "/research_teams/{teamId}": {
+      "description": "Research teams"
+    },
+    "/research_team_members/{memberId}": {
+      "description": "Research team members"
+    },
+    "/research_milestones/{milestoneId}": {
+      "description": "Research milestones"
+    },
+    "/research_deliverables/{deliverableId}": {
+      "description": "Research deliverables"
+    },
+    "/research_outputs/{outputId}": {
+      "description": "Research outputs"
+    },
+    "/research_publications/{publicationId}": {
+      "description": "Research publications"
+    },
+    "/research_dataset_references/{refId}": {
+      "description": "Research dataset references"
+    },
+    "/research_agreements/{agreementId}": {
+      "description": "Research agreements"
+    },
+    "/ip_disclosures/{disclosureId}": {
+      "description": "Intellectual property disclosures"
+    },
+    "/ip_assessments/{assessmentId}": {
+      "description": "IP assessments"
+    },
+    "/ip_protection_decisions/{decisionId}": {
+      "description": "IP protection decisions"
+    },
+    "/patent_records/{patentId}": {
+      "description": "Patent records"
+    },
+    "/copyright_records/{copyrightId}": {
+      "description": "Copyright records"
+    },
+    "/trademark_records/{trademarkId}": {
+      "description": "Trademark records"
+    },
+    "/technology_transfer_opportunities/{opId}": {
+      "description": "Tech transfer opportunities"
+    },
+    "/license_records/{licenseId}": {
+      "description": "IP License records"
+    },
+    "/innovation_records/{innovationId}": {
+      "description": "Innovation records"
+    },
+    "/innovation_pipelines/{pipelineId}": {
+      "description": "Innovation pipelines"
+    },
+    "/research_ethics_references/{ethicsId}": {
+      "description": "Ethics references"
+    },
+    "/research_compliance_records/{compId}": {
+      "description": "Compliance records"
+    },
+    "/research_conflicts_of_interest/{coiId}": {
+      "description": "Research COI disclosures"
+    },
+    "/grant_obligations/{obligationId}": {
+      "description": "Grant obligations"
+    },
+    "/grant_reporting_requirements/{reqId}": {
+      "description": "Grant reporting requirements"
+    },
+    "/grant_reports/{reportId}": {
+      "description": "Submitted grant reports"
+    },
+    "/research_risks/{riskId}": {
+      "description": "Research risks"
+    },
+    "/research_exceptions/{exceptionId}": {
+      "description": "Research exceptions"
+    },
+    "/research_benefits/{benefitId}": {
+      "description": "Research benefits"
+    },
+    "/research_impact_records/{impactId}": {
+      "description": "Research impact records"
+    },
+    "/research_closures/{closureId}": {
+      "description": "Research closures"
+    },
+    "/research_audit_logs/{auditId}": {
+      "description": "Immutable audit trail for research governance"
+    },
+    "/human_capital_workforce_strategies/{strategyId}": {
+      "description": "Governed workforce strategies"
+    },
+    "/human_capital_workforce_plans/{planId}": {
+      "description": "Governed workforce plans"
+    },
+    "/human_capital_workforce_scenarios/{scenarioId}": {
+      "description": "Workforce what-if scenarios"
+    },
+    "/human_capital_position_governance/{posId}": {
+      "description": "Position governance records"
+    },
+    "/human_capital_role_governance/{roleId}": {
+      "description": "Role governance records"
+    },
+    "/human_capital_capacity_observations/{obsId}": {
+      "description": "Workforce capacity observations"
+    },
+    "/human_capital_demand_observations/{obsId}": {
+      "description": "Workforce demand observations"
+    },
+    "/human_capital_gap_assessments/{gapId}": {
+      "description": "Workforce gap assessments"
+    },
+    "/human_capital_competency_frameworks/{fwId}": {
+      "description": "Competency frameworks"
+    },
+    "/human_capital_competencies/{compId}": {
+      "description": "Competency definitions"
+    },
+    "/human_capital_skills/{skillId}": {
+      "description": "Skill definitions"
+    },
+    "/human_capital_staff_competencies/{refId}": {
+      "description": "Staff competency references"
+    },
+    "/human_capital_talent_pools/{poolId}": {
+      "description": "Talent pools"
+    },
+    "/human_capital_talent_assessments/{assId}": {
+      "description": "Talent assessments"
+    },
+    "/human_capital_career_paths/{pathId}": {
+      "description": "Career paths"
+    },
+    "/human_capital_development_plans/{planId}": {
+      "description": "Development plans"
+    },
+    "/human_capital_development_objectives/{objId}": {
+      "description": "Development objectives"
+    },
+    "/human_capital_training_governance/{trgId}": {
+      "description": "Training governance records"
+    },
+    "/human_capital_learning_requirements/{reqId}": {
+      "description": "Learning requirements"
+    },
+    "/human_capital_performance_cycles/{cycleId}": {
+      "description": "Performance cycles"
+    },
+    "/human_capital_performance_goals/{goalId}": {
+      "description": "Performance goals"
+    },
+    "/human_capital_performance_reviews/{revId}": {
+      "description": "Performance reviews"
+    },
+    "/human_capital_performance_calibrations/{calId}": {
+      "description": "Performance calibrations"
+    },
+    "/human_capital_recognition/{recId}": {
+      "description": "Recognition records"
+    },
+    "/human_capital_succession_plans/{planId}": {
+      "description": "Succession plans"
+    },
+    "/human_capital_succession_candidates/{candId}": {
+      "description": "Succession candidates"
+    },
+    "/human_capital_critical_roles/{roleId}": {
+      "description": "Critical roles"
+    },
+    "/human_capital_key_person_dependencies/{depId}": {
+      "description": "Key person dependencies"
+    },
+    "/human_capital_promotion_governance/{promId}": {
+      "description": "Promotion governance records"
+    },
+    "/human_capital_tenure_governance/{tenId}": {
+      "description": "Tenure governance references"
+    },
+    "/human_capital_performance_improvement_plans/{pipId}": {
+      "description": "Performance improvement plans"
+    },
+    "/human_capital_engagement_observations/{engId}": {
+      "description": "Engagement observations"
+    },
+    "/human_capital_retention_risks/{riskId}": {
+      "description": "Retention risk records"
+    },
+    "/human_capital_workforce_risks/{riskId}": {
+      "description": "Workforce risk records"
+    },
+    "/human_capital_capability_assessments/{assId}": {
+      "description": "Organizational capability assessments"
+    },
+    "/human_capital_resilience_assessments/{assId}": {
+      "description": "Workforce resilience assessments"
+    },
+    "/human_capital_knowledge_transfer_plans/{planId}": {
+      "description": "Knowledge transfer plans"
+    },
+    "/human_capital_offboarding_governance/{offId}": {
+      "description": "Offboarding governance records"
+    },
+    "/human_capital_exceptions/{excId}": {
+      "description": "Human capital exceptions"
+    },
+    "/human_capital_audit_logs/{auditId}": {
+      "description": "Immutable audit trail for human capital governance"
+    },
+    "/financial_governance_strategies/{strategyId}": {
+      "description": "Governed financial strategies"
+    },
+    "/financial_governance_plans/{planId}": {
+      "description": "Governed financial plans"
+    },
+    "/financial_governance_scenarios/{scenarioId}": {
+      "description": "Financial what-if scenarios"
+    },
+    "/financial_budget_frameworks/{fwId}": {
+      "description": "Budget frameworks"
+    },
+    "/financial_budget_cycles/{cycleId}": {
+      "description": "Budget cycles"
+    },
+    "/financial_budget_envelopes/{envId}": {
+      "description": "Budget envelopes"
+    },
+    "/financial_budget_allocations/{allocId}": {
+      "description": "Budget allocations"
+    },
+    "/financial_budget_requests/{reqId}": {
+      "description": "Budget requests"
+    },
+    "/financial_budget_revisions/{revId}": {
+      "description": "Budget revisions"
+    },
+    "/financial_budget_transfers/{transId}": {
+      "description": "Budget transfers"
+    },
+    "/financial_cost_center_governance/{costGovId}": {
+      "description": "Cost center governance"
+    },
+    "/financial_cost_observations/{obsId}": {
+      "description": "Cost observations"
+    },
+    "/financial_cost_optimization_plans/{optPlanId}": {
+      "description": "Cost optimization plans"
+    },
+    "/financial_revenue_governance/{revGovId}": {
+      "description": "Revenue governance"
+    },
+    "/financial_revenue_streams/{streamId}": {
+      "description": "Revenue streams"
+    },
+    "/financial_revenue_forecasts/{forecastId}": {
+      "description": "Revenue forecasts"
+    },
+    "/financial_funding_sources/{sourceId}": {
+      "description": "Funding source references"
+    },
+    "/financial_cashflow_observations/{obsId}": {
+      "description": "Cash flow observations"
+    },
+    "/financial_liquidity_observations/{obsId}": {
+      "description": "Liquidity observations"
+    },
+    "/financial_treasury_governance/{treasuryId}": {
+      "description": "Treasury governance references"
+    },
+    "/financial_capital_plans/{planId}": {
+      "description": "Capital plans"
+    },
+    "/financial_capital_project_governance/{projGovId}": {
+      "description": "Capital project governance"
+    },
+    "/financial_forecasts/{forecastId}": {
+      "description": "Financial forecasts"
+    },
+    "/financial_variance_observations/{varId}": {
+      "description": "Financial variance observations"
+    },
+    "/financial_controls/{controlId}": {
+      "description": "Financial controls"
+    },
+    "/financial_control_tests/{testId}": {
+      "description": "Financial control tests"
+    },
+    "/financial_control_exceptions/{excId}": {
+      "description": "Financial control exceptions"
+    },
+    "/financial_risks/{riskId}": {
+      "description": "Financial risks"
+    },
+    "/financial_resilience_assessments/{assId}": {
+      "description": "Financial resilience assessments"
+    },
+    "/financial_approvals/{appId}": {
+      "description": "Financial approvals"
+    },
+    "/financial_decisions/{decId}": {
+      "description": "Financial decisions"
+    },
+    "/financial_audit_logs/{auditId}": {
+      "description": "Immutable audit trail for financial governance"
+    },
+    "/procurement_governance_strategies/{strategyId}": {
+      "description": "Governed procurement strategies"
+    },
+    "/procurement_governance_plans/{planId}": {
+      "description": "Governed procurement plans"
+    },
+    "/procurement_categories/{catId}": {
+      "description": "Procurement categories"
+    },
+    "/procurement_demand_observations/{obsId}": {
+      "description": "Procurement demand observations"
+    },
+    "/procurement_requests/{reqId}": {
+      "description": "Procurement requests"
+    },
+    "/procurement_approvals/{appId}": {
+      "description": "Procurement approvals"
+    },
+    "/procurement_exceptions/{excId}": {
+      "description": "Procurement exceptions"
+    },
+    "/procurement_sourcing_events/{eventId}": {
+      "description": "Sourcing events"
+    },
+    "/procurement_tender_governance/{tenderId}": {
+      "description": "Tender governance records"
+    },
+    "/procurement_bid_evaluations/{evalId}": {
+      "description": "Bid evaluations"
+    },
+    "/procurement_bid_criteria/{critId}": {
+      "description": "Bid evaluation criteria"
+    },
+    "/procurement_vendor_governance/{vendorGovId}": {
+      "description": "Vendor governance records"
+    },
+    "/procurement_vendor_classifications/{classId}": {
+      "description": "Vendor classifications"
+    },
+    "/procurement_vendor_due_diligence/{ddId}": {
+      "description": "Vendor due diligence records"
+    },
+    "/procurement_vendor_risk_assessments/{assId}": {
+      "description": "Vendor risk assessments"
+    },
+    "/procurement_vendor_risk_mitigations/{mitId}": {
+      "description": "Vendor risk mitigations"
+    },
+    "/procurement_third_party_governance/{tpGovId}": {
+      "description": "Third party governance"
+    },
+    "/procurement_third_party_dependencies/{depId}": {
+      "description": "Third party dependencies"
+    },
+    "/procurement_third_party_concentration/{concId}": {
+      "description": "Third party concentration risk"
+    },
+    "/procurement_contract_governance/{contractGovId}": {
+      "description": "Contract governance references"
+    },
+    "/procurement_contract_renewals/{renId}": {
+      "description": "Contract renewal observations"
+    },
+    "/procurement_contract_amendments/{amendId}": {
+      "description": "Contract amendment governance"
+    },
+    "/procurement_vendor_performance/{perfId}": {
+      "description": "Vendor performance observations"
+    },
+    "/procurement_vendor_sla_observations/{slaId}": {
+      "description": "Vendor SLA observations"
+    },
+    "/procurement_vendor_incidents/{incId}": {
+      "description": "Vendor incident observations"
+    },
+    "/procurement_emergency_governance/{emergId}": {
+      "description": "Emergency procurement governance"
+    },
+    "/procurement_single_source_justifications/{ssId}": {
+      "description": "Single source justifications"
+    },
+    "/procurement_controls/{controlId}": {
+      "description": "Procurement controls"
+    },
+    "/procurement_control_tests/{testId}": {
+      "description": "Procurement control tests"
+    },
+    "/procurement_control_exceptions/{excId}": {
+      "description": "Procurement control exceptions"
+    },
+    "/procurement_resilience_assessments/{assId}": {
+      "description": "Procurement resilience assessments"
+    },
+    "/procurement_supplier_disruption_scenarios/{scenId}": {
+      "description": "Supplier disruption scenarios"
+    },
+    "/procurement_decisions/{decId}": {
+      "description": "Procurement decisions"
+    },
+    "/procurement_audit_logs/{auditId}": {
+      "description": "Immutable audit trail for procurement governance"
+    },
+    "/procurement_diagnostic_findings/{findId}": {
+      "description": "Procurement diagnostic findings"
+    },
+    "/contract_governance_strategies/{stratId}": {
+      "description": "Contract governance strategies"
+    },
+    "/contract_governance_plans/{planId}": {
+      "description": "Contract governance plans"
+    },
+    "/contract_intake_governance/{intakeId}": {
+      "description": "Contract intake governance"
+    },
+    "/contract_classification_governance/{classId}": {
+      "description": "Contract classification governance"
+    },
+    "/contract_governance_references/{refId}": {
+      "description": "Contract governance references"
+    },
+    "/contract_version_governance/{verId}": {
+      "description": "Contract version governance"
+    },
+    "/contract_approval_governance/{apprId}": {
+      "description": "Contract approval governance"
+    },
+    "/contract_risk_assessments/{riskId}": {
+      "description": "Contract risk assessments"
+    },
+    "/contract_risk_mitigations/{mitId}": {
+      "description": "Contract risk mitigations"
+    },
+    "/contract_legal_reviews/{legId}": {
+      "description": "Contract legal reviews"
+    },
+    "/contract_compliance_reviews/{compId}": {
+      "description": "Contract compliance reviews"
+    },
+    "/contract_commercial_reviews/{commId}": {
+      "description": "Contract commercial reviews"
+    },
+    "/contract_security_reviews/{secId}": {
+      "description": "Contract security reviews"
+    },
+    "/contract_privacy_reviews/{privId}": {
+      "description": "Contract privacy reviews"
+    },
+    "/contract_execution_governance/{execId}": {
+      "description": "Contract execution governance"
+    },
+    "/contract_obligations/{obId}": {
+      "description": "Contract obligations"
+    },
+    "/contract_obligation_evidence/{evId}": {
+      "description": "Contract obligation evidence"
+    },
+    "/contract_obligation_exceptions/{excId}": {
+      "description": "Contract obligation exceptions"
+    },
+    "/contract_milestones/{mileId}": {
+      "description": "Contract milestones"
+    },
+    "/contract_milestone_observations/{obsId}": {
+      "description": "Contract milestone observations"
+    },
+    "/contract_sla_governance/{slaId}": {
+      "description": "Contract SLA governance"
+    },
+    "/contract_sla_observations/{obsId}": {
+      "description": "Contract SLA observations"
+    },
+    "/contract_performance_observations/{perfId}": {
+      "description": "Contract performance observations"
+    },
+    "/contract_renewal_observations/{renId}": {
+      "description": "Contract renewal observations"
+    },
+    "/contract_amendment_governance/{amendId}": {
+      "description": "Contract amendment governance"
+    },
+    "/contract_termination_governance/{termId}": {
+      "description": "Contract termination governance"
+    },
+    "/contract_dispute_governance/{dispId}": {
+      "description": "Contract dispute governance"
+    },
+    "/contract_claim_observations/{claimId}": {
+      "description": "Contract claim observations"
+    },
+    "/contract_exception_governance/{excId}": {
+      "description": "Contract exception governance"
+    },
+    "/contract_controls/{ctrlId}": {
+      "description": "Contract controls"
+    },
+    "/contract_control_tests/{testId}": {
+      "description": "Contract control tests"
+    },
+    "/contract_control_exceptions/{excId}": {
+      "description": "Contract control exceptions"
+    },
+    "/contract_resilience_assessments/{resId}": {
+      "description": "Contract resilience assessments"
+    },
+    "/contract_dependency_observations/{depId}": {
+      "description": "Contract dependency observations"
+    },
+    "/contract_decisions/{decId}": {
+      "description": "Contract decisions"
+    },
+    "/contract_assurance_events/{assId}": {
+      "description": "Contract assurance events"
+    },
+    "/contract_audit_logs/{auditId}": {
+      "description": "Immutable audit trail for contract governance"
+    },
+    "/contract_diagnostic_findings/{findId}": {
+      "description": "Contract diagnostic findings"
+    },
+    "/asset_governance_references/{id}": {
+      "description": "Asset governance master references"
+    },
+    "/asset_category_governance/{id}": {
+      "description": "Asset category governance policies"
+    },
+    "/asset_criticality_profiles/{id}": {
+      "description": "Asset criticality profiles and multi-factor scores"
+    },
+    "/asset_lifecycle_governance/{id}": {
+      "description": "Asset lifecycle state transition records"
+    },
+    "/asset_condition_observations/{id}": {
+      "description": "Asset condition inspection observations"
+    },
+    "/asset_health_observations/{id}": {
+      "description": "Asset health telemetry observations"
+    },
+    "/asset_ownership_references/{id}": {
+      "description": "Asset ownership and custody references"
+    },
+    "/facility_governance/{id}": {
+      "description": "Facility governance and lifecycle records"
+    },
+    "/site_governance/{id}": {
+      "description": "Site governance and geographic zones"
+    },
+    "/building_governance/{id}": {
+      "description": "Building governance and structural integrity records"
+    },
+    "/space_governance/{id}": {
+      "description": "Space governance and category records"
+    },
+    "/space_allocations/{id}": {
+      "description": "Space department allocations"
+    },
+    "/space_utilization_observations/{id}": {
+      "description": "Space utilization and occupancy telemetry observations"
+    },
+    "/infrastructure_governance/{id}": {
+      "description": "Infrastructure governance and redundancy topology"
+    },
+    "/utility_governance/{id}": {
+      "description": "Utility provider governance"
+    },
+    "/utility_consumption_observations/{id}": {
+      "description": "Utility consumption and carbon observations"
+    },
+    "/energy_efficiency_observations/{id}": {
+      "description": "Energy efficiency and EUI ratings"
+    },
+    "/water_governance/{id}": {
+      "description": "Water supply and reserve governance"
+    },
+    "/waste_governance/{id}": {
+      "description": "Waste and hazardous material governance"
+    },
+    "/maintenance_governance/{id}": {
+      "description": "Maintenance policies and oversight"
+    },
+    "/maintenance_risk_observations/{id}": {
+      "description": "Maintenance risk and backlog observations"
+    },
+    "/preventive_maintenance_governance/{id}": {
+      "description": "Preventive maintenance schedules"
+    },
+    "/corrective_maintenance_governance/{id}": {
+      "description": "Corrective maintenance governance"
+    },
+    "/work_order_references/{id}": {
+      "description": "Work order references to CMMS"
+    },
+    "/facility_service_level_governance/{id}": {
+      "description": "Facility SLA governance"
+    },
+    "/facilities_vendor_references/{id}": {
+      "description": "Facilities vendor qualifications"
+    },
+    "/capital_renewal_governance/{id}": {
+      "description": "Capital renewal and FCI governance"
+    },
+    "/asset_replacement_plans/{id}": {
+      "description": "Asset lifecycle replacement plans"
+    },
+    "/lifecycle_cost_observations/{id}": {
+      "description": "Lifecycle cost and TCO observations"
+    },
+    "/physical_security_governance/{id}": {
+      "description": "Physical security access and surveillance governance"
+    },
+    "/environmental_risk_observations/{id}": {
+      "description": "Environmental risk observations"
+    },
+    "/facility_resilience_assessments/{id}": {
+      "description": "Facility resilience multi-hazard assessments"
+    },
+    "/business_continuity_facility_mappings/{id}": {
+      "description": "Business continuity facility mappings"
+    },
+    "/emergency_facility_dependencies/{id}": {
+      "description": "Emergency facility dependencies"
+    },
+    "/facility_incidents/{id}": {
+      "description": "Facility physical incident records"
+    },
+    "/asset_risks/{id}": {
+      "description": "Asset and facility governance risks"
+    },
+    "/asset_controls/{id}": {
+      "description": "Asset and facility internal controls"
+    },
+    "/asset_control_tests/{id}": {
+      "description": "Asset control test records"
+    },
+    "/asset_exceptions/{id}": {
+      "description": "Asset and facility temporary exceptions"
+    },
+    "/asset_decisions/{id}": {
+      "description": "Asset and facility executive governance decisions"
+    },
+    "/asset_facilities_audit_logs/{id}": {
+      "description": "Immutable append-only audit trail for asset & facilities governance"
+    },
+    "/asset_diagnostic_findings/{id}": {
+      "description": "Asset and facilities diagnostic findings"
+    },
+    "/safety_governance_references/{id}": {
+      "description": "Institutional safety and EHS governance references"
+    },
+    "/safety_policies/{id}": {
+      "description": "Governed institutional safety policies"
+    },
+    "/safety_programs/{id}": {
+      "description": "Institutional safety programs and oversight"
+    },
+    "/hazard_registers/{id}": {
+      "description": "Institutional hazard registry and lifecycle states"
+    },
+    "/hazard_assessments/{id}": {
+      "description": "Deterministic safety hazard risk assessments"
+    },
+    "/hazard_observations/{id}": {
+      "description": "Observed workplace hazard observations"
+    },
+    "/safety_risk_controls/{id}": {
+      "description": "Hierarchy of safety risk controls and effectiveness observations"
+    },
+    "/safety_inspections/{id}": {
+      "description": "Scheduled safety inspections and walkthroughs"
+    },
+    "/safety_inspection_findings/{id}": {
+      "description": "Inspection findings and severity tracking"
+    },
+    "/safety_corrective_actions/{id}": {
+      "description": "CAPA corrective and preventive action items"
+    },
+    "/safety_exceptions/{id}": {
+      "description": "Bounded temporary safety exceptions and variances"
+    },
+    "/safety_incidents/{id}": {
+      "description": "Governed incident classifications and near-miss references"
+    },
+    "/emergency_preparedness_plans/{id}": {
+      "description": "Emergency preparedness plans and scenario mappings"
+    },
+    "/emergency_exercises/{id}": {
+      "description": "Emergency exercise evaluations and drill records"
+    },
+    "/fire_life_safety_governances/{id}": {
+      "description": "Fire alarm, sprinkler, and emergency egress compliance"
+    },
+    "/lab_safety_governances/{id}": {
+      "description": "Laboratory, BSL-3, IBC, and radiation safety permits"
+    },
+    "/environmental_health_governances/{id}": {
+      "description": "Environmental observations, air/water quality, and hazardous waste"
+    },
+    "/contractor_safety_governances/{id}": {
+      "description": "Contractor safety inductions and high-risk work permits"
+    },
+    "/safety_decisions/{id}": {
+      "description": "Executive safety decisions under Four-Eyes SoD"
+    },
+    "/safety_ehs_audit_logs/{id}": {
+      "description": "Immutable append-only audit trail for safety & EHS governance"
+    },
+    "/safety_diagnostic_findings/{id}": {
+      "description": "Diagnostic findings for institutional safety gaps and SoD breaches"
+    },
+    "/quality_frameworks/{id}": {
+      "description": "Institutional quality frameworks and policy standards"
+    },
+    "/quality_standards/{id}": {
+      "description": "Quality standards, criteria, and weights"
+    },
+    "/accreditation_cycles/{id}": {
+      "description": "Accreditation bodies, review cycles, and self-study tracks"
+    },
+    "/accreditation_requirements/{id}": {
+      "description": "Accreditation criteria and evidence mapping references"
+    },
+    "/assessment_evidence/{id}": {
+      "description": "Cryptographically verifiable assessment evidence artifacts"
+    },
+    "/institutional_effectiveness_plans/{id}": {
+      "description": "Institutional effectiveness pillars and KPI indicator mappings"
+    },
+    "/program_reviews/{id}": {
+      "description": "Academic, departmental, and service program reviews"
+    },
+    "/quality_metrics/{id}": {
+      "description": "Quality metrics and calculated indicators"
+    },
+    "/quality_metric_observations/{id}": {
+      "description": "Recorded metric observations with calculation basis"
+    },
+    "/quality_benchmarks/{id}": {
+      "description": "Cohort and aspirational peer benchmarks"
+    },
+    "/quality_findings/{id}": {
+      "description": "Audit findings, deficiencies, and root cause analyses"
+    },
+    "/quality_capa_actions/{id}": {
+      "description": "Corrective and preventive action milestones"
+    },
+    "/continuous_improvement_plans/{id}": {
+      "description": "Continuous improvement plans and PDCA cycles"
+    },
+    "/quality_risks/{id}": {
+      "description": "Quantified quality risks and mitigating controls"
+    },
+    "/maturity_assessments/{id}": {
+      "description": "12-dimension institutional maturity assessments"
+    },
+    "/quality_resilience_assessments/{id}": {
+      "description": "Quality resilience and key person dependency evaluations"
+    },
+    "/quality_exceptions/{id}": {
+      "description": "Governed quality standard exceptions and bounded waivers"
+    },
+    "/quality_committees/{id}": {
+      "description": "Quality assurance committees and review boards"
+    },
+    "/quality_decisions/{id}": {
+      "description": "Executive quality submissions and approvals under SoD"
+    },
+    "/quality_audit_logs/{id}": {
+      "description": "Immutable append-only audit trail for quality assurance governance"
+    },
+    "/quality_diagnostic_findings/{id}": {
+      "description": "Automated diagnostic findings for quality gaps and SoD breaches"
+    },
+    "/workflow_definitions/{id}": {
+      "description": "Immutable published enterprise workflow definitions"
+    },
+    "/workflow_instances/{id}": {
+      "description": "Active and completed workflow execution instances"
+    },
+    "/workflow_steps/{id}": {
+      "description": "Individual steps and states of a workflow instance"
+    },
+    "/workflow_approvals/{id}": {
+      "description": "Four-Eyes approvals and decisions for workflow progression"
+    },
+    "/workflow_exceptions/{id}": {
+      "description": "Governed workflow exceptions and SLA waivers"
+    },
+    "/workflow_escalations/{id}": {
+      "description": "Escalations triggered by SLA breaches or blocked workflows"
+    },
+    "/workflow_execution_audits/{id}": {
+      "description": "Immutable append-only audit trail for workflow provenance"
+    },
+    "/enterprise_cases/{id}": {
+      "description": "Universal enterprise governed cases across all EMS domains"
+    },
+    "/enterprise_tasks/{id}": {
+      "description": "Governed enterprise task items linked to cases or workflows"
+    },
+    "/enterprise_action_items/{id}": {
+      "description": "Enterprise action and accountability register items requiring Four-Eyes verification"
+    },
+    "/enterprise_sla_policies/{id}": {
+      "description": "Working-hour aware SLA policies and tier thresholds"
+    },
+    "/enterprise_sla_observations/{id}": {
+      "description": "Real-time SLA status observations and pause state tracking"
+    },
+    "/enterprise_escalation_events/{id}": {
+      "description": "Level 0 through Level 4 escalation log events with idempotency locks"
+    },
+    "/enterprise_work_queues/{id}": {
+      "description": "Role, department, campus, and executive work queues"
+    },
+    "/enterprise_governance_exceptions/{id}": {
+      "description": "Time-bounded governance exceptions with mandatory compensating controls"
+    },
+    "/enterprise_case_audit_logs/{id}": {
+      "description": "Immutable append-only audit trail for case governance provenance"
+    },
+    "/enterprise_documents/{id}": {
+      "description": "Governed document metadata and lifecycle references"
+    },
+    "/enterprise_document_versions/{id}": {
+      "description": "Immutable document version history with SHA-256 evidence hashes"
+    },
+    "/enterprise_records/{id}": {
+      "description": "Institutional record metadata, retention schedules, and disposal eligibility"
+    },
+    "/enterprise_correspondence/{id}": {
+      "description": "Official incoming, outgoing, and regulatory correspondence metadata"
+    },
+    "/enterprise_approval_packages/{id}": {
+      "description": "Aggregated document, contract, and decision approval packages"
+    },
+    "/enterprise_approval_decisions/{id}": {
+      "description": "Four-Eyes governed approval decisions with idempotency keys"
+    },
+    "/enterprise_document_reviews/{id}": {
+      "description": "Structured peer, legal, and compliance document reviews"
+    },
+    "/enterprise_document_issues/{id}": {
+      "description": "Document findings and compliance issues linked to action register"
+    },
+    "/enterprise_retention_governance/{id}": {
+      "description": "Retention policy references and disposition review logs"
+    },
+    "/enterprise_legal_holds/{id}": {
+      "description": "Litigation freeze legal holds preventing disposition and retirement"
+    },
+    "/enterprise_document_relationships/{id}": {
+      "description": "Bounded document relationship graph entries"
+    },
+    "/enterprise_document_evidence/{id}": {
+      "description": "Verified content integrity hashes and evidence references"
+    },
+    "/enterprise_document_exceptions/{id}": {
+      "description": "Time-bounded document policy exceptions with compensating controls"
+    },
+    "/enterprise_document_audit_logs/{id}": {
+      "description": "Immutable append-only audit trail for document governance provenance"
+    },
+    "/enterprise_communication_policies/{id}": {
+      "description": "Governed communication policies, scope, and lifecycle state"
+    },
+    "/enterprise_communication_channels/{id}": {
+      "description": "Governed communication channels and integration provider references"
+    },
+    "/enterprise_communication_templates/{id}": {
+      "description": "Message templates with immutable SHA-256 content checksums"
+    },
+    "/enterprise_communication_campaigns/{id}": {
+      "description": "Mass messaging campaign definitions and dispatch metadata"
+    },
+    "/enterprise_communication_messages/{id}": {
+      "description": "Governed message dispatch logs with deterministic idempotency keys"
+    },
+    "/enterprise_communication_audiences/{id}": {
+      "description": "Governed audience definitions with privacy small-cell protection"
+    },
+    "/enterprise_notification_rules/{id}": {
+      "description": "Deterministic notification trigger rules and suppression windows"
+    },
+    "/enterprise_notification_events/{id}": {
+      "description": "Notification trigger events with payload hashes"
+    },
+    "/enterprise_communication_alerts/{id}": {
+      "description": "Four-Eyes protected high-severity institutional alerts"
+    },
+    "/enterprise_escalation_policies/{id}": {
+      "description": "Configurable multi-level escalation policy rules"
+    },
+    "/enterprise_official_notices/{id}": {
+      "description": "Official institutional notices linked to documents, cases, and incidents"
+    },
+    "/enterprise_emergency_communications/{id}": {
+      "description": "Campus emergency communications and crisis dispatch metadata"
+    },
+    "/enterprise_communication_suppressions/{id}": {
+      "description": "Governed communication suppression rules protecting emergency channels"
+    },
+    "/enterprise_communication_audit_logs/{id}": {
+      "description": "Immutable append-only audit trail for communication control plane"
+    },
+    "/enterprise_data_domains/{id}": {
+      "description": "Governed master data domain definitions and authoritative system references"
+    },
+    "/enterprise_master_references/{id}": {
+      "description": "Global cross-system master record identifier references"
+    },
+    "/enterprise_reference_datasets/{id}": {
+      "description": "Institutional reference datasets and controlled vocabularies"
+    },
+    "/enterprise_reference_values/{id}": {
+      "description": "Individual reference values and external system code mappings"
+    },
+    "/enterprise_data_mappings/{id}": {
+      "description": "Source-to-target field mapping definitions and validation metadata"
+    },
+    "/enterprise_data_contracts/{id}": {
+      "description": "Versioned data contract specifications and compatibility rules"
+    },
+    "/enterprise_data_contract_versions/{id}": {
+      "description": "Immutable schema checksums and breaking change history for data contracts"
+    },
+    "/enterprise_integration_definitions/{id}": {
+      "description": "Governed integration endpoint registry and provider references"
+    },
+    "/enterprise_synchronization_policies/{id}": {
+      "description": "Synchronization direction, frequency, and idempotency rules"
+    },
+    "/enterprise_reconciliation_runs/{id}": {
+      "description": "Cross-system reconciliation summary execution records"
+    },
+    "/enterprise_reconciliation_exceptions/{id}": {
+      "description": "Individual record reconciliation mismatch exceptions"
+    },
+    "/enterprise_data_quality_rules/{id}": {
+      "description": "Deterministic data quality rules across dimensions"
+    },
+    "/enterprise_data_quality_observations/{id}": {
+      "description": "Observed data quality telemetry and evidence references"
+    },
+    "/enterprise_data_lineage_nodes/{id}": {
+      "description": "Lineage graph nodes representing systems, stores, and transformations"
+    },
+    "/enterprise_data_lineage_edges/{id}": {
+      "description": "Lineage graph edges and data contract references"
+    },
+    "/enterprise_data_dependencies/{id}": {
+      "description": "Upstream and downstream system dependency mapping"
+    },
+    "/enterprise_data_provenance/{id}": {
+      "description": "Cryptographic SHA-256 provenance records for integration events"
+    },
+    "/enterprise_data_exceptions/{id}": {
+      "description": "Governed data contract and sync exceptions with mandatory expiry dates"
+    },
+    "/enterprise_integration_risks/{id}": {
+      "description": "Integration risk evaluations and composite risk scores"
+    },
+    "/enterprise_integration_approvals/{id}": {
+      "description": "Four-Eyes protected governance decision approvals"
+    },
+    "/enterprise_integration_audit_logs/{id}": {
+      "description": "Immutable append-only audit trail for data integration governance"
+    },
+    "/enterprise_event_definitions/{id}": {
+      "description": "Governed event catalog definitions across institutional modules"
+    },
+    "/enterprise_event_envelopes/{id}": {
+      "description": "Observed event envelopes with correlation, causation, and provenance metadata"
+    },
+    "/enterprise_event_subscriptions/{id}": {
+      "description": "Routing subscriptions mapping event categories to business rules"
+    },
+    "/enterprise_business_rules/{id}": {
+      "description": "Deterministic business rules with match type, conditions, and actions"
+    },
+    "/enterprise_rule_versions/{id}": {
+      "description": "Immutable SHA-256 business rule versions with Four-Eyes approval history"
+    },
+    "/enterprise_rule_evaluations/{id}": {
+      "description": "Execution evaluation records of business rules against event envelopes"
+    },
+    "/enterprise_automation_policies/{id}": {
+      "description": "Global automation policies enforcing max depth, action bounds, and recursion limits"
+    },
+    "/enterprise_automation_executions/{id}": {
+      "description": "Deterministic automation execution orchestrations and risk scores"
+    },
+    "/enterprise_automation_steps/{id}": {
+      "description": "Individual action execution steps within an automation orchestration"
+    },
+    "/enterprise_work_queues/{id}": {
+      "description": "Enterprise work queue definitions, capacity limits, and owner assignments"
+    },
+    "/enterprise_work_queue_items/{id}": {
+      "description": "Work queue items referencing caseIdRef and taskIdRef"
+    },
+    "/enterprise_action_requests/{id}": {
+      "description": "Cross-module action requests requiring governance authorization"
+    },
+    "/enterprise_action_authorizations/{id}": {
+      "description": "Four-Eyes decision authorizations for cross-module actions"
+    },
+    "/enterprise_action_executions/{id}": {
+      "description": "Executed cross-module actions with target module result references"
+    },
+    "/enterprise_escalation_policies/{id}": {
+      "description": "SLA warning and breach escalation threshold policies"
+    },
+    "/enterprise_escalation_events/{id}": {
+      "description": "Dispatched SLA escalation events and acknowledgment records"
+    },
+    "/enterprise_automation_exceptions/{id}": {
+      "description": "Governed automation exceptions with mandatory expiry dates"
+    },
+    "/enterprise_automation_suppressions/{id}": {
+      "description": "Temporary noisy-event suppression windows"
+    },
+    "/enterprise_dead_letter_events/{id}": {
+      "description": "Unhandled dead-letter events with failure classifications"
+    },
+    "/enterprise_replay_requests/{id}": {
+      "description": "Authorized replay requests for dead-letter events"
+    },
+    "/enterprise_replay_executions/{id}": {
+      "description": "Replay executions maintaining provenance integrity"
+    },
+    "/enterprise_automation_dependencies/{id}": {
+      "description": "Rule dependency mappings and cycle detection graphs"
+    },
+    "/enterprise_automation_risks/{id}": {
+      "description": "Bounded automation risk scores and criticality ratings"
+    },
+    "/enterprise_automation_audit_logs/{id}": {
+      "description": "Immutable append-only audit log for event & automation governance"
+    },
+    "/enterprise_automation_diagnostics/{id}": {
+      "description": "Diagnostic scanner findings and recommendations"
+    },
+    "/enterprise_integration_strategies/{id}": {
+      "description": "Phase 8.7 Institutional enterprise integration strategies and guidelines"
+    },
+    "/enterprise_integration_portfolios/{id}": {
+      "description": "Phase 8.7 Governed integration portfolios and domains"
+    },
+    "/enterprise_integration_definitions/{id}": {
+      "description": "Phase 8.7 Authoritative integration registry records"
+    },
+    "/enterprise_api_records/{id}": {
+      "description": "Phase 8.7 Published institutional API governance records"
+    },
+    "/enterprise_interface_contracts/{id}": {
+      "description": "Phase 8.7 Governed interoperability contracts and SLAs"
+    },
+    "/enterprise_integration_security_profiles/{id}": {
+      "description": "Phase 8.7 Security profiles, authentication references, and TLS policies"
+    },
+    "/enterprise_integration_exceptions/{id}": {
+      "description": "Phase 8.7 Temporary integration and protocol exceptions with expiry controls"
+    },
+    "/enterprise_integration_risks/{id}": {
+      "description": "Phase 8.7 Deterministic integration risk assessments"
+    },
+    "/enterprise_integration_diagnostics/{id}": {
+      "description": "Phase 8.7 Diagnostic scanner findings for orphaned/expired integrations"
+    },
+    "/enterprise_integration_audit_events/{id}": {
+      "description": "Phase 8.7 Cryptographically linked immutable integration audit events"
+    },
+    "/decisionBriefs/{id}": {
+      "description": "Phase 9.2 Executive decision briefs requiring Four-Eyes authorization"
+    },
+    "/analyticsExceptions/{id}": {
+      "description": "Phase 9.2 Temporary strategic analytics exceptions"
+    },
+    "/analyticsOverrides/{id}": {
+      "description": "Phase 9.2 Authorized manual indicator corrections and overrides"
+    },
+    "/analyticsStrategies/{id}": {
+      "description": "Phase 9.2 Five-year strategic masterplans and indicator objectives"
+    },
+    "/indicatorObservations/{id}": {
+      "description": "Phase 9.2 Active operational data observations and data sufficiency tags"
+    },
+    "/indicatorTargets/{id}": {
+      "description": "Phase 9.2 Governed indicator targets and strategic alignment mappings"
+    },
+    "/forecastRuns/{id}": {
+      "description": "Phase 9.2 Predictive forecasting models and short-term interval estimates"
+    },
+    "/earlyWarningObservations/{id}": {
+      "description": "Phase 9.2 Active early warning radar deviations and automated mitigation steps"
+    },
+    "/analyticsScenarios/{id}": {
+      "description": "Phase 9.2 In-memory what-if scenario intelligence outcomes and risk ratings"
+    },
+    "/analyticsDiagnostics/{id}": {
+      "description": "Phase 9.2 Systemic diagnostics checking separation of duties and metadata orphans"
+    },
+    "/analyticsAuditEvents/{id}": {
+      "description": "Phase 9.2 Cryptographically linked immutable ledger events for analytics"
+    },
+    "/data_governance_strategies/{id}": {
+      "description": "Phase 9.3 Strategic masterplans and trust objectives for governance"
+    },
+    "/data_governance_domains/{id}": {
+      "description": "Phase 9.3 Governed data domains and operational steward assignments"
+    },
+    "/data_governance_sources/{id}": {
+      "description": "Phase 9.3 Connected systems of record and connection statuses"
+    },
+    "/data_governance_authorities/{id}": {
+      "description": "Phase 9.3 Authoritative master data declarations"
+    },
+    "/data_governance_policies/{id}": {
+      "description": "Phase 9.3 Data quality thresholds and validation policy controls"
+    },
+    "/data_governance_quality_observations/{id}": {
+      "description": "Phase 9.3 Systemic validation results with deterministic quality scoring"
+    },
+    "/data_governance_certifications/{id}": {
+      "description": "Phase 9.3 Cryptographically signed data credentials with expiry controls"
+    },
+    "/data_governance_provenance_records/{id}": {
+      "description": "Phase 9.3 Dynamic transformation records with cryptographic lineage hashchains"
+    },
+    "/data_governance_contracts/{id}": {
+      "description": "Phase 9.3 Interface contracts and compliance statuses"
+    },
+    "/data_governance_reliability_observations/{id}": {
+      "description": "Phase 9.3 Service availability and response latency measurements"
+    },
+    "/data_governance_reconciliation_observations/{id}": {
+      "description": "Phase 9.3 Multi-system variance reconciliation cross-checks"
+    },
+    "/data_governance_exceptions/{id}": {
+      "description": "Phase 9.3 Temporary data exceptions requiring Four-Eyes approval"
+    },
+    "/data_governance_overrides/{id}": {
+      "description": "Phase 9.3 Manual indicator corrections with mandatory finite expiry"
+    },
+    "/data_governance_diagnostics/{id}": {
+      "description": "Phase 9.3 Validation scanners checking metadata orphans and SoD violations"
+    },
+    "/data_governance_risks/{id}": {
+      "description": "Phase 9.3 Deterministic multi-factor risk levels"
+    },
+    "/data_governance_audit_events/{id}": {
+      "description": "Phase 9.3 Immutable append-only audit ledger events"
+    },
+    "/knowledge_strategies/{id}": {
+      "description": "Phase 9.4 Strategic masterplans and knowledge alignment goals"
+    },
+    "/knowledge_domains/{id}": {
+      "description": "Phase 9.4 Governed knowledge domains and steward assignments"
+    },
+    "/knowledge_objects/{id}": {
+      "description": "Phase 9.4 Governed knowledge objects and lifecycle states"
+    },
+    "/knowledge_source_references/{id}": {
+      "description": "Phase 9.4 Connected system source records"
+    },
+    "/knowledge_evidence_references/{id}": {
+      "description": "Phase 9.4 Attached peer-review evidence references"
+    },
+    "/knowledge_provenance_records/{id}": {
+      "description": "Phase 9.4 Cryptographic lineage records with provenance hash chains"
+    },
+    "/knowledge_verifications/{id}": {
+      "description": "Phase 9.4 Peer-reviewed and manual verifications"
+    },
+    "/knowledge_decisions/{id}": {
+      "description": "Phase 9.4 Institutional decisions and outcome matrices"
+    },
+    "/knowledge_exceptions/{id}": {
+      "description": "Phase 9.4 Temporary unverified use exceptions requiring Four-Eyes approval"
+    },
+    "/knowledge_overrides/{id}": {
+      "description": "Phase 9.4 Manual indicator corrections with mandatory finite expiry"
+    },
+    "/knowledge_retrieval_requests/{id}": {
+      "description": "Phase 9.4 Governed metadata retrieval requests"
+    },
+    "/knowledge_retrieval_policies/{id}": {
+      "description": "Phase 9.4 Minimum required role and sensitivity policies"
+    },
+    "/knowledge_contradictions/{id}": {
+      "description": "Phase 9.4 Opposing domain rule and decision contradictions"
+    },
+    "/knowledge_diagnostics/{id}": {
+      "description": "Phase 9.4 Validation scanners checking metadata orphans and SoD violations"
+    },
+    "/knowledge_risks/{id}": {
+      "description": "Phase 9.4 Multi-factor knowledge risk calculations"
+    },
+    "/knowledge_audit_events/{id}": {
+      "description": "Phase 9.4 Immutable append-only audit ledger events"
+    },
+    "/executive_decisions/{decisionId}": {
+      "description": "Governed institutional executive decisions with provenance"
+    },
+    "/decision_requests/{requestId}": {
+      "description": "Intake requests for institutional decisions"
+    },
+    "/decision_briefs/{briefId}": {
+      "description": "Strategic decision briefs and options analysis"
+    },
+    "/decision_audit_events/{eventId}": {
+      "description": "Immutable append-only decision governance audit records"
+    },
+    "/decision_intelligence_strategies/{strategyId}": {
+      "description": "Institutional decision intelligence strategies and objectives"
+    },
+    "/decision_challenges/{challengeId}": {
+      "description": "Formal dissent and challenges to executive decisions"
+    },
+    "/policy_impact_assessments/{assessmentId}": {
+      "description": "Assessments of decision impact on institutional policies"
+    },
+    "/strategic_action_directives/{directiveId}": {
+      "description": "Executive directives for strategic implementation assurance"
+    },
+    "/decision_diagnostics/{diagnosticId}": {
+      "description": "Governance diagnostic findings for decision intelligence"
+    },
+    "/planning_cycles/{cycleId}": {
+      "description": "Phase 9.6 Institutional Planning Cycles"
+    },
+    "/planning_initiatives/{initiativeId}": {
+      "description": "Phase 9.6 Institutional Initiatives"
+    },
+    "/initiative_portfolios/{portfolioId}": {
+      "description": "Phase 9.6 Initiative Portfolios"
+    },
+    "/resource_requests/{requestId}": {
+      "description": "Phase 9.6 Resource Allocation Requests"
+    },
+    "/budget_governance_requests/{requestId}": {
+      "description": "Phase 9.6 Budget Governance Requests"
+    },
+    "/allocation_proposals/{proposalId}": {
+      "description": "Phase 9.6 Allocation Proposals"
+    },
+    "/allocation_decisions/{decisionId}": {
+      "description": "Phase 9.6 Allocation Decisions with Cryptographic Provenance"
+    },
+    "/planning_exceptions/{exceptionId}": {
+      "description": "Phase 9.6 Planning Exceptions with Expiry"
+    },
+    "/planning_diagnostics/{diagnosticId}": {
+      "description": "Phase 9.6 Planning Diagnostics & Validation Scanners"
+    },
+    "/planning_audit_events/{eventId}": {
+      "description": "Phase 9.6 Immutable append-only planning audit ledger events"
+    },
+    "/process_landscape/{processId}": {
+      "description": "Phase 9.7 Process Landscape definitions"
+    },
+    "/process_versions/{versionId}": {
+      "description": "Phase 9.7 Process Versions"
+    },
+    "/process_ownership/{ownershipId}": {
+      "description": "Phase 9.7 Process Ownership records"
+    },
+    "/process_maturity_assessments/{assessmentId}": {
+      "description": "Phase 9.7 Process Maturity Assessments"
+    },
+    "/process_performance_observations/{observationId}": {
+      "description": "Phase 9.7 Process Performance Observations"
+    },
+    "/process_bottlenecks/{bottleneckId}": {
+      "description": "Phase 9.7 Process Bottleneck Observations"
+    },
+    "/root_cause_analyses/{rcId}": {
+      "description": "Phase 9.7 Root Cause Analysis records"
+    },
+    "/improvement_opportunities/{opportunityId}": {
+      "description": "Phase 9.7 Improvement Opportunity records"
+    },
+    "/improvement_initiatives/{initiativeId}": {
+      "description": "Phase 9.7 Improvement Initiative records"
+    },
+    "/corrective_actions/{actionId}": {
+      "description": "Phase 9.7 Corrective Action records"
+    },
+    "/preventive_actions/{actionId}": {
+      "description": "Phase 9.7 Preventive Action records"
+    },
+    "/improvement_experiments/{experimentId}": {
+      "description": "Phase 9.7 Improvement Experiment records"
+    },
+    "/benefit_realizations/{realizationId}": {
+      "description": "Phase 9.7 Benefit Realization records"
+    },
+    "/process_exceptions/{exceptionId}": {
+      "description": "Phase 9.7 Process Exceptions"
+    },
+    "/process_risks/{riskId}": {
+      "description": "Phase 9.7 Process Risks"
+    },
+    "/process_dependencies/{dependencyId}": {
+      "description": "Phase 9.7 Process Dependencies"
+    },
+    "/process_benchmark_observations/{benchmarkId}": {
+      "description": "Phase 9.7 Benchmark Observations"
+    },
+    "/process_reviews/{reviewId}": {
+      "description": "Phase 9.7 Process Reviews"
+    },
+    "/process_diagnostics/{diagnosticId}": {
+      "description": "Phase 9.7 Process Diagnostics"
+    },
+    "/process_audit_events/{eventId}": {
+      "description": "Phase 9.7 Immutable append-only audit events"
+    },
+    "/suppliers/{supplierId}": {
+      "description": "Phase 11.3 Authoritative Supplier Register"
+    },
+    "/supplier_categories/{categoryId}": {
+      "description": "Phase 11.3 Supplier Category Definitions"
+    },
+    "/supplier_qualifications/{qualificationId}": {
+      "description": "Phase 11.3 Supplier Qualification Records"
+    },
+    "/supplier_contacts/{contactId}": {
+      "description": "Phase 11.3 Supplier Contact References"
+    },
+    "/purchase_requisitions/{requisitionId}": {
+      "description": "Phase 11.3 Purchase Requisition Records"
+    },
+    "/requisition_lines/{lineId}": {
+      "description": "Phase 11.3 Requisition Line Items"
+    },
+    "/procurement_approvals/{approvalId}": {
+      "description": "Phase 11.3 Stage-Gate Approval Trail"
+    },
+    "/purchase_orders/{orderId}": {
+      "description": "Phase 11.3 Authoritative Purchase Orders"
+    },
+    "/purchase_order_lines/{lineId}": {
+      "description": "Phase 11.3 Purchase Order Line Items"
+    },
+    "/goods_receipts/{receiptId}": {
+      "description": "Phase 11.3 Goods Receipt Notes"
+    },
+    "/goods_receipt_lines/{lineId}": {
+      "description": "Phase 11.3 Goods Receipt Line Items"
+    },
+    "/supplier_invoices/{invoiceId}": {
+      "description": "Phase 11.3 Supplier Invoices"
+    },
+    "/supplier_invoice_lines/{lineId}": {
+      "description": "Phase 11.3 Supplier Invoice Line Items"
+    },
+    "/three_way_match_results/{matchId}": {
+      "description": "Phase 11.3 Three-Way Matching Audit Logs"
+    },
+    "/procurement_commitments/{commitmentId}": {
+      "description": "Phase 11.3 Encumbrance & Commitment Ledger"
+    },
+    "/procurement_disputes/{disputeId}": {
+      "description": "Phase 11.3 Supplier & Quality Disputes"
+    },
+    "/procurement_audit_events/{eventId}": {
+      "description": "Phase 11.3 Immutable SHA-256 Procurement Audit Trail"
+    },
+    "/assets/{assetId}": {
+      "description": "Phase 11.4 Authoritative Institutional Asset Records"
+    },
+    "/asset_assignments/{assignmentId}": {
+      "description": "Phase 11.4 Asset Custody and Assignment History"
+    },
+    "/asset_transfers/{transferId}": {
+      "description": "Phase 11.4 Inter-Campus and Inter-Org Asset Transfers"
+    },
+    "/asset_disposals/{disposalId}": {
+      "description": "Phase 11.4 Governed Four-Eyes Asset Disposal Trail"
+    },
+    "/inventory_items/{itemId}": {
+      "description": "Phase 11.4 Authoritative Inventory SKU Registers"
+    },
+    "/inventory_locations/{locationId}": {
+      "description": "Phase 11.4 Stock Warehouse and Location Definitions"
+    },
+    "/inventory_movements/{movementId}": {
+      "description": "Phase 11.4 Deterministic Idempotent Stock Movements"
+    },
+    "/facilities/{facilityId}": {
+      "description": "Phase 11.4 Authoritative Buildings, Floors, and Rooms"
+    },
+    "/maintenance_requests/{requestId}": {
+      "description": "Phase 11.4 Maintenance Operational Requests"
+    },
+    "/maintenance_work_orders/{workOrderId}": {
+      "description": "Phase 11.4 Maintenance Work Orders"
+    },
+    "/preventive_maintenance_schedules/{scheduleId}": {
+      "description": "Phase 11.4 Preventive Maintenance Schedules"
+    },
+    "/inspections/{inspectionId}": {
+      "description": "Phase 11.4 Facility and Asset Safety Inspections"
+    },
+    "/asset_audit_events/{eventId}": {
+      "description": "Phase 11.4 Immutable SHA-256 Asset Audit Trail"
+    },
+    "/asset_simulation_scenarios/{scenarioId}": {
+      "description": "Phase 11.4 Isolated What-If Sandbox Scenarios"
+    }
+  }
+}

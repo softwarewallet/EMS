@@ -1,0 +1,41 @@
+import { UniversalModuleContract } from '../../core/contracts/ModuleContract';
+
+export const SafetyEhsGovernanceModule: UniversalModuleContract = {
+  moduleId: 'mod_safety_ehs_governance',
+  name: 'Institutional Safety, Occupational Health, Environmental Health, Emergency Preparedness & Life-Safety Governance Engine',
+  displayName: 'Safety, EHS, Life-Safety & Emergency Governance',
+  description: 'Authoritative institutional governance, assurance, and risk control plane for occupational safety, laboratory safety, environmental health, emergency preparedness, life-safety compliance, inspections, CAPA, and physical safety resilience.',
+  version: '1.0.0',
+  status: 'INSTALLED',
+  category: 'Operations',
+  provider: 'EduTech-SMS',
+  dependencies: [],
+  configurationSchema: [],
+  navigationItems: [],
+  permissions: [
+    { code: 'safety.governance.view', name: 'View Safety Governance', description: 'View safety governance workspace, hazard registries, and executive dashboards.' },
+    { code: 'safety.hazard.manage', name: 'Manage Hazard Registry', description: 'Create, update, and govern hazard registers and observations.' },
+    { code: 'safety.risk.assess', name: 'Assess Safety Risks', description: 'Perform and review deterministic safety risk assessments.' },
+    { code: 'safety.control.manage', name: 'Manage Safety Controls', description: 'Govern control hierarchies, implementations, and effectiveness verifications.' },
+    { code: 'safety.inspection.manage', name: 'Manage Safety Inspections', description: 'Schedule, conduct, and record institutional safety inspections.' },
+    { code: 'safety.finding.manage', name: 'Manage Inspection Findings', description: 'Record, assign, and track safety inspection findings.' },
+    { code: 'safety.capa.manage', name: 'Manage CAPA', description: 'Manage corrective and preventive action plans with independent verification.' },
+    { code: 'safety.incident.view', name: 'View Incident Governance', description: 'View reference-only incident classifications and investigations.' },
+    { code: 'safety.incident.govern', name: 'Govern Safety Incidents', description: 'Govern incident classifications, root causes, and regulatory notifications.' },
+    { code: 'safety.emergency.manage', name: 'Manage Emergency Plans', description: 'Govern emergency preparedness plans, evacuation routes, and shelter plans.' },
+    { code: 'safety.exercise.manage', name: 'Manage Emergency Exercises', description: 'Schedule, evaluate, and track emergency drills and tabletop exercises.' },
+    { code: 'safety.firelife.manage', name: 'Manage Fire & Life Safety', description: 'Govern fire alarm certifications, egress paths, suppression, and life-safety compliance.' },
+    { code: 'safety.lab.manage', name: 'Manage Lab & Bio/Chem/Rad Safety', description: 'Govern laboratory safety, IBC/RSC authorizations, chemical hygiene, and radiation permits.' },
+    { code: 'safety.environment.manage', name: 'Manage Environmental Health', description: 'Govern air quality, water safety, hazardous waste, and environmental observations.' },
+    { code: 'safety.training.manage', name: 'Manage Safety Training', description: 'Govern mandatory safety training requirements, PPE enforcement, and competency.' },
+    { code: 'safety.contractor.manage', name: 'Manage Contractor Safety', description: 'Govern contractor safety inductions, high-risk work permits, and visitor protocols.' },
+    { code: 'safety.exception.create', name: 'Create Safety Exception', description: 'Request temporary safety deviations or waivers.' },
+    { code: 'safety.exception.approve', name: 'Approve Safety Exception', description: 'Authorize safety exceptions with compensating controls under Four-Eyes SoD.' },
+    { code: 'safety.resilience.assess', name: 'Assess Safety Resilience', description: 'Perform institutional safety resilience and emergency capability assessments.' },
+    { code: 'safety.simulation.run', name: 'Run Safety Simulations', description: 'Execute isolated in-memory what-if emergency and multi-hazard safety simulations.' },
+    { code: 'safety.decision.propose', name: 'Propose Safety Decisions', description: 'Propose executive safety decisions, hazard acceptances, or operational suspensions.' },
+    { code: 'safety.decision.approve', name: 'Approve Safety Decisions', description: 'Approve executive safety decisions with Four-Eyes Separation of Duties.' },
+    { code: 'safety.audit.view', name: 'View Safety Audit Trail', description: 'View append-only audit trail for institutional safety governance.' },
+    { code: 'safety.diagnostics.run', name: 'Run Safety Diagnostics', description: 'Execute diagnostic engine for safety hazards, life-safety deficits, and SoD breaches.' }
+  ]
+};

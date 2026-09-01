@@ -1,0 +1,1 @@
+sed -i 's/import { BASE_NAVIGATION_ITEMS } from '\''\.\.\/config\/navigationRegistry'\'';/import { BASE_NAVIGATION_ITEMS } from '\''\.\.\/config\/navigationRegistry'\'';\nimport { ModuleEngine } from '\''\.\.\/core\/modules\/ModuleEngine'\'';/' src/services/navigationService.ts
