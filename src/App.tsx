@@ -111,6 +111,7 @@ import { InternationalizationGovernanceWorkspace } from './components/internatio
 import { InternationalizationGlobalMobilityWorkspace } from './components/internationalizationGlobalMobility/InternationalizationGlobalMobilityWorkspace';
 import { InstitutionalAdvancementDevelopmentWorkspace } from './components/institutionalAdvancementDevelopment/InstitutionalAdvancementDevelopmentWorkspace';
 import { InstitutionalLegalComplianceRiskGovernanceWorkspace } from './components/institutionalLegalComplianceRiskGovernance/InstitutionalLegalComplianceRiskGovernanceWorkspace';
+import { InstitutionalStrategyPlanningPerformanceWorkspace } from './components/institutionalStrategyPlanningPerformance/InstitutionalStrategyPlanningPerformanceWorkspace';
 import { DigitalTechnologyGovernanceWorkspace } from './components/digitalTechnologyGovernance/DigitalTechnologyGovernanceWorkspace';
 import { CyberSecurityPrivacyGovernanceWorkspace } from './components/cyberSecurityPrivacyGovernance/CyberSecurityPrivacyGovernanceWorkspace';
 import { BusinessContinuityResilienceGovernanceWorkspace } from './components/businessContinuityResilienceGovernance/BusinessContinuityResilienceGovernanceWorkspace';
@@ -721,6 +722,10 @@ function AppContent() {
 
             {(activeRoute === 'institutional_legal_compliance_risk_governance' || activeTab === 'institutional_legal_compliance_risk_governance' || activeRoute === 'institutional_legal_compliance_risk_governance_workspace' || activeRoute === 'institutional_legal_compliance_risk_governance_workspace' || activeRoute === 'nav_institutional_legal_compliance_risk_governance' || activeRoute === 'nav_institutional_legal_compliance_risk_governance') && (
               <InstitutionalLegalComplianceRiskGovernanceWorkspace />
+            )}
+
+            {(activeRoute === 'institutional_strategy_planning_performance' || activeTab === 'institutional_strategy_planning_performance' || activeRoute === 'nav_institutional_strategy_planning_performance') && (
+              <InstitutionalStrategyPlanningPerformanceWorkspace />
             )}
 
           </RouteGuard>

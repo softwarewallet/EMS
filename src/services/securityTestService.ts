@@ -41,6 +41,7 @@ import { studentServicesSupportService } from './studentServicesSupportService';
 import { internationalizationGlobalMobilityOperationsService } from './internationalizationGlobalMobilityOperationsService';
 import { institutionalAdvancementDevelopmentService } from './institutionalAdvancementDevelopmentService';
 import { InstitutionalLegalComplianceRiskGovernanceService } from './institutionalLegalComplianceRiskGovernanceService';
+import { InstitutionalStrategyPlanningPerformanceService } from './institutionalStrategyPlanningPerformanceService';
 import { Student, StudentAttendanceRecord, ProcessLifecycleState } from '../types';
 
 export interface TestResult {
@@ -6662,6 +6663,26 @@ export class SecurityTestService {
     return suiteResults.map(r => ({
       id: r.id,
       category: r.category as TestResult['category'],
+      title: r.title,
+      description: r.description,
+      status: r.status === 'PASS' ? 'PASSED' : 'FAILED',
+      durationMs: r.durationMs
+    }));
+  }
+
+  /**
+   * PHASE 11.17: Institutional Strategy, Planning, Performance & Quality Verification Suite
+   * Comprehensive 50 Adversarial Tests (ADV-11.17-01 to ADV-11.17-50)
+   */
+  static async runPhase1117VerificationSuite(
+    tenantId: string = 'tenant-main',
+    campusId: string = 'campus-north'
+  ): Promise<TestResult[]> {
+    const serviceInstance = InstitutionalStrategyPlanningPerformanceService.getInstance();
+    const suiteResults = serviceInstance.runPhase1117VerificationSuite(tenantId, campusId);
+    return suiteResults.map(r => ({
+      id: r.id,
+      category: 'Authorization' as TestResult['category'], // mapped for test view
       title: r.title,
       description: r.description,
       status: r.status === 'PASS' ? 'PASSED' : 'FAILED',

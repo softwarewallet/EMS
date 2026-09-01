@@ -99,6 +99,8 @@ export const SecurityVerificationView: React.FC = () => {
         results = await SecurityTestService.runPhase1115VerificationSuite();
       } else if (selectedSuite === '1116') {
         results = await SecurityTestService.runPhase1116VerificationSuite();
+      } else if (selectedSuite === '1117') {
+        results = await SecurityTestService.runPhase1117VerificationSuite();
       } else {
         let rawSuite: any[] = [];
         let category: TestResult['category'] = 'Authentication';
@@ -262,6 +264,7 @@ export const SecurityVerificationView: React.FC = () => {
             <option value="1112">Security, Safety &amp; Business Continuity (Phase 11.12)</option>
             <option value="1115">Institutional Advancement &amp; Development (Phase 11.15)</option>
             <option value="1116">Legal, Compliance, Risk &amp; Governance (Phase 11.16)</option>
+            <option value="1117">Strategy, Planning, Performance &amp; Quality (Phase 11.17)</option>
           </select>
 
           <button
